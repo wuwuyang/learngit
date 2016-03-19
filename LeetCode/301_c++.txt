@@ -1,0 +1,135 @@
+class Solution {
+public:
+    //暴力dfs剪枝
+    void helper(set<string>& res,string& s,string temp,int index,int status)
+    {
+        if(status<0||status>(s.length()-index+1))
+        return;
+        if(index==s.length())
+        {
+            if(status==0)
+            {
+                if(res.size()==0||temp.length()==res.begin()->length())
+                res.insert(temp);
+                else if(temp.length()>res.begin()->length())
+                {
+                    res.clear();
+                    res.insert(temp);
+                }
+            }
+            return;
+        }
+        if(s[index]=='(')
+        {
+            helper(res,s,temp+"(",index+1,status+1);
+            helper(res,s,temp,index+1,status);
+        }
+        else if(s[index]==')')
+        {
+            helper(res,s,temp+")",index+1,status-1);
+            helper(res,s,temp,index+1,status);
+        }
+        else
+        {
+            helper(res,s,temp+s[index],index+1,status);
+        }
+    }
+    
+    //dfs+剪枝（次暴力求解）
+    int calc(string s)
+    {
+        int a=0,b=0;
+        for(int i=0;i<s.length();i++)
+        {
+            if(s[i]=='(')
+            a++;
+            else if(s[i]==')')
+            a--;
+            b+=a<0?1:0;
+            a=max(a,0);
+        }
+        return a+b;
+    }
+    
+    vector<string> dfs(set<string>& set1,string s)
+    {
+        vector<string> res;
+        int mi=calc(s);
+        if(mi==0)
+        {
+            res.push_back(s);
+            return res;
+        }
+        for(int i=0;i<s.length();i++)
+        {
+            string ts="";
+            if(s[i]=='('||s[i]==')')
+            {
+                ts+=s.substr(0,i)+s.substr(i+1);
+            }
+            else
+            continue;
+            if(set1.find(ts)==set1.end()&&calc(ts)<mi)
+            {
+                set1.insert(ts);
+                vector<string> vec=dfs(set1,ts);
+                res.insert(res.end(),vec.begin(),vec.end());
+            }
+        }
+        return res;
+    }
+
+    vector<string> removeInvalidParentheses(string s) {
+        //dfs暴力求解
+        // set<string> res;
+        // helper(res,s,"",0,0);
+        // vector<string> vec;
+        // for(auto it=res.begin();it!=res.end();it++)
+        // vec.push_back(*it);
+        // return vec;
+        //dfs+剪枝（次暴力求解）
+        // set<string> set1;
+        // set1.insert(s);
+        // return dfs(set1,s);
+        //BFS求解
+        queue<string> q;
+        q.push(s);
+        set<string> set1;
+        set1.insert(s);
+        vector<string> res;
+        while(!q.empty())
+        {
+            string t=q.front();
+            q.pop();
+            if(calc(t)==0)
+            {
+                res.push_back(t);
+                while(!q.empty())
+                {
+                    string t1=q.front();
+                    q.pop();
+                    if(t1.length()<t.length())
+                    break;
+                    if(calc(t1)==0)
+                    res.push_back(t1);
+                }
+                break;
+            }
+            else
+            {
+                for(int i=0;i<t.length();i++)
+                {
+                    if(t[i]!='('&&t[i]!=')')
+                    continue;
+                    string ts=t.substr(0,i)+t.substr(i+1);
+                    if(set1.find(ts)==set1.end())
+                    {
+                        set1.insert(ts);
+                        q.push(ts);
+                    }
+                }
+            }
+        }
+        return res;
+    }
+};
