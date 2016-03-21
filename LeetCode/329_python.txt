@@ -1,0 +1,35 @@
+class Solution(object):
+    def __init__(self):
+        self.dir=[[0,1],[0,-1],[1,0],[-1,0]]
+    
+    def dfs(self,dp,matrix,x,y):
+        if dp[x][y]!=-1:
+            return dp[x][y]
+        res=0
+        for t in self.dir:
+            tx,ty=x+t[0],y+t[1]
+            if tx<0 or tx>=len(matrix) or ty<0 or ty>=len(matrix[0]) or matrix[tx][ty]<=matrix[x][y]:
+                continue
+            t1=self.dfs(dp,matrix,tx,ty)
+            if t1>res:
+                res=t1
+        dp[x][y]=res+1
+        return res+1
+            
+        
+    
+    def longestIncreasingPath(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: int
+        """
+        if len(matrix)==0 or len(matrix[0])==0:
+            return 0
+        t1,t2=len(matrix),len(matrix[0])
+        dp=[[-1 for i in range(t2)] for j in range(t1)]
+        res=0
+        for i in range(t1):
+            for j in range(t2):
+                res=max(res,self.dfs(dp,matrix,i,j))
+        return res
+        
