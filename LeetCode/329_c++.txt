@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int helper(int dir[4][2],vector<vector<int>>& matrix,vector<vector<int>>& flag,int x,int y,int& res)
+    {
+        if(flag[x][y]>=0)
+        return flag[x][y];
+        int tres=0;
+        for(int i=0;i<4;i++)
+        {
+            int tx=x+dir[i][0];
+            int ty=y+dir[i][1];
+            if(tx<0||tx>=matrix.size()||ty<0||ty>=matrix[0].size()||matrix[x][y]<=matrix[tx][ty])
+            continue;
+            int t=helper(dir,matrix,flag,tx,ty,res);
+            if(t>tres)
+            tres=t;
+        }
+        tres+=1;
+        flag[x][y]=tres;
+        if(tres>res)
+        res=tres;
+        //cout<<"x:"<<x<<"y"<<y<<" "<<flag[x][y]<<endl;
+        return tres;
+    }
+
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        int len1,len2;
+        len1=matrix.size();
+        if(len1==0)
+        return 0;
+        len2=matrix[0].size();
+        int res=0;
+        vector<vector<int>> flag(len1,vector<int>(len2,-1));
+        int dir[4][2]={1,0,-1,0,0,1,0,-1};
+        for(int i=0;i<len1;i++)
+        {
+            for(int j=0;j<len2;j++)
+            {
+                helper(dir,matrix,flag,i,j,res);
+            }
+        }
+        return res;
+    }
+};
