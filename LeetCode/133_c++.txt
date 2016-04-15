@@ -1,0 +1,49 @@
+/**
+ * Definition for undirected graph.
+ * struct UndirectedGraphNode {
+ *     int label;
+ *     vector<UndirectedGraphNode *> neighbors;
+ *     UndirectedGraphNode(int x) : label(x) {};
+ * };
+ */
+class Solution {
+public:
+    void helper1(UndirectedGraphNode* node,unordered_map<int,UndirectedGraphNode*>& hmap)
+    {
+        if(node==NULL)
+        return;
+        if(hmap.find(node->label)!=hmap.end())
+        return;
+        hmap[node->label]=new UndirectedGraphNode(node->label);
+        for(auto it=node->neighbors.begin();it!=node->neighbors.end();it++)
+        {
+            helper1(*it,hmap);
+        }
+    }
+    
+    void helper2(UndirectedGraphNode* node,unordered_map<int,UndirectedGraphNode*>& hmap)
+    {
+        if(node==NULL)
+        return;
+        if(hmap[node->label]->neighbors.size()>0)
+        return;
+        for(auto it=node->neighbors.begin();it!=node->neighbors.end();it++)
+        {
+            (hmap[node->label]->neighbors).push_back(hmap[(*it)->label]);
+        }
+        for(auto it=node->neighbors.begin();it!=node->neighbors.end();it++)
+        {
+            helper2(*it,hmap);
+        }
+    }
+
+    UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
+        if(node==NULL)
+        return NULL;
+        unordered_map<int,UndirectedGraphNode*> hmap;
+        helper1(node,hmap);
+        helper2(node,hmap);
+        //UndirectedGraphNode* res=hmap[node->label];
+        return hmap[node->label];
+    }
+};

@@ -1,0 +1,38 @@
+# Definition for a undirected graph node
+# class UndirectedGraphNode(object):
+#     def __init__(self, x):
+#         self.label = x
+#         self.neighbors = []
+
+class Solution(object):
+    def bfs(self,node,hmap):
+        t=[]
+        t.append(node)
+        while len(t)>0:
+            t1=t[0]
+            del t[0]
+            if t1.label in hmap:
+                continue
+            hmap[t1.label]=UndirectedGraphNode(t1.label)
+            for t2 in t1.neighbors:
+                t.append(t2)
+                
+    def dfs(self,node,hmap):
+        if len(hmap[node.label].neighbors)>0:
+            return
+        for t1 in node.neighbors:
+            hmap[node.label].neighbors.append(hmap[t1.label])
+        for t1 in node.neighbors:
+            self.dfs(t1,hmap)
+    
+    def cloneGraph(self, node):
+        """
+        :type node: UndirectedGraphNode
+        :rtype: UndirectedGraphNode
+        """
+        if node==None:
+            return None
+        hmap={}
+        self.bfs(node,hmap)
+        self.dfs(node,hmap)
+        return hmap[node.label]
