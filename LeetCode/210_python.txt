@@ -1,0 +1,35 @@
+class Solution(object):
+    def findOrder(self, numCourses, prerequisites):
+        """
+        :type numCourses: int
+        :type prerequisites: List[List[int]]
+        :rtype: List[int]
+        """
+        a=[[] for i in range(numCourses)]
+        for t in prerequisites:
+            a[t[0]].append(t[1])
+        res=[]
+        flag=[False for i in range(numCourses)]
+        while True:
+            hasRing=True
+            for i in range(numCourses):
+                if flag[i]:
+                    continue
+                if len(a[i])==0:
+                    res.append(i)
+                    flag[i]=True
+                    hasRing=False
+                else:
+                    flag2=True
+                    for j in a[i]:
+                        if not flag[j]:
+                            flag2=False
+                            break
+                    if flag2:
+                        res.append(i)
+                        flag[i]=True
+                        hasRing=False
+            if len(res)==numCourses:
+                return res
+            if hasRing:
+                return []

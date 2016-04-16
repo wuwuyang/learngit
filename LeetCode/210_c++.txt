@@ -1,0 +1,74 @@
+struct node
+{
+    int course;
+    vector<int> pre;
+    node(int n=0):course(n){}
+};
+
+bool a_less_b(const node& a,const node& b)
+{
+    return a.pre.size()<b.pre.size();
+}
+
+class Solution {
+    
+public:
+
+
+    vector<int> findOrder(int numCourses, vector<pair<int, int>>& prerequisites) {
+        vector<node> info(numCourses);
+        vector<int> res;
+        for(int i=0;i<numCourses;i++)
+        {
+            info[i]=node(i);
+        }
+        for(auto t:prerequisites)
+        {
+            info[t.first].pre.push_back(t.second);
+        }
+        //sort(info.begin(),info.end(),a_less_b);
+        vector<bool> flag(numCourses,false);
+        while(true)
+        {
+            bool hasRing=true;
+            for(node a:info)
+            {
+                if(flag[a.course])
+                continue;
+                if(a.pre.size()==0)
+                {
+                    res.push_back(a.course);
+                    flag[a.course]=true;
+                    hasRing=false;
+                }
+                else
+                {
+                    bool flag2=true;
+                    for(int t:a.pre)
+                    {
+                        if(!flag[t])
+                        {
+                            flag2=false;
+                            break;
+                        }
+                    }
+                    if(flag2)
+                    {
+                        res.push_back(a.course);
+                        flag[a.course]=true;
+                        hasRing=false;
+                    }
+                }
+            }
+            if(res.size()==numCourses)
+            {
+                return res;
+            }
+            if(hasRing)
+            {
+                break;
+            }
+        }
+        return vector<int>();
+    }
+};
