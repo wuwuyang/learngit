@@ -1,0 +1,75 @@
+class Solution {
+public:
+    void solve(vector<vector<char>>& board) {
+        int t1=board.size();
+        if(t1==0)
+        return;
+        int t2=board[0].size();
+        if(t2==0)
+        return;
+        //vector<vector<int>> vec(t1,vector<int>(t2));
+        queue<pair<int,int>> q;
+        /*for(int i=0;i<t1;i++)
+        {
+            for(int j=0;j<t2;j++)
+            {
+                if(board[i][j]=='O')
+                {
+                    if(i==0||i==t1-1||j==0||j==t2-1)
+                    {
+                        //board[i][j]='S';
+                        q.push({i,j});
+                    }
+                }
+            }
+        }*/
+        for(int i=0;i<t1;i++)
+        {
+            if(board[i][0]=='O')
+            q.push({i,0});
+        }
+        if(t2>1)
+        for(int i=0;i<t1;i++)
+        {
+            if(board[i][t2-1]=='O')
+            q.push({i,t2-1});
+        }
+        for(int i=1;i<t2-1;i++)
+        {
+            if(board[0][i]=='O')
+            q.push({0,i});
+        }
+        if(t1>1)
+        for(int i=1;i<t2-1;i++)
+        {
+            if(board[t1-1][i]=='O')
+            q.push({t1-1,i});
+        }
+        while(!q.empty())
+        {
+            pair<int,int> t=q.front();
+            q.pop();
+            if(t.first<0||t.first>=t1||t.second<0||t.second>=t2||board[t.first][t.second]=='X'||board[t.first][t.second]=='S')
+            continue;
+            board[t.first][t.second]='S';
+            q.push({t.first-1,t.second});
+            q.push({t.first+1,t.second});
+            q.push({t.first,t.second-1});
+            q.push({t.first,t.second+1});
+        }
+        for(int i=0;i<t1;i++)
+        {
+            for(int j=0;j<t2;j++)
+            {
+                if(board[i][j]=='O')
+                {
+                    board[i][j]='X';
+                }
+                else if(board[i][j]=='S')
+                {
+                    board[i][j]='O';
+                }
+            }
+        }
+    }
+};
