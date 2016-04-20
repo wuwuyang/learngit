@@ -1,0 +1,67 @@
+class TrieNode {
+public:
+    // Initialize your data structure here.
+    bool isEnd;
+    vector<TrieNode*> sub;
+    TrieNode() {
+        isEnd=false;
+        sub=vector<TrieNode*>(26,NULL);
+    }
+};
+
+class Trie {
+public:
+    Trie() {
+        root = new TrieNode();
+    }
+
+    // Inserts a word into the trie.
+    void insert(string word) {
+        TrieNode* t=root;
+        for(char c:word)
+        {
+            int t1=c-'a';
+            if(t->sub[t1]==NULL)
+            {
+                t->sub[t1]=new TrieNode();
+            }
+            t=t->sub[t1];
+        }
+        t->isEnd=true;
+    }
+
+    // Returns if the word is in the trie.
+    bool search(string word) {
+        TrieNode* t=root;
+        for(char c:word)
+        {
+            int t1=c-'a';
+            if(t->sub[t1]==NULL)
+            return false;
+            t=t->sub[t1];
+        }
+        return t->isEnd;
+    }
+
+    // Returns if there is any word in the trie
+    // that starts with the given prefix.
+    bool startsWith(string prefix) {
+        TrieNode* t=root;
+        for(char c:prefix)
+        {
+            int t1=c-'a';
+            if(t->sub[t1]==NULL)
+            return false;
+            t=t->sub[t1];
+        }
+        return true;
+    }
+
+private:
+    TrieNode* root;
+};
+
+// Your Trie object will be instantiated and called as such:
+// Trie trie;
+// trie.insert("somestring");
+// trie.search("key");
