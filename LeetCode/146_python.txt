@@ -1,0 +1,112 @@
+class Node(object):
+    def __init__(self,key,val):
+        self.key=key
+        self.val=val
+        self.next=None
+
+class LRUCache(object):
+
+    def __init__(self, capacity):
+        """
+        :type capacity: int
+        """
+        # 解法1
+        # self.capacity=capacity
+        # self.q=[]
+        # self.keys=set()
+        # self.d={}
+        # self.por=100000000
+        self.capacity=capacity
+        self.root=Node(-1,-1)
+        self.hmap={}
+        
+    def makeIndex(self,key):
+    # 解法1
+    #     por=self.d[key][1]
+    #     left,right=0,len(self.q)-1
+    #     while left<right:
+    #         mid=(left+right)/2
+    #         if self.q[mid][1]>por:
+    #             right=mid-1
+    #         elif self.q[mid][1]<por:
+    #             left=mid+1
+    #         else:
+    #             left,right=mid,mid
+    #     self.q[left][1]=self.por
+    #     self.d[key][1]=self.por
+    #     self.por-=1
+    #     self.q=[self.q[left]]+self.q[:left]+self.q[left+1:]
+    # 解法2
+        tv=self.hmap[key].val
+        if self.hmap[key].next==None:
+                t1=self.root
+                while t1.next.next!=None:
+                    t1=t1.next
+                del self.hmap[t1.next.key]
+                t1.next=None
+        else:
+            t1=self.hmap[key].next
+            self.hmap[key].val=t1.val
+            self.hmap[key].key=t1.key
+            self.hmap[key].next=t1.next
+            self.hmap[t1.key]=self.hmap[key]
+        t1=Node(key,tv)
+        t1.next=self.root.next
+        self.root.next=t1
+        self.hmap[key]=t1
+
+    def get(self, key):
+        """
+        :rtype: int
+        """
+        #########################################
+        # 解法1
+        # if not key in self.keys:
+        #     return -1
+        # self.makeIndex(key)
+        # return self.d[key][0]
+        #########################################
+        # 解法2
+        if key in self.hmap:
+            self.makeIndex(key)
+            return self.hmap[key].val
+        return -1
+
+    def set(self, key, value):
+        """
+        :type key: int
+        :type value: int
+        :rtype: nothing
+        """
+        #########################################
+        # 解法1
+        # if key in self.keys:
+        #     self.makeIndex(key)
+        #     self.d[key][0]=value
+        # else:
+        #     if len(self.q)>=self.capacity:
+        #         self.keys.remove(self.q[-1][0])
+        #         del self.d[self.q[-1][0]]
+        #         del self.q[-1]
+        #     self.keys.add(key)
+        #     self.q=[[key,self.por]]+self.q
+        #     self.d[key]=[value,self.por]
+        #     self.por-=1
+        ##########################################
+        # 解法2
+        if key in self.hmap:
+            self.makeIndex(key)
+            self.hmap[key].val=value
+        else:
+            if len(self.hmap)>=self.capacity:
+                t1=self.root
+                while t1.next.next!=None:
+                    t1=t1.next
+                del self.hmap[t1.next.key]
+                t1.next=None
+            t1=Node(key,value)
+            t1.next=self.root.next
+            self.root.next=t1
+            self.hmap[key]=t1
+            
+        

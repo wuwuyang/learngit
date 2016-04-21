@@ -1,0 +1,132 @@
+struct Node{
+    int key;
+    int value;
+    Node* next;
+    Node(int k,int v):key(k),value(v),next(NULL){}
+};
+
+struct Node1{
+    int key;
+    int value;
+    Node1(int k,int v):key(k),value(v){}
+};
+
+class LRUCache1{
+public:
+    map<int,Node*> hmap;
+    int capacity;
+    Node* root;
+
+    LRUCache1(int capacity) {
+        this->capacity=capacity;
+        root=new Node(-1,-1);
+        hmap=map<int,Node*>();
+    }
+    
+    void makeIndex(int key)
+    {
+        Node* t=hmap[key];
+        int tv=t->value;
+        if(t->next==NULL)
+        {
+            t=root;
+            while(t->next->next!=NULL)
+            t=t->next;
+            //delete t->next;
+            free(t->next);
+            t->next=NULL;
+        }
+        else
+        {
+            t->key=t->next->key;
+            t->value=t->next->value;
+            t->next=t->next->next;
+            hmap[t->key]=t;
+        }
+        t=new Node(key,tv);
+        t->next=root->next;
+        root->next=t;
+        hmap[key]=t;
+    }
+    
+    int get(int key) {
+        if(hmap.find(key)!=hmap.end())
+        {
+            makeIndex(key);
+            return hmap[key]->value;
+        }
+        return -1;
+    }
+    
+    void set(int key, int value) {
+        if(hmap.find(key)!=hmap.end())
+        {
+            makeIndex(key);
+            hmap[key]->value=value;
+        }
+        else
+        {
+            if(hmap.size()>=capacity)
+            {
+                Node* t=root;
+                while(t->next->next!=NULL)
+                t=t->next;
+                hmap.erase(hmap.find(t->next->key));
+                //delete t->next;
+                free(t->next);
+                t->next=NULL;
+            }
+            Node* t=new Node(key,value);
+            t->next=root->next;
+            root->next=t;
+            hmap[key]=t;
+        }
+    }
+};
+
+class LRUCache{
+public:
+    list<Node1> lt;
+    unordered_map<int,list<Node1>::iterator> hmap;
+    int capacity;
+
+    LRUCache(int capacity) {
+        this->capacity=capacity;
+    }
+    
+    
+    int get(int key) {
+        if(hmap.find(key)!=hmap.end())
+        {
+            auto t1=hmap[key];
+            Node1 t(key,t1->value);
+            lt.erase(t1);
+            lt.push_front(t);
+            hmap[key]=lt.begin();
+            return hmap[key]->value;
+        }
+        return -1;
+    }
+    
+    void set(int key, int value) {
+        if(hmap.find(key)!=hmap.end())
+        {
+            auto t1=hmap[key];
+            Node1 t(key,value);
+            lt.erase(t1);
+            lt.push_front(t);
+            hmap[key]=lt.begin();
+        }
+        else
+        {
+            if(hmap.size()>=capacity)
+            {
+                hmap.erase(lt.back().key);
+                lt.pop_back();
+            }
+            Node1 t(key,value);
+            lt.push_front(t);
+            hmap[key]=lt.begin();
+        }
+    }
+};
