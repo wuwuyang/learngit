@@ -1,0 +1,67 @@
+class Solution {
+public:
+    bool isPalindrome(string word)
+    {
+        for(int i=0,j=word.size()-1;i<j;i++,j--)
+        {
+            if(word[i]!=word[j])
+            return false;
+        }
+        return true;
+    }
+    
+    void rev(string& word)
+    {
+        for(int i=0,j=word.size()-1;i<j;i++,j--)
+        {
+            char t=word[i];
+            word[i]=word[j];
+            word[j]=t;
+        }
+    }
+
+    vector<vector<int>> palindromePairs(vector<string>& words) {
+        set<pair<int,int>> set1;
+        map<string,int> wmap;
+        for(int i=0;i<words.size();i++)
+        wmap[words[i]]=i;
+        for(string word:words)
+        {
+            int idx=wmap[word];
+            if(wmap.find("")!=wmap.end()&&word!=""&&isPalindrome(word))
+            {
+                int tidx=wmap[""];
+                set1.insert({idx,tidx});
+                set1.insert({tidx,idx});
+            }
+            string rword=word.substr(0);
+            rev(rword);
+            if(rword!=word&&wmap.find(rword)!=wmap.end())
+            {
+                set1.insert({idx,wmap[rword]});
+            }
+            for(int i=1;i<word.size();i++)
+            {
+                string t1=word.substr(0,i);
+                string t2=word.substr(i);
+                string t3=t1;
+                rev(t3);
+                string t4=t2;
+                rev(t4);
+                if(isPalindrome(t1)&&wmap.find(t4)!=wmap.end())
+                set1.insert({wmap[t4],idx});
+                if(isPalindrome(t2)&&wmap.find(t3)!=wmap.end())
+                set1.insert({idx,wmap[t3]});
+            }
+        }
+        vector<vector<int>> res;
+        for(auto t:set1)
+        {
+            vector<int> vec;
+            vec.push_back(t.first);
+            vec.push_back(t.second);
+            res.push_back(vec);
+        }
+        return res;
+    }
+};
