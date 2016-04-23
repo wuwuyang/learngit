@@ -1,0 +1,99 @@
+class NumArray(object):
+    def lowbit(self,x):
+        return x&-x
+        
+    def add(self,i,value):
+        while i<len(self.c):
+            self.c[i]+=value
+            i+=self.lowbit(i)
+            
+    def getSum(self,i):
+        res=0
+        while i>0:
+            res+=self.c[i]
+            i-=self.lowbit(i)
+        return res
+    
+    def __init__(self, nums):
+        """
+        initialize your data structure here.
+        :type nums: List[int]
+        """
+        ################################
+        # 分段解法
+        # self.nums=nums
+        # self.sums=[]
+        # t=0
+        # for i in range(len(nums)):
+        #     t+=nums[i]
+        #     if i%100==0:
+        #         self.sums.append(t)
+        #         t=0
+        # self.sums.append(t)
+        ################################
+        #树状数组解法
+        self.nums=nums
+        self.c=[0 for i in range(len(nums)+1)]
+        for i in range(len(nums)):
+            self.add(i+1,nums[i])
+        
+        
+
+    def update(self, i, val):
+        """
+        :type i: int
+        :type val: int
+        :rtype: int
+        """
+        ################################
+        # 分段解法
+        # t=val-self.nums[i]
+        # self.nums[i]=val
+        # if i==0:
+        #     self.sums[0]=val
+        # else:
+        #     t1=(i-1)/100+1
+        #     self.sums[t1]+=t
+        ################################
+        t=val-self.nums[i]
+        self.add(i+1,t)
+        self.nums[i]=val
+
+    def sumRange(self, i, j):
+        """
+        sum of elements nums[i..j], inclusive.
+        :type i: int
+        :type j: int
+        :rtype: int
+        """
+        ##################################
+        # 分段解法
+        # res=0
+        # if j==0:
+        #     return self.sums[0]
+        # if i==0:
+        #     res+=self.sums[0]
+        #     i=1
+        # if j-i<100:
+        #     for k in range(i,j+1):
+        #         res+=self.nums[k]
+        #     return res
+        # while i%100!=1:
+        #     res+=self.nums[i]
+        #     i+=1
+        # while j%100!=0:
+        #     res+=self.nums[j]
+        #     j-=1
+        # t1,t2=(i-1)/100+1,j/100
+        # for k in range(t1,t2+1):
+        #     res+=self.sums[k]
+        # return res
+        ##################################
+        return self.getSum(j+1)-self.getSum(i)
+
+
+# Your NumArray object will be instantiated and called as such:
+# numArray = NumArray(nums)
+# numArray.sumRange(0, 1)
+# numArray.update(1, 10)
+# numArray.sumRange(1, 2)
