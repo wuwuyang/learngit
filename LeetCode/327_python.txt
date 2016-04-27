@@ -1,0 +1,115 @@
+class Solution(object):
+    def countRangeSum(self, nums, lower, upper):
+        """
+        :type nums: List[int]
+        :type lower: int
+        :type upper: int
+        :rtype: int
+        """
+        # 归并排序解法
+        # size=len(nums)
+        # sums=[0 for i in range(size+1)]
+        # for i in range(1,size+1):
+        #     sums[i]=sums[i-1]+nums[i-1]
+        # MAX=max(sums)
+        # def merge_sort(left,right):
+        #     if left>=right:
+        #         return 0
+        #     mid=(left+right)/2
+        #     cnt=merge_sort(left,mid)+merge_sort(mid+1,right)
+        #     x,y=left,left
+        #     for i in range(mid+1,right+1):
+        #         while x<=mid and sums[i]-sums[x]>=lower:
+        #             x+=1
+        #         while y<=mid and sums[i]-sums[y]>upper:
+        #             y+=1
+        #         cnt+=x-y
+        #     part=sums[left:right+1]
+        #     t1,t2=left,mid+1
+        #     for i in range(left,right+1):
+        #         x=part[t1-left] if t1<=mid else MAX
+        #         y=part[t2-left] if t2<=right else MAX
+        #         if x>y:
+        #             t2+=1
+        #         else:
+        #             t1+=1
+        #         sums[i]=min(x,y)
+        #     return cnt
+        # return merge_sort(0,size)
+        
+        # 树状数组解法
+        def find_left(sums,a):
+            i,j=0,len(sums)-1
+            while i<j:
+                mid=(i+j)/2
+                if sums[mid]==a:
+                    return mid
+                elif sums[mid]>a:
+                    j=mid-1
+                else:
+                    i=mid+1
+            if sums[i]>=a:
+                return i
+            else:
+                return i+1
+        def find_right(sums,a):
+            i,j=0,len(sums)-1
+            while i<j:
+                mid=(i+j)/2
+                if sums[mid]==a:
+                    return mid
+                elif sums[mid]>a:
+                    j=mid-1
+                else:
+                    i=mid+1
+            if sums[i]<=a:
+                return i
+            else:
+                return i-1
+        def find(sums,a):
+            i,j=0,len(sums)-1
+            while i<j:
+                mid=(i+j)/2
+                if sums[mid]==a:
+                    return mid
+                elif sums[mid]>a:
+                    j=mid-1
+                else:
+                    i=mid+1
+            return i
+        
+        size=len(nums)
+        sums=nums[:]
+        for i in range(1,size):
+            sums[i]+=sums[i-1]
+        sums2=sorted(set(sums))
+        res=0
+        ta=treeArray(len(sums2))
+        for i in range(len(sums)):
+            s=sums[i]
+            t1=find_right(sums2,s-lower)
+            t2=find_left(sums2,s-upper)
+            t3=find(sums2,s)
+            print t1,t2
+            res+=ta.getSum(t1+1)-ta.getSum(t2)+(lower<=s<=upper)
+            ta.add(t3+1,1)
+        return res
+        
+        
+class treeArray(object):
+    def __init__(self,n):
+        self.n=n
+        self.arr=[0 for i in range(n+1)]
+    def lowbit(self,x):
+        return x&-x
+    def add(self,x,val):
+        while x<=self.n:
+            self.arr[x]+=val;
+            x+=self.lowbit(x)
+    def getSum(self,x):
+        res=0
+        while x>0:
+            res+=self.arr[x]
+            x-=self.lowbit(x)
+        return res
+            

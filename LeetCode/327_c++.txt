@@ -1,0 +1,211 @@
+struct treeArray{
+    int n;
+    vector<int> arr;
+    treeArray(int a)
+    {
+        n=a;
+        arr.resize(n+1);
+    }
+    int lowbit(int x)
+    {
+        return x&-x;
+    }
+    void add(int x,int val)
+    {
+        while(x<=n)
+        {
+            arr[x]+=val;
+            x+=lowbit(x);
+        }
+    }
+    int getSum(int x)
+    {
+       int res=0;
+       while(x>0)
+       {
+           res+=arr[x];
+           x-=lowbit(x);
+           //cout<<x<<endl;
+       }
+       return res;
+    }
+};
+
+int find_left(vector<long long int>& vec,long long int x)
+{
+    int i=0,j=vec.size()-1;
+    while(i<j)
+    {
+        int mid=(i+j)/2;
+        if(vec[mid]==x)
+        {
+            return mid;
+        }
+        else if(vec[mid]>x)
+        {
+            j=mid-1;
+        }
+        else
+        {
+            i=mid+1;
+        }
+    }
+    if(vec[i]>=x)
+    return i;
+    else
+    return i+1;
+}
+
+int find_right(vector<long long int>&vec,long long int x)
+{
+    int i=0,j=vec.size()-1;
+    while(i<j)
+    {
+        int mid=(i+j)/2;
+        if(vec[mid]==x)
+        {
+            return mid;
+        }
+        else if(vec[mid]>x)
+        {
+            j=mid-1;
+        }
+        else
+        {
+            i=mid+1;
+        }
+    }
+    if(vec[i]<=x)
+    return i;
+    else
+    return i-1;
+}
+
+int find(vector<long long int>& vec,long long int x)
+{
+    int i=0,j=vec.size()-1;
+    while(i<j)
+    {
+        int mid=(i+j)/2;
+        if(vec[mid]==x)
+        return mid;
+        else if(vec[mid]>x)
+        {
+            j=mid-1;
+        }
+        else
+        {
+            i=mid+1;
+        }
+    }
+    return i;
+}
+
+class Solution {
+public:
+    //归并排序解法
+    int merge_sort(vector<long long int>& sums,int lower,int upper,int left,int right,long long int& INF)
+    {
+        if(left>=right)
+        return 0;
+        int mid=(left+right)/2;
+        int cnt=merge_sort(sums,lower,upper,left,mid,INF)+merge_sort(sums,lower,upper,mid+1,right,INF);
+        long long int x=left,y=left;
+        for(int i=mid+1;i<=right;i++)
+        {
+            while(x<=mid)
+            {
+                long long int t=sums[i]-sums[x];
+                if(t>=lower)
+                x++;
+                else
+                break;
+            }
+            while(y<=mid)
+            {
+                long long int t=sums[i]-sums[y];
+                if(t>upper)
+                y++;
+                else
+                break;
+            }
+            cnt+=x-y;
+        }
+        int t1=left,t2=mid+1;
+        vector<long long int> temp(sums.begin()+left,sums.begin()+right+1);
+        for(int i=left;i<=right;i++)
+        {
+            if(t1<=mid)
+            {
+                x=temp[t1-left];
+            }
+            else
+            {
+                x=INF;
+            }
+            if(t2<=right)
+            {
+                y=temp[t2-left];
+            }
+            else
+            {
+                y=INF;
+            }
+            if(x<y)
+            t1++;
+            else
+            t2++;
+            sums[i]=min(x,y);
+        }
+        return cnt;
+    }
+
+    int countRangeSum(vector<int>& nums, int lower, int upper) {
+        //归并排序解法
+        // int size=nums.size();
+        // vector<long long int> sums(size+1,0);
+        // if(size==0)
+        // return 0;
+        // long long int INF=0x7fffffff;
+        // for(int i=1;i<=size;i++)
+        // {
+        //     sums[i]=sums[i-1]+nums[i-1];
+        // }
+        // return merge_sort(sums,lower,upper,0,size,INF);
+        //树状数组解法
+        int size=nums.size();
+        if(size==0)
+        return 0;
+        set<long long int> set1;
+        vector<long long int> sums(nums.begin(),nums.end());
+        set1.insert(nums[0]);
+        for(int i=1;i<size;i++)
+        {
+            sums[i]+=sums[i-1];
+            set1.insert(sums[i]);
+        }
+        vector<long long int> sums2;
+        for(auto t:set1)
+        {
+            sums2.push_back(t);
+        }
+        sort(sums2.begin(),sums2.end());
+        int res=0;
+        treeArray ta(size);
+        for(int i=0;i<size;i++)
+        {
+            long long int s=sums[i];
+            int t1=find_left(sums2,s-upper);
+            int t2=find_right(sums2,s-lower);
+            int t3=find(sums2,s);
+            //cout<<t2<<" "<<t1<<endl;
+            if(t2>=t1)
+            res+=ta.getSum(t2+1)-ta.getSum(t1);
+            //cout<<"k4"<<endl;
+            if(s>=lower&&s<=upper)
+            res+=1;
+            ta.add(t3+1,1);
+        }
+        return res;
+    }
+};
