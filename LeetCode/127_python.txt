@@ -1,0 +1,62 @@
+class Solution(object):
+    def isSim(self,w1,w2):
+        res=0
+        for i in range(len(w1)):
+            if w1[i]!=w2[i]:
+                res+=1
+                if res>1:
+                    return False
+        return True
+            
+    
+    def ladderLength(self, beginWord, endWord, wordList):
+        """
+        :type beginWord: str
+        :type endWord: str
+        :type wordList: Set[str]
+        :rtype: int
+        """
+        if beginWord==endWord:
+            return 1
+        if self.isSim(beginWord,endWord):
+            return 2
+        if beginWord in wordList:
+            wordList.remove(beginWord)
+        if endWord in wordList:
+            wordList.remove(endWord)
+        a1={beginWord:1}
+        a2={endWord:1}
+        q1=collections.deque([beginWord])
+        q2=collections.deque([endWord])
+        wm={}
+        for x in wordList:
+            for i in range(len(x)):
+                tx=x[:i]+'_'+x[i+1:]
+                if not tx in wm:
+                    wm[tx]=set()
+                wm[tx].add(x)
+        while q1 or q2:
+            if q1:
+                t1=q1.popleft()
+                if t1 in a2:
+                    return a1[t1]+a2[t1]-1
+                for i in range(len(t1)):
+                    tx=t1[:i]+'_'+t1[i+1:]
+                    if tx in wm:
+                        for x in wm[tx]:
+                            if not x in a1:
+                                a1[x]=a1[t1]+1
+                                q1+=x,
+            if q2:
+                t2=q2.popleft()
+                if t2 in a1:
+                    return a1[t2]+a2[t2]-1
+                for i in range(len(t2)):
+                    tx=t2[:i]+'_'+t2[i+1:]
+                    if tx in wm:
+                        for x in wm[tx]:
+                            if not x in a2:
+                                a2[x]=a2[t2]+1
+                                q2+=x,
+        return 0
+            
