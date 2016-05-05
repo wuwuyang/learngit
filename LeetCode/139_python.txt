@@ -1,0 +1,27 @@
+class Solution(object):
+    def wordBreak(self, s, wordDict):
+        """
+        :type s: str
+        :type wordDict: Set[str]
+        :rtype: bool
+        """
+        a=set([s])
+        q=collections.deque()
+        q+=s,
+        while q:
+            t=q[0]
+            q.popleft()
+            if t in wordDict:
+                return True
+            t1=''
+            for i in range(len(t)):
+                t1+=t[i]
+                if t1 in wordDict:
+                    t2=t[i+1:]
+                    if t2 in a:
+                        continue
+                    a.add(t2)
+                    if t2 in wordDict:
+                        return True
+                    q+=t2,
+        return False

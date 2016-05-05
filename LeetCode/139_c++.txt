@@ -1,0 +1,31 @@
+class Solution {
+public:
+    bool wordBreak(string s, unordered_set<string>& wordDict) {
+        queue<string> q;
+        q.push(s);
+        unordered_set<string> a;
+        a.insert(s);
+        while(!q.empty())
+        {
+            string t=q.front();
+            q.pop();
+            if(wordDict.find(t)!=wordDict.end())
+            return true;
+            string ts="";
+            for(int i=0;i<s.length();i++)
+            {
+                ts+=t[i];
+                if(wordDict.find(ts)!=wordDict.end())
+                {
+                    string ts2=t.substr(i+1);
+                    if(a.find(ts2)==a.end())
+                    {
+                        q.push(ts2);
+                        a.insert(ts2);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+};
