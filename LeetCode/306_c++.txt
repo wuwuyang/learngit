@@ -1,0 +1,98 @@
+class Solution {
+public:
+    string add(string s1,string s2)
+    {
+        if(s1.length()<s2.length())
+        {
+            string t=s1;
+            s1=s2;
+            s2=t;
+        }
+        int len1=s1.length(),len2=s2.length();
+        int up=0;
+        for(int i=1;i<=s2.length();i++)
+        {
+            int t=s1[len1-i]+s2[len2-i]-'0'-'0'+up;
+            if(t<10)
+            {
+                s1[len1-i]=t+'0';
+                up=0;
+            }
+            else
+            {
+                s1[len1-i]=t+'0'-10;
+                up=1;
+            }
+        }
+        if(up>0)
+        {
+            for(int i=s2.length()+1;i<=s1.length();i++)
+            {
+                int t=s1[len1-i]+up-'0';
+                if(t>=10)
+                {
+                    s1[len1-i]=t-10+'0';
+                }
+                else
+                {
+                    s1[len1-i]=t+'0';
+                    up=0;
+                    break;
+                }
+            }
+            if(up>0)
+            {
+                s1="1"+s1;
+            }
+        }
+        return s1;
+    }
+    
+    bool startswith(string s1,string s2)
+    {
+        if(s1.length()<s2.length())
+        return false;
+        for(int i=0;i<s2.length();i++)
+        {
+            if(s1[i]!=s2[i])
+            return false;
+        }
+        return true;
+    }
+
+    bool helper(string num,string pre1,string pre2)
+    {
+        //cout<<num<<" "<<pre1<<" "<<pre2<<endl;
+        if(pre2.length()>num.length())
+        return false;
+        string pre3=add(pre1,pre2);
+        if(pre3==num)
+        return true;
+        if(startswith(num,pre3))
+        {
+            string tnum=num.substr(pre3.length());
+            return helper(tnum,pre2,pre3);
+        }
+        return false;
+    }
+
+    bool isAdditiveNumber(string num) {
+        for(int i=1;i<num.length();i++)
+        {
+            for(int j=1;j<num.length()-i;j++)
+            {
+                string pre1=num.substr(0,i);
+                string pre2=num.substr(i,j);
+                string tnum=num.substr(i+j);
+                if(helper(tnum,pre1,pre2))
+                return true;
+                if(num[i]=='0')
+                break;
+            }
+            if(num[0]=='0')
+            break;
+        }
+        //cout<<add("99","1")<<endl;
+        return false;
+    }
+};
