@@ -1,0 +1,25 @@
+class Solution {
+public:
+    bool isSelfCrossing(vector<int>& x) {
+        int l1=x.size();
+        for(int i=0;i<l1-3;i++)
+        {
+            if(i<l1-3)
+            {
+                if(x[i]>=x[i+2]&&x[i+3]>=x[i+1])
+                return true;
+            }
+            if(i<l1-4)
+            {
+                if(x[i+1]==x[i+3]&&(x[i]+x[i+4]>=x[i+2]))
+                return true;
+            }
+            if(i<l1-5)
+            {
+                if(x[i+3]>x[i+1]&&(x[i]+x[i+4]>=x[i+2])&&(x[i+1]+x[i+5]>=x[i+3])&&x[i+4]<=x[i+2])
+                return true;
+            }
+        }
+        return false;
+    }
+};
