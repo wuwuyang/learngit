@@ -1,0 +1,22 @@
+class Solution {
+public:
+    vector<int> countBits(int num) {
+        vector<int> vec(num+1);
+        int stand=1,left=1,right=1;
+        for(int i=1;i<=num;i++)
+        {
+            if(i==stand)
+            {
+                vec[i]=1;
+                stand*=2;
+                left=1;
+            }
+            else
+            {
+                vec[i]=1+vec[left];
+                left++;
+            }
+        }
+        return vec;
+    }
+};
