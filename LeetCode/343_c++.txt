@@ -1,0 +1,21 @@
+class Solution {
+public:
+
+    int integerBreak(int n) {
+        if(n==2)
+        return 1;
+        else if(n==3)
+        return 2;
+        else
+        {
+            int t1=n/3;
+            int t2=n%3;
+            if(t2==0)
+            return pow(3,t1);
+            else if(t2==1)
+            return pow(3,t1-1)*4;
+            else
+            return pow(3,t1)*2;
+        }
+    }
+};
