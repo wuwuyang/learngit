@@ -1,0 +1,55 @@
+class Solution {
+public:
+    void quickSort(vector<pair<int,int>>& vec,int left,int right)
+    {
+        if(left>=right)
+        return;
+        int mid=(left+right)/2;
+        auto t=vec[mid];
+        vec[mid]=vec[left];
+        vec[left]=t;
+        int stand=t.second;
+        int i=left,j=right;
+        int temp=left;
+        while(i<j)
+        {
+            while(temp<j&&vec[j].second<stand)
+            j--;
+            if(temp<j)
+            {
+                vec[temp]=vec[j];
+                temp=j;
+                j--;
+            }
+            while(i<temp&&vec[i].second>=stand)
+            i++;
+            if(i<temp)
+            {
+                vec[temp]=vec[i];
+                temp=i;
+                i++;
+            }
+        }
+        vec[temp]=t;
+        quickSort(vec,left,temp-1);
+        quickSort(vec,temp+1,right);
+    }
+
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        map<int,int> m;
+        for(int i:nums)
+        {
+            m[i]++;
+        }
+        vector<pair<int,int>> vec;
+        for(auto it=m.begin();it!=m.end();it++)
+        {
+            vec.push_back({it->first,it->second});
+        }
+        quickSort(vec,0,vec.size()-1);
+        vector<int> res(k);
+        for(int i=0;i<k;i++)
+        res[i]=vec[i].first;
+        return res;
+    }
+};
