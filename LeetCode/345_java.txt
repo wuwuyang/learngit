@@ -1,0 +1,30 @@
+public class Solution {
+    public String reverseVowels(String s) {
+        Set<Character> set=new HashSet<Character>();
+        String ts="aeiouAEIOU";
+        for(int i=0;i<ts.length();i++)
+        set.add(ts.charAt(i));
+        int left=0,right=s.length()-1;
+        StringBuffer sb=new StringBuffer(s);
+        while(left<right)
+        {
+            //System.out.println(left+" "+sb.charAt(left)+" "+right+" "+sb.charAt(right));
+            while(left<right&&!set.contains(sb.charAt(left)))
+            {
+                //System.out.println("Fuck1");
+                left++;
+            }
+            while(left<right&&!set.contains(sb.charAt(right)))
+            {
+                //System.out.println("Fuck2");
+                right--;
+            }
+            char t=sb.charAt(left);
+            sb.setCharAt(left,sb.charAt(right));
+            sb.setCharAt(right,t);
+            left++;
+            right--;
+        }
+        return sb.toString();
+    }
+}

@@ -1,0 +1,72 @@
+class Pair{
+    int first;
+    int second;
+    Pair(){}
+    Pair(int a,int b)
+    {
+        first=a;
+        second=b;
+    }
+}
+
+class SortByFeq implements Comparator{
+    public int compare(Object a,Object b)
+    {
+        Pair pa=(Pair)a;
+        Pair pb=(Pair)b;
+        return pb.second-pa.second;
+    }
+}
+
+public class Solution {
+    public List<Integer> topKFrequent(int[] nums, int k) {
+        Map<Integer,Integer> map=new HashMap<Integer,Integer>();
+        for(int i=0;i<nums.length;i++)
+        {
+            if(map.containsKey(nums[i]))
+            {
+                map.put(nums[i],map.get(nums[i])+1);
+            }
+            else
+            {
+                map.put(nums[i],1);
+            }
+        }
+        // ArrayList<Pair> array=new ArrayList<Pair>();
+        // for(Map.Entry entry:map.entrySet())
+        // {
+        //     array.add(new Pair((Integer)entry.getKey(),(Integer)entry.getValue()));
+        // }
+        // Collections.sort(array,new SortByFeq());
+        // List<Integer> list=new ArrayList<Integer>();
+        // for(int i=0;i<k;i++)
+        // {
+        //     list.add(array.get(i).first);
+        // }
+        // return list;
+        int n=nums.length+1;
+        ArrayList array[];
+        array=new ArrayList[n];
+        for(int i=0;i<n;i++)
+        array[i]=new ArrayList<Integer>();
+        for(Map.Entry entry:map.entrySet())
+        {
+            array[(Integer)entry.getValue()].add((Integer)entry.getKey());
+        }
+        List<Integer> list=new ArrayList<Integer>();
+        int index=0;
+        for(int i=n-1;i>0;i--)
+        {
+            int t=0;
+            while(index<k&&t<array[i].size())
+            {
+                list.add((Integer)array[i].get(t));
+                index++;
+                t++;
+            }
+            if(index>=k)
+            break;
+        }
+        return list;
+    }
+}
