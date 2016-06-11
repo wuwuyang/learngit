@@ -1,0 +1,15 @@
+public class Solution {
+    public String reverseString(String s) {
+        int left=0,right=s.length()-1;
+        StringBuffer sb=new StringBuffer(s);
+        while(left<right)
+        {
+            char c=sb.charAt(left);
+            sb.setCharAt(left,sb.charAt(right));
+            sb.setCharAt(right,c);
+            left++;
+            right--;
+        }
+        return sb.toString();
+    }
+}
