@@ -1,0 +1,155 @@
+public class Twitter {
+    
+    public int time;
+    public Map<Integer,List<Tweet>> map;
+    public Map<Integer,Set<Integer>> fmap;
+    
+    class Tweet
+    {
+        int tweetId;
+        int time;
+        Tweet(int t1,int t2)
+        {
+            tweetId=t1;
+            time=t2;
+        }
+    }
+
+    /** Initialize your data structure here. */
+    public Twitter() {
+        time=0;
+        map=new HashMap<Integer,List<Tweet>>();
+        fmap=new HashMap<Integer,Set<Integer>>();
+    }
+    
+    /** Compose a new tweet. */
+    public void postTweet(int userId, int tweetId) {
+        List<Tweet> tlist;
+        if(map.containsKey(userId))
+        {
+            tlist=map.get(userId);
+            if(tlist.size()==10)
+            {
+                tlist.remove(9);
+            }
+            tlist.add(0,new Tweet(tweetId,time++));
+        }
+        else
+        {
+            tlist=new ArrayList<Tweet>();
+            tlist.add(new Tweet(tweetId,time++));
+        }
+        map.put(userId,tlist);
+    }
+    
+    /** Retrieve the 10 most recent tweet ids in the user's news feed. Each item in the news feed must be posted by users who the user followed or by the user herself. Tweets must be ordered from most recent to least recent. */
+    public List<Integer> getNewsFeed(int userId) {
+        List<Tweet> tres=new ArrayList<Tweet>();
+        if(map.get(userId)!=null)
+        {
+            tres.addAll(map.get(userId));
+        }
+        // System.out.println("-------------------");
+        // System.out.println(tres.size());
+        // for(int i=0;i<tres.size();i++)
+        // System.out.print(tres.get(i).tweetId+" ");
+        // System.out.println();
+        Set<Integer> set=fmap.get(userId);
+        if(set!=null)
+        {
+            for(int id:set)
+            {
+                List<Tweet> tlist=new ArrayList<Tweet>();
+                tlist.addAll(map.get(id));
+                int i=0;
+                while(tres.size()<10&&tlist.size()>0)
+                {
+                    Tweet t1=tlist.get(0);
+                    tlist.remove(0);
+                    for(;i<=tres.size();i++)
+                    {
+                        if(i==tres.size())
+                        {
+                            tres.add(t1);
+                            i=tres.size();
+                            break;
+                        }
+                        if(t1.time>tres.get(i).time)
+                        {
+                            tres.add(i,t1);
+                            i++;
+                            break;
+                        }
+                    }
+                }
+                for(Tweet t1:tlist)
+                {
+                    boolean flag=false;
+                    for(;i<=10;i++)
+                    {
+                        if(i==10)
+                        {
+                            flag=true;
+                            break;
+                        }
+                        if(t1.time>tres.get(i).time)
+                        {
+                            tres.add(i,t1);
+                            tres.remove(10);
+                            i++;
+                            break;
+                        }
+                    }
+                    if(flag)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+        List<Integer> res=new ArrayList<Integer>();
+        for(int i=0;i<tres.size();i++)
+        {
+            res.add(tres.get(i).tweetId);
+        }
+        return res;
+    }
+    
+    /** Follower follows a followee. If the operation is invalid, it should be a no-op. */
+    public void follow(int followerId, int followeeId) {
+        if(followerId==followeeId)
+        return;
+        Set<Integer> set;
+        if(fmap.containsKey(followerId))
+        {
+            set=fmap.get(followerId);
+        }
+        else
+        {
+            set=new HashSet<Integer>();
+        }
+        set.add(followeeId);
+        fmap.put(followerId,set);
+    }
+    
+    /** Follower unfollows a followee. If the operation is invalid, it should be a no-op. */
+    public void unfollow(int followerId, int followeeId) {
+        Set<Integer> set=fmap.get(followerId);
+        if(set==null)
+        return;
+        if(set.contains(followeeId))
+        {
+            set.remove(followeeId);
+        }
+        fmap.put(followerId,set);
+    }
+}
+
+/**
+ * Your Twitter object will be instantiated and called as such:
+ * Twitter obj = new Twitter();
+ * obj.postTweet(userId,tweetId);
+ * List<Integer> param_2 = obj.getNewsFeed(userId);
+ * obj.follow(followerId,followeeId);
+ * obj.unfollow(followerId,followeeId);
+ */
