@@ -1,0 +1,122 @@
+public class Solution {
+    class Pair implements Comparable{
+        int w;
+        int h;
+        Pair(int t1,int t2)
+        {
+            w=t1;
+            h=t2;
+        }
+        @Override
+        public int compareTo(Object o)
+        {
+            Pair p=(Pair)o;
+            if(this.w!=p.w)
+            {
+                return this.w-p.w;
+            }
+            return this.h-p.h;
+        }
+        
+        public String toString()
+        {
+            return "("+w+","+h+")";
+        }
+    }
+    
+    class Pair2 implements Comparable{
+        int w;
+        int h;
+        Pair2(int t1,int t2)
+        {
+            w=t1;
+            h=t2;
+        }
+        @Override
+        public int compareTo(Object o)
+        {
+            Pair2 p=(Pair2)o;
+            if(this.w!=p.w)
+            {
+                return this.w-p.w;
+            }
+            return p.h-this.h;
+        }
+        
+        public String toString()
+        {
+            return "("+w+","+h+")";
+        }
+    }
+    
+    
+    
+    public int maxEnvelopes(int[][] envelopes) {
+        // List<Pair> p=new ArrayList<Pair>();
+        // for(int i=0;i<envelopes.length;i++)
+        // {
+        //     p.add(new Pair(envelopes[i][0],envelopes[i][1]));
+        // }
+        // Collections.sort(p);
+        // //for(int i=0;i<envelopes.length;i++)
+        // //System.out.print(p.get(i).toString()+"   ");
+        // //boolean flag[]=new boolean[envelopes.length];
+        // int res=0;
+        // int a[]=new int[envelopes.length];
+        // for(int i=0;i<envelopes.length;i++)
+        // {
+        //     //flag[i]=false;
+        //     a[i]=0;
+        //     //a[i][1]=0;
+        // }
+        // for(int i=0;i<envelopes.length;i++)
+        // {
+        //     int tres=0;
+        //     Pair pi=p.get(i);
+        //     for(int j=i-1;j>=0;j--)
+        //     {
+        //         Pair pj=p.get(j);
+        //         if(pi.w>pj.w&&pi.h>pj.h&&a[j]>tres)
+        //         tres=a[j];
+        //     }
+        //     a[i]=tres+1;
+        //     if(a[i]>res)
+        //     res=a[i];
+        // }
+        // return res;
+        
+        List<Pair2> p=new ArrayList<Pair2>();
+        for(int i=0;i<envelopes.length;i++)
+        {
+            p.add(new Pair2(envelopes[i][0],envelopes[i][1]));
+        }
+        Collections.sort(p);
+        // for(int i=0;i<envelopes.length;i++)
+        // System.out.print(p.get(i).toString()+"   ");
+        List<Pair2> list=new ArrayList<Pair2>();
+        for(Pair2 tp:p)
+        {
+            int left=0,right=list.size()-1;
+            while(left<=right)
+            {
+                int mid=(left+right)/2;
+                int mh=list.get(mid).h;
+                if(mh<tp.h)
+                {
+                    left=mid+1;
+                }
+                else
+                {
+                    right=mid-1;
+                }
+            }
+            if(left<list.size())
+            list.set(left,tp);
+            else
+            list.add(tp);
+        }
+        // for(Pair2 tp:list)
+        // System.out.print(tp.toString()+" ");
+        return list.size();
+    }
+}
