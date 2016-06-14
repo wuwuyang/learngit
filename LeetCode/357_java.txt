@@ -1,0 +1,18 @@
+public class Solution {
+    public int countNumbersWithUniqueDigits(int n) {
+        int unique_num=1;
+        int all_num=1;
+        int s1=0;
+        int s2=0;
+        for(int i=1;i<=n;i++)
+        {
+            int t1=all_num*9;
+            int t2=s2*(i-1)+s1*10;
+            unique_num+=t1-t2;
+            s1=t2;
+            s2=t1-t2;
+            all_num*=10;
+        }
+        return unique_num;
+    }
+}
