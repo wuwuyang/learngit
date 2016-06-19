@@ -1,0 +1,80 @@
+public class Solution {
+    //dfs 
+    public List<String> helper(String start,Map<String,List<String>> map)
+    {
+        List<String> left=new ArrayList();
+        List<String> right=new ArrayList();
+        List<String> temp=map.get(start);
+        if(temp!=null)
+        {
+            temp=new ArrayList(map.get(start));
+            for(String s:temp)
+            {
+                List<String> temp2=map.get(start);
+                if(temp2!=null&&temp2.contains(s))
+                {
+                    temp2.remove(s);
+                    map.put(start,temp2);
+                    List<String> t1=helper(s,map);
+                    if(t1.contains(start))
+                    left.addAll(t1);
+                    else
+                    right.addAll(t1);
+                }
+            }
+        }
+        List<String> res=new ArrayList();
+        res.add(start);
+        res.addAll(left);
+        res.addAll(right);
+        return res;
+    }
+    
+    //HierholzerÀ„∑®
+    public void helper2(String start,List<String> res,Map<String,List<String>> map)
+    {
+        List<String> temp=map.get(start);
+        if(temp!=null)
+        {
+            temp=new ArrayList(temp);
+            for(String s:temp)
+            {
+                List<String> t1=map.get(start);
+                if(t1!=null&&t1.contains(s))
+                {
+                    t1.remove(s);
+                    helper2(s,res,map);
+                }
+            }
+        }
+        res.add(start);
+    }
+    
+    public List<String> findItinerary(String[][] tickets) {
+        Map<String,List<String>> map=new HashMap();
+        for(int i=0;i<tickets.length;i++)
+        {
+            List<String> temp=map.get(tickets[i][0]);
+            if(temp==null)
+            temp=new ArrayList();
+            temp.add(tickets[i][1]);
+            map.put(tickets[i][0],temp);
+        }
+        for(String s:map.keySet())
+        {
+            List<String> temp=map.get(s);
+            Collections.sort(temp);
+            map.put(s,temp);
+        }
+        //return helper("JFK",map);
+        List<String> res=new ArrayList();
+        helper2("JFK",res,map);
+        for(int i=0,j=res.size()-1;i<j;i++,j--)
+        {
+            String t=res.get(i);
+            res.set(i,res.get(j));
+            res.set(j,t);
+        }
+        return res;
+    }
+}
