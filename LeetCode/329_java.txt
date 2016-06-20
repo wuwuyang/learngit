@@ -1,0 +1,51 @@
+public class Solution {
+    public int dfs(int[][] flag,int[][] matrix,int x,int y)
+    {
+        if(flag[x][y]>-1)
+        return flag[x][y];
+        int row=matrix.length;
+        int col=matrix[0].length;
+        int[][] dir={{0,1},{0,-1},{1,0},{-1,0}};
+        int max=0;
+        for(int i=0;i<4;i++)
+        {
+            int tx=x+dir[i][0];
+            int ty=y+dir[i][1];
+            if(tx<0||tx>=row||ty<0||ty>=col||matrix[x][y]<=matrix[tx][ty])
+            continue;
+            int tres=dfs(flag,matrix,tx,ty);
+            if(tres>max)
+            max=tres;
+        }
+        flag[x][y]=max+1;
+        return 1+max;
+    }
+    
+    public int longestIncreasingPath(int[][] matrix) {
+        int row=matrix.length;
+        if(row==0)
+        return 0;
+        int col=matrix[0].length;
+        if(col==0)
+        return 0;
+        int[][] flag=new int[row][col];
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                flag[i][j]=-1;
+            }
+        }
+        int res=0;
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                int t=dfs(flag,matrix,i,j);
+                if(t>res)
+                res=t;
+            }
+        }
+        return res;
+    }
+}
