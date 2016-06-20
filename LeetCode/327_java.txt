@@ -1,0 +1,102 @@
+public class Solution {
+    public int findIndex(List<Long> nums,long val)
+    {
+        int left=0,right=nums.size()-1;
+        while(left<=right)
+        {
+            int mid=(left+right)/2;
+            if(nums.get(mid)==val)
+            return mid;
+            if(nums.get(mid)<val)
+            {
+                left=mid+1;
+            }
+            else
+            {
+                right=mid-1;
+            }
+        }
+        if(left>=nums.size())
+        return nums.size()-1;
+        return left;
+    }
+    
+    public int countRangeSum(int[] nums, int lower, int upper) {
+        if(nums.length==0)
+        return 0;
+        long[] sums=new long[nums.length];
+        long[] sums2=new long[nums.length];
+        sums[0]=nums[0];
+        sums2[0]=nums[0];
+        for(int i=1;i<nums.length;i++)
+        {
+            sums[i]=nums[i]+sums[i-1];
+            sums2[i]=sums[i];
+        }
+        Arrays.sort(sums2);
+        List<Long> osums=new ArrayList();
+        osums.add(sums2[0]);
+        long last=sums2[0];
+        for(int i=1;i<sums2.length;i++)
+        {
+            if(sums2[i]!=last)
+            {
+                osums.add(sums2[i]);
+                last=sums2[i];
+            }
+        }
+        FenwickTree ft=new FenwickTree(osums.size());
+        int ans=0;
+        for(Long s:sums)
+        {
+            int left=findIndex(osums,s-upper);
+            int right=findIndex(osums,s-lower);
+            if(osums.get(left)<s-upper)
+            left++;
+            if(osums.get(right)<=s-lower)
+            right++;
+            ans+=ft.sum(right)-ft.sum(left);
+            if(s>=lower&&s<=upper)
+            ans++;
+            int index=findIndex(osums,s)+1;
+            ft.add(index,1);
+            //System.out.println(ans);
+        }
+        return ans;
+    }
+    
+    class FenwickTree{
+        int n;
+        int[] nums;
+        public FenwickTree(int t)
+        {
+            n=t;
+            nums=new int[n+1];
+        }
+        
+        public int lowbit(int x)
+        {
+            return x&-x;
+        }
+        
+        public void add(int x,int val)
+        {
+            while(x<=n)
+            {
+                nums[x]+=val;
+                x+=lowbit(x);
+            }
+        }
+        
+        public int sum(int x)
+        {
+            int res=0;
+            while(x>0)
+            {
+                res+=nums[x];
+                x-=lowbit(x);
+            }
+            return res;
+        }
+    }
+}
