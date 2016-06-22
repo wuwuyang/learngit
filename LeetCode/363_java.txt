@@ -1,0 +1,56 @@
+public class Solution {
+    public int helper(int[] nums,int k)
+    {
+        int res=nums[0];
+        int[] temp=new int[nums.length];
+        temp[0]=nums[0];
+        for(int i=1;i<nums.length;i++)
+        {
+            temp[i]=temp[i-1]+nums[i];
+        }
+        for(int i=0;i<nums.length;i++)
+        {
+            if(res>k||(res<temp[i]&&temp[i]<=k))
+            res=temp[i];
+            for(int j=i+1;j<nums.length;j++)
+            {
+                int t=temp[j]-temp[i];
+                if(res>k||(res<t&&t<=k))
+                res=t;
+            }
+        }
+        return res;
+    }
+    
+    public int maxSumSubmatrix(int[][] matrix, int k) {
+        int m=matrix.length;
+        if(m==0)
+        return 0;
+        int n=matrix[0].length;
+        if(n==0)
+        return 0;
+        int res=matrix[0][0];
+        for(int i=0;i<m;i++)
+        {
+            int[] sums=new int[n];
+            for(int j=0;j<n;j++)
+            sums[j]=0;
+            for(int j=i;j<m;j++)
+            {
+                for(int h=0;h<n;h++)
+                {
+                    sums[h]+=matrix[j][h];
+                }
+                int t=helper(sums,k);
+                //System.out.println("t:"+t);
+                if(res>k||(t<=k&&t>res))
+                {
+                    res=t;
+                }
+                if(res==k)
+                return res;
+            }
+        }
+        return res;
+    }
+}
