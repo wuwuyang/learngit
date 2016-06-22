@@ -1,0 +1,92 @@
+public class Solution {
+    //根据快排思想，将nums数组以第order大的元素为标准分成两部分
+    public void helper(int[] nums,int left,int right,int order)
+    {
+        int mid=(left+right)/2;
+        int temp=nums[mid];
+        nums[mid]=nums[left];
+        int now=left;
+        int i=left,j=right;
+        while(i<j)
+        {
+            while(i<j&&nums[j]>temp)
+            j--;
+            nums[now]=nums[j];
+            now=j;
+            while(i<j&&nums[i]<=temp)
+            i++;
+            nums[now]=nums[i];
+            now=i;
+        }
+        nums[now]=temp;
+        int t=now-left+1;
+        if(t==order)
+        return;
+        if(t>order)
+        {
+            helper(nums,left,now-1,order);
+        }
+        else
+        {
+            helper(nums,now+1,right,order-t);
+        }
+    }
+    
+    
+    public void wiggleSort(int[] nums) {
+        int order=nums.length/2+nums.length%2;
+        helper(nums,0,nums.length-1,order);
+        int stand=nums[order-1];
+        int t=0;
+        //把前一部分的最大元素放到最前面
+        for(int i=0;i<order;i++)
+        {
+            if(nums[i]==stand)
+            {
+                nums[i]=nums[t];
+                nums[t++]=stand;
+            }
+        }
+        int equalId=t;
+        t=order;
+        //把后一部分大于前一部分最大元素的元素放到最前面
+        for(int i=order;i<nums.length;i++)
+        {
+            if(nums[i]>stand)
+            {
+                int temp=nums[i];
+                nums[i]=nums[t];
+                nums[t++]=temp;
+            }
+        }
+        //只使用O(1)空间进行排序
+        for(int i=1,j=order,k=1;i<nums.length;i+=2,j++,k++)
+        {
+            int temp=nums[i];
+            nums[i]=nums[j];
+            if(k<equalId)
+            {
+                nums[j]=nums[equalId+k-1];
+                nums[equalId+k-1]=temp;
+            }
+            else
+            {
+                nums[j]=temp;
+            }
+        }
+        // int[] tnums=new int[nums.length];
+        // for(int i=0,j=order,k=0;i<order;i++,j++)
+        // {
+        //     tnums[k++]=nums[i];
+        //     if(j<nums.length)
+        //     {
+        //         tnums[k++]=nums[j];
+        //     }
+        // }
+        // for(int i=0;i<nums.length;i++)
+        // {
+        //     //System.out.println(tnums[i]);
+        //     nums[i]=tnums[i];
+        // }
+    }
+}
