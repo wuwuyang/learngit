@@ -1,0 +1,88 @@
+public class Solution {
+    // public String removeDuplicateLetters(String s) {
+    //     char[] ts=s.toCharArray();
+    //     int[] sum=new int[26];
+    //     for(int i=0;i<26;i++)
+    //     {
+    //         sum[i]=0;
+    //     }
+    //     for(char c:ts)
+    //     {
+    //         sum[c-'a']++;
+    //     }
+    //     String res="";
+    //     while(ts.length>0)
+    //     {
+    //         char minc=ts[0];
+    //         int tid=0;
+    //         for(int i=0;i<ts.length;i++)
+    //         {
+    //             if(minc>ts[i])
+    //             {
+    //                 minc=ts[i];
+    //                 tid=i;
+    //             }
+    //             if(sum[ts[i]-'a']==1)
+    //             {
+    //                 res+=minc;
+    //                 String t="";
+    //                 for(int j=0;j<26;j++)
+    //                 {
+    //                     sum[j]=0;
+    //                 }
+    //                 for(int j=tid+1;j<ts.length;j++)
+    //                 {
+    //                     char c=ts[j];
+    //                     if(c!=minc)
+    //                     {
+    //                         sum[c-'a']++;
+    //                         t+=c;
+    //                     }
+    //                 }
+    //                 ts=t.toCharArray();
+    //                 break;
+    //             }
+    //             else
+    //             {
+    //                 sum[ts[i]-'a']--;
+    //             }
+    //         }
+    //     }
+    //     return res;
+    // }
+    
+    public String removeDuplicateLetters(String s) {
+        char[] ts=s.toCharArray();
+        Stack<Character> stk=new Stack();
+        int[] sum=new int[26];
+        boolean[] flag=new boolean[26];
+        for(int i=0;i<26;i++)
+        {
+            flag[i]=false;
+            sum[i]=0;
+        }
+        for(char c:ts)
+        sum[c-'a']++;
+        for(char c:ts)
+        {
+            int id=c-'a';
+            sum[id]--;
+            if(flag[id])
+            continue;
+            while(!stk.empty()&&(stk.peek()>c)&&sum[stk.peek()-'a']>0)
+            {
+                flag[stk.peek()-'a']=false;
+                stk.pop();
+            }
+            stk.push(c);
+            flag[id]=true;
+        }
+        String res="";
+        while(!stk.empty())
+        {
+            char c=stk.pop();
+            res=c+res;
+        }
+        return res;
+    }
+}
