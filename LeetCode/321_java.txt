@@ -1,0 +1,116 @@
+public class Solution {
+    //输出数组nums中k个元素所组成的最大k位数，这k个元素按照nums中的相对顺序排列
+    public int[] helper(int[] nums,int k)
+    {
+        if(k==0)
+        return new int[0];
+        Stack<Integer> stk=new Stack();
+        stk.push(nums[0]);
+        for(int i=1;i<nums.length;i++)
+        {
+            if(nums.length-i==k-stk.size())
+            {
+                stk.push(nums[i]);
+                continue;
+            }
+            if(stk.peek()>=nums[i])
+            {
+                if(stk.size()<k)
+                stk.push(nums[i]);
+                continue;
+            }
+            else
+            {
+                while(!stk.empty()&&stk.peek()<nums[i]&&(nums.length-i>k-stk.size()))
+                {
+                    stk.pop();
+                }
+                stk.push(nums[i]);
+            }
+        }
+        int[] res=new int[k];
+        for(int i=k-1;i>=0;i--)
+        {
+            res[i]=stk.peek();
+            stk.pop();
+        }
+        return res;
+    }
+    
+    //最难搞定
+    public int[] merge(int[] nums1,int[] nums2)
+    {
+        // System.out.print("s1:"+s1+" e1:"+e1+" nums1:");
+        // for(int i=0;i<nums1.length;i++)
+        // System.out.print(nums1[i]+" ");
+        // System.out.println();
+        // System.out.print("s2:"+s2+" e2:"+e2+" nums2:");
+        // for(int i=0;i<nums2.length;i++)
+        // System.out.print(nums2[i]+" ");
+        // System.out.println();
+        int[] res=new int[nums1.length+nums2.length];
+        //int[] res=new int[e1-s1+1+e2-s2+1];
+        //int i=nums1.length-1,j=nums2.length-1;
+        int i=0,j=0;
+        while(i<nums1.length&&j<nums2.length)
+        {
+            if(cmp(nums1,i,nums1.length-1,nums2,j,nums2.length-1))
+            {
+                res[i+j]=nums2[j];
+                j++;
+            }
+            else
+            {
+                res[i+j]=nums1[i];
+                i++;
+            }
+        }
+        while(i<nums1.length)
+        res[i+j]=nums1[i++];
+        while(j<nums2.length)
+        res[i+j]=nums2[j++];
+        return res;
+    }
+    
+    public boolean cmp(int[] nums1,int s1,int e1,int[] nums2,int s2,int e2)
+    {
+        int i,j;
+        for(i=s1,j=s2;i<=e1&&j<=e2;i++,j++)
+        {
+            if(nums1[i]>nums2[j])
+            return false;
+            if(nums1[i]<nums2[j])
+            return true;
+        }
+        if(i>e1)
+        return true;
+        return false;
+    }
+    
+    public int[] maxNumber(int[] nums1, int[] nums2, int k) {
+        int t1=Math.min(nums1.length,k);
+        int t2=Math.min(nums2.length,k);
+        int[] res=null;
+        for(int i=0;i<=t1;i++)
+        {
+            if(k-i<=t2)
+            {
+                int[] n1=helper(nums1,i);
+                int[] n2=helper(nums2,k-i);
+                int[] tr=merge(n1,n2);
+                if(res==null)
+                {
+                    res=tr;
+                }
+                else if(cmp(res,0,res.length-1,tr,0,tr.length-1))
+                {
+                    res=tr;
+                }
+                // for(int h=0;h<k;h++)
+                // System.out.print(" "+tr[h]);
+                // System.out.println();
+            }
+        }
+        return res;
+    }
+}
