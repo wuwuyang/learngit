@@ -1,0 +1,136 @@
+// class Pair{
+//     public int x;
+//     public int y;
+//     public Pair(int a,int b)
+//     {
+//         x=a;
+//         y=b;
+//     }
+//     @Override
+//     public boolean equals(Object o)
+//     {
+//         if(o instanceof Pair)
+//         {
+//             if(x==((Pair)(o)).x&&y==((Pair)(o)).y)
+//             return true;
+//         }
+//         return false;
+//     }
+    
+//     @Override
+//     public int hashCode()
+//     {
+//         return x*y+x+y;
+//     }
+// }
+
+// public class Solution {
+//     public boolean canMeasureWater(int x, int y, int z) {
+//         if(x==z||y==z)
+//         return true;
+//         if(x+y<z)
+//         return false;
+//         //boolean[][] flag=new boolean[x+1][y+1];
+//         Set<Pair> flag=new HashSet();
+//         Pair p=new Pair(0,0);
+//         flag.add(p);
+//         LinkedList<Pair> ll=new LinkedList();
+//         ll.add(p);
+//         while(ll.size()>0)
+//         {
+//             Pair t=ll.remove();
+//             if(t.x==z||t.y==z||(t.x+t.y)==z)
+//             return true;
+//             Pair t2=new Pair(0,t.y);
+//             if(!flag.contains(t2))
+//             {
+//                 flag.add(t2);
+//                 ll.add(t2);
+//             }
+//             t2=new Pair(x,t.y);
+//             if(!flag.contains(t2))
+//             {
+//                 flag.add(t2);
+//                 ll.add(t2);
+//             }
+//             t2=new Pair(t.x,0);
+//             if(!flag.contains(t2))
+//             {
+//                 flag.add(t2);
+//                 ll.add(t2);
+//             }
+//             t2=new Pair(t.x,y);
+//             if(!flag.contains(t2))
+//             {
+//                 flag.add(t2);
+//                 ll.add(t2);
+//             }
+//             int sum=t.x+t.y;
+//             t2=new Pair(sum,0);
+//             if(sum<=x&&!flag.contains(t2))
+//             {
+//                 flag.add(t2);
+//                 ll.add(t2);
+//                 // if(sum==z)
+//                 // return true;
+//             }
+//             t2=new Pair(x,sum-x);
+//             if(sum>x&&!flag.contains(t2))
+//             {
+//                 flag.add(t2);
+//                 ll.add(t2);
+//                 // if(sum-x==z)
+//                 // return true;
+//             }
+//             t2=new Pair(0,sum);
+//             if(sum<=y&&!flag.contains(t2))
+//             {
+//                 flag.add(t2);
+//                 ll.add(t2);
+//                 // if(sum==z)
+//                 // return true;
+//             }
+//             t2=new Pair(sum-y,y);
+//             if(sum>y&&!flag.contains(t2))
+//             {
+//                 flag.add(t2);
+//                 ll.add(t2);
+//                 // if(sum-y==z)
+//                 // return true;
+//             }
+//         }
+//         return false;
+//     }
+// }
+
+public class Solution {
+    //求最大公约数
+    public int helper(int x,int y)
+    {
+        int t=x%y;
+        while(t>0)
+        {
+            x=y;
+            y=t;
+            t=x%y;
+        }
+        return y;
+    }
+    
+    public boolean canMeasureWater(int x, int y, int z) {
+        if(x==z||y==z||x+y==z)
+        return true;
+        if(x+y<z)
+        return false;
+        if(x<y)
+        {
+            int t=x;
+            x=y;
+            y=t;
+        }
+        int t=helper(x,y);
+        if(z%t==0)
+        return true;
+        return false;
+    }
+}
