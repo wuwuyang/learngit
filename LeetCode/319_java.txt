@@ -1,0 +1,16 @@
+public class Solution {
+    public int bulbSwitch(int n) {
+        int res=0;
+        long i=1;
+        while(true)
+        {
+            long t=i*i;
+            if(t<=n)
+            res++;
+            else
+            break;
+            i++;
+        }
+        return res;
+    }
+}
