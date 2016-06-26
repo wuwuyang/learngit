@@ -1,0 +1,24 @@
+public class Solution {
+    public boolean isPerfectSquare(int num) {
+        long left=0,right=num/2+1;
+        if(num<1)
+        return false;
+        while(left<=right)
+        {
+            long mid=(left+right)/2;
+            long d=mid*mid;
+            //System.out.println(left+" "+right+" "+mid+" "+d);
+            if(d==num)
+            return true;
+            if(d>num)
+            {
+                right=mid-1;
+            }
+            if(d<num)
+            {
+                left=mid+1;
+            }
+        }
+        return false;
+    }
+}
