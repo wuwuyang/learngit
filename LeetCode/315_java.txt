@@ -1,0 +1,196 @@
+//归并排序方法
+// public class Solution {
+//     public int[][] sort(int[][] nums,int[] helper)
+//     {
+//         int mid=nums.length/2;
+//         if(mid>0)
+//         {
+//             int[][] left=new int[mid][2];
+//             int[][] right=new int[nums.length-mid][2];
+//             for(int i=0;i<mid;i++)
+//             {
+//                 left[i][0]=nums[i][0];
+//                 left[i][1]=nums[i][1];
+//             }
+//             for(int i=mid;i<nums.length;i++)
+//             {
+//                 right[i-mid][0]=nums[i][0];
+//                 right[i-mid][1]=nums[i][1];
+//             }
+//             left=sort(left,helper);
+//             right=sort(right,helper);
+//             //int[][] res=new int[nums.length][2];
+//             int i=0,j=0;
+//             int temp=0;
+//             for(;i<mid&&j<nums.length-mid;)
+//             {
+//                 if(left[i][0]<=right[j][0])
+//                 {
+//                     nums[i+j][0]=left[i][0];
+//                     nums[i+j][1]=left[i][1];
+//                     helper[nums[i+j][1]]+=temp;
+//                     i++;
+//                 }
+//                 else
+//                 {
+//                     nums[i+j][0]=right[j][0];
+//                     nums[i+j][1]=right[j][1];
+//                     j++;
+//                     temp=j;
+//                 }
+//             }
+//             while(i<mid)
+//             {
+//                 nums[i+j][0]=left[i][0];
+//                 nums[i+j][1]=left[i][1];
+//                 helper[nums[i+j][1]]+=j;
+//                 i++;
+//             }
+//             while(j<nums.length-mid)
+//             {
+//                 nums[i+j][0]=right[j][0];
+//                 nums[i+j][1]=right[j++][1];
+//             }
+//         }
+//         // for(int i=0;i<nums.length;i++)
+//         // {
+//         //     System.out.print("[nums["+i+"][0]:"+nums[i][0]+" nums["+i+"][1]:"+nums[i][1]+" helper[nums["+i+"][1]]:"+helper[nums[i][1]]);
+//         // }
+//         // System.out.println("");
+//         return nums;
+//     }
+    
+//     public List<Integer> countSmaller(int[] nums) {
+//         int[] helper=new int[nums.length];
+//         int[][] helper2=new int[nums.length][2];
+//         for(int i=0;i<nums.length;i++)
+//         {
+//             helper2[i][0]=nums[i];
+//             helper2[i][1]=i;
+//             helper[i]=0;
+//         }
+//         helper2=sort(helper2,helper);
+//         List<Integer> res=new ArrayList<Integer>();
+//         for(int i=0;i<helper.length;i++)
+//         res.add(helper[i]);
+//         return res;
+//     }
+// }
+
+class TreeArray{
+    int n;
+    int[] nums;
+    public TreeArray(int t)
+    {
+        n=t+1;
+        nums=new int[t+1];
+        for(int i=0;i<=t;i++)
+        nums[i]=0;
+    }
+    public int lowbit(int x)
+    {
+        return x&(-x);
+    }
+    public void add(int index,int num)
+    {
+        //index+=1;
+        while(index<n)
+        {
+            nums[index]+=num;
+            index+=lowbit(index);
+        }
+    }
+    public int sum(int index)
+    {
+        //index+=1;
+        int res=0;
+        while(index>0)
+        {
+            res+=nums[index];
+            index-=lowbit(index);
+        }
+        return res;
+    }
+}
+
+public class Solution {
+    public void swap(int[] nums1,int[] nums2)
+    {
+        int t;
+        for(int i=0;i<nums1.length;i++)
+        {
+            t=nums1[i];
+            nums1[i]=nums2[i];
+            nums2[i]=t;
+        }
+        return;
+    }
+    
+    public void quickSort(int[][] nums,int left,int right)
+    {
+        if(left>=right)
+        return;
+        int mid=(left+right)/2;
+        swap(nums[left],nums[mid]);
+        int i=left,j=right;
+        int pit=left;
+        //int standard=nums[pit][0];
+        while(i<j)
+        {
+            while(i<j&&nums[j][0]>=nums[pit][0])
+            {
+                j--;
+            }
+            swap(nums[pit],nums[j]);
+            pit=j;
+            while(i<j&&nums[i][0]<nums[pit][0])
+            {
+                i++;
+            }
+            swap(nums[pit],nums[i]);
+            pit=i;
+        }
+        quickSort(nums,left,pit-1);
+        quickSort(nums,pit+1,right);
+    }
+    
+    public List<Integer> countSmaller(int[] nums) {
+        List<Integer> res=new ArrayList<Integer>();
+        if(nums.length<1)
+        return res;
+        int[][] helper=new int[nums.length][2];
+        for(int i=0;i<nums.length;i++)
+        {
+            helper[i][0]=nums[i];
+            helper[i][1]=i;
+        }
+        quickSort(helper,0,nums.length-1);
+        // for(int i=0;i<nums.length;i++)
+        // System.out.print(helper[i][0]+" ");
+        // System.out.println();
+        TreeArray at=new TreeArray(nums.length);
+        int[] tres=new int[nums.length];
+        //java创建数组自动赋0
+        // for(int i=0;i<nums.length;i++)
+        // tres[i]=0;
+        int t1=helper[0][0];
+        int t2=0;
+        for(int i=0;i<nums.length;i++)
+        {
+            if(helper[i][0]>t1)
+            {
+                for(;t2<i;t2++)
+                {
+                    at.add(helper[t2][1]+1,1);
+                }
+                t1=helper[i][0];
+            }
+            tres[helper[i][1]]=at.sum(nums.length)-at.sum(helper[i][1]);
+        }
+        for(int i=0;i<nums.length;i++)
+        {
+            res.add(tres[i]);
+        }
+        return res;
+    }
+}
