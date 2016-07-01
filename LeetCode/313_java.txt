@@ -1,0 +1,73 @@
+public class Solution {
+    // public int nthSuperUglyNumber(int n, int[] primes) {
+    //     if(n==1)
+    //     return 1;
+    //     List<Integer>[] lists=new ArrayList[primes.length];
+    //     for(int i=0;i<primes.length;i++)
+    //     {
+    //         lists[i]=new ArrayList();
+    //         lists[i].add(primes[i]);
+    //     }
+    //     int[] helper=new int[primes.length];
+    //     int tv=0,ti=0;
+    //     for(int i=1;i<n;i++)
+    //     {
+    //         tv=lists[0].get(helper[0]);
+    //         //System.out.print("["+tv+"]");
+    //         ti=0;
+    //         for(int j=1;j<primes.length;j++)
+    //         {
+    //             // for(int k=0;k<lists[0].size();k++)
+    //             // System.out.print(" "+lists[0].get(k));
+    //             // System.out.println();
+    //             int t=lists[j].get(helper[j]);
+    //             if(t<tv)
+    //             {
+    //                 tv=t;
+    //                 ti=j;
+    //             }
+    //         }
+    //         helper[ti]++;
+    //         for(int k=ti;k<primes.length;k++)
+    //         {
+    //             lists[k].add(tv*primes[k]);
+    //         }
+    //         //System.out.print(" "+tv+"["+helper[ti]+"]");
+    //     }
+    //     return tv;
+    // }
+    public int findmin(int[] nums)
+    {
+        int res=nums[0];
+        for(int i=1;i<nums.length;i++)
+        {
+            if(res>nums[i])
+            res=nums[i];
+        }
+        return res;
+    }
+    
+    public int nthSuperUglyNumber(int n, int[] primes) {
+        if(n==1)
+        return 1;
+        int[] q=new int[n];
+        q[0]=1;
+        int[] index=new int[primes.length];
+        int[] temp=new int[primes.length];
+        for(int i=1;i<n;i++)
+        {
+            for(int j=0;j<primes.length;j++)
+            {
+                temp[j]=q[index[j]]*primes[j];
+            }
+            int t=findmin(temp);
+            for(int j=0;j<primes.length;j++)
+            {
+                if(temp[j]==t)
+                index[j]++;
+            }
+            q[i]=t;
+        }
+        return q[n-1];
+    }
+}{\rtf1}
