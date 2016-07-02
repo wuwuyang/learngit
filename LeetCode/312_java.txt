@@ -1,0 +1,25 @@
+public class Solution {
+    public int maxCoins(int[] nums) {
+        int[] tnums=new int[nums.length+2];
+        for(int i=0;i<nums.length;i++)
+        tnums[i+1]=nums[i];
+        tnums[0]=1;
+        tnums[nums.length+1]=1;
+        int[][] dp=new int[tnums.length][tnums.length];
+        for(int k=2;k<tnums.length;k++)
+        {
+            for(int i=0;i<tnums.length-k;i++)
+            {
+                int tres=0;
+                for(int j=i+1;j<i+k;j++)
+                {
+                    int t=tnums[i]*tnums[j]*tnums[i+k]+dp[i][j]+dp[j][i+k];
+                    if(t>tres)
+                    tres=t;
+                }
+                dp[i][i+k]=tres;
+            }
+        }
+        return dp[0][tnums.length-1];
+    }
+}
