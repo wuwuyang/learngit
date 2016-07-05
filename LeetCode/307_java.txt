@@ -1,0 +1,62 @@
+public class NumArray {
+    int n;
+    int[] nums;
+    int[] tnums;
+    
+    int lowbit(int x)
+    {
+        return x&-x;
+    }
+
+    public NumArray(int[] tnums) {
+        n=tnums.length+1;
+        nums=new int[n];
+        this.tnums=new int[tnums.length];
+        for(int i=1;i<n;i++)
+        {
+            int t=i;
+            while(t<n)
+            {
+                nums[t]+=tnums[i-1];
+                t+=lowbit(t);
+            }
+            this.tnums[i-1]=tnums[i-1];
+        }
+    }
+
+    void update(int i, int val) {
+        int t=val-tnums[i];
+        tnums[i]=val;
+        i++;
+        while(i<n)
+        {
+            nums[i]+=t;
+            i+=lowbit(i);
+        }
+    }
+
+    public int sumRange(int i, int j) {
+        // i++;
+        j++;
+        int sum1=0;
+        while(i>0)
+        {
+            sum1+=nums[i];
+            i-=lowbit(i);
+        }
+        int sum2=0;
+        while(j>0)
+        {
+            sum2+=nums[j];
+            j-=lowbit(j);
+        }
+        return sum2-sum1;
+    }
+}
+
+
+// Your NumArray object will be instantiated and called as such:
+// NumArray numArray = new NumArray(nums);
+// numArray.sumRange(0, 1);
+// numArray.update(1, 10);
+// numArray.sumRange(1, 2);
