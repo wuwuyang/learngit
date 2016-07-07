@@ -1,0 +1,76 @@
+public class Solution {
+    public String stradd(String num1,String num2)
+    {
+        if(num1.length()<num2.length())
+        {
+            String t=num1;
+            num1=num2;
+            num2=t;
+        }
+        char[] res=new char[num1.length()+1];
+        int up=0;
+        int i=1;
+        for(;i<=num2.length();i++)
+        {
+            char c1=num1.charAt(num1.length()-i);
+            char c2=num2.charAt(num2.length()-i);
+            int t=c1+c2-'0'-'0'+up;
+            up=t/10;
+            t=t%10;
+            res[res.length-i]=(char)(t+'0');
+        }
+        while(i<=num1.length())
+        {
+            int t=num1.charAt(num1.length()-i)-'0'+up;
+            up=t/10;
+            t%=10;
+            res[res.length-i]=(char)(t+'0');
+            i++;
+        }
+        res[0]=(char)(up+'0');
+        if(up==0)
+        {
+            return new String(res,1,num1.length());
+        }
+        return new String(res);
+    }
+    
+    public boolean helper(String num,int i,int j,int k)
+    {
+        String num1=num.substring(i,j);
+        String num2=num.substring(j,k);
+        //int t=new Integer(num1)+new Integer(num2);
+        String num3=stradd(num1,num2);
+        if(num3.length()>num.length()-k)
+        return false;
+        int d=0;
+        for(d=0;d<num3.length();d++)
+        {
+            if(num3.charAt(d)!=num.charAt(k+d))
+            {
+                break;
+            }
+        }
+        if(d<num3.length())
+        return false;
+        if(k+d==num.length())
+        return true;
+        return helper(num,j,k,k+d);
+    }
+    
+    public boolean isAdditiveNumber(String num) {
+        for(int i=1;i<num.length();i++)
+        {
+            for(int j=i+1;j<num.length();j++)
+            {
+                if(helper(num,0,i,j))
+                return true;
+                if(num.charAt(i)=='0')
+                break;
+            }
+            if(num.charAt(0)=='0')
+            break;
+        }
+        return false;
+    }
+}
