@@ -1,0 +1,49 @@
+public class Solution {
+    
+    //纯递归，直接超时
+    // public int helper(int left,int right)
+    // {
+    //     if(left>=right)
+    //     return 0;
+    //     int res=0x7fffffff;
+    //     for(int i=left;i<right;i++)
+    //     {
+    //         int t=i+Math.max(helper(left,i-1),helper(i+1,right));
+    //         if(t<res)
+    //         res=t;
+    //     }
+    //     return res;
+    // }
+    
+    //加入记事本的递归
+    public int helper2(int[][] dp,int left,int right)
+    {
+        if(dp[left][right]>=0)
+        return dp[left][right];
+        if(left>=right)
+        dp[left][right]=0;
+        else
+        {
+            dp[left][right]=0x7fffffff;
+            for(int i=left;i<right;i++)
+            {
+                int t=i+Math.max(helper2(dp,left,i-1),helper2(dp,i+1,right));
+                if(t<dp[left][right])
+                dp[left][right]=t;
+            }
+        }
+        return dp[left][right];
+    }
+    
+    
+    
+    public int getMoneyAmount(int n) {
+        int[][] dp=new int[n+1][n+1];
+        for(int i=0;i<=n;i++)
+        {
+            for(int j=0;j<=n;j++)
+            dp[i][j]=-1;
+        }
+        return helper2(dp,1,n);
+    }
+}
