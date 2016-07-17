@@ -1,0 +1,68 @@
+// public class NumMatrix {
+
+//     int[][] sumRecord;
+
+//     public NumMatrix(int[][] matrix) {
+//         sumRecord=matrix;
+//         for(int i=0;i<sumRecord.length;i++)
+//         {
+//             for(int j=1;j<sumRecord[i].length;j++)
+//             {
+//                 sumRecord[i][j]+=sumRecord[i][j-1];
+//             }
+//         }
+//     }
+
+//     public int sumRegion(int row1, int col1, int row2, int col2) {
+//         int res=0;
+//         for(int i=row1;i<=row2;i++)
+//         {
+//             int t1=0;
+//             if(col1>0)
+//             t1=sumRecord[i][col1-1];
+//             int t2=sumRecord[i][col2];
+//             res+=t2-t1;
+//         }
+//         return res;
+//     }
+// }
+
+public class NumMatrix {
+
+    int[][] dp;
+
+    public NumMatrix(int[][] matrix) {
+        dp=matrix;
+        for(int i=0;i<dp.length;i++)
+        {
+            for(int j=1;j<dp[i].length;j++)
+            {
+                dp[i][j]+=dp[i][j-1];
+            }
+            if(i>0)
+            {
+                for(int j=0;j<dp[i].length;j++)
+                dp[i][j]+=dp[i-1][j];
+            }
+        }
+    }
+
+    public int sumRegion(int row1, int col1, int row2, int col2) {
+        int res=0;
+        int t1=0,t2=0,t3=0;
+        if(row1>0&&col1>0)
+        t1=dp[row1-1][col1-1];
+        if(row1>0)
+        t2=dp[row1-1][col2];
+        if(col1>0)
+        t3=dp[row2][col1-1];
+        res=dp[row2][col2]-t2-t3+t1;
+        return res;
+    }
+}
+
+
+// Your NumMatrix object will be instantiated and called as such:
+// NumMatrix numMatrix = new NumMatrix(matrix);
+// numMatrix.sumRegion(0, 1, 2, 3);
+// numMatrix.sumRegion(1, 2, 3, 4);
