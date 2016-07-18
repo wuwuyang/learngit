@@ -1,0 +1,101 @@
+public class Solution {
+    public int getLeftNum(String s)
+    {
+        int left=0;
+        int res=0;
+        for(int i=0;i<s.length();i++)
+        {
+            char c=s.charAt(i);
+            if(c=='(')
+            left++;
+            else if(c==')')
+            {
+                if(left>0)
+                {
+                    left--;
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
+    
+    public void helper(Set<String> res,String t,String s,int leftnum,int left,int curleft,int index)
+    {
+        if(index==s.length())
+        {
+            if(curleft==0&&leftnum==left)
+            res.add(t);
+            return;
+        }
+        char c=s.charAt(index);
+        if(c=='(')
+        {
+            if(left<leftnum)
+            {
+                helper(res,t+c,s,leftnum,left+1,curleft+1,index+1);
+            }
+            helper(res,t,s,leftnum,left,curleft,index+1);
+        }
+        else if(c==')')
+        {
+            if(curleft>0)
+            {
+                helper(res,t+c,s,leftnum,left,curleft-1,index+1);
+            }
+            helper(res,t,s,leftnum,left,curleft,index+1);
+        }
+        else
+        {
+            helper(res,t+c,s,leftnum,left,curleft,index+1);
+        }
+    }
+    
+    public Set<String> visited=new HashSet<String>();
+    public int calc(String s)
+    {
+        int a=0,b=0;
+        for(int i=0;i<s.length();i++)
+        {
+            char c=s.charAt(i);
+            if(c=='(')
+            a+=1;
+            else if(c==')')
+            a-=1;
+            b+=a<0?1:0;
+            a=Math.max(a,0);
+        }
+        return a+b;
+    }
+    
+    public void dfs(List<String> res,String s)
+    {
+        visited.add(s);
+        int standard=calc(s);
+        if(standard==0)
+        {
+            res.add(s);
+            return;
+        }
+        for(int i=0;i<s.length();i++)
+        {
+            String ts=s.substring(0,i)+s.substring(i+1);
+            if(!visited.contains(ts)&&calc(ts)<standard)
+            {
+                dfs(res,ts);
+            }
+        }
+    }
+    
+    public List<String> removeInvalidParentheses(String s) {
+        // int num=getLeftNum(s);
+        List<String> res=new ArrayList<String>();
+        // Set<String> set=new HashSet<String>();
+        // helper(set,"",s,num,0,0,0);
+        // for(String ts:set)
+        // res.add(ts);
+        // return res;
+        dfs(res,s);
+        return res;
+    }
+}
