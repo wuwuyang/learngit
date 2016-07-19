@@ -1,0 +1,143 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+    
+    public void helper1(StringBuilder s,TreeNode t)
+    {
+        if(t==null)
+        {
+            //s.add("#");
+            s.append('#');
+            s.append(' ');
+        }
+        else
+        {
+            //s.add(""+t.val);
+            s.append(t.val);
+            s.append(' ');
+            helper1(s,t.left);
+            helper1(s,t.right);
+        }
+    }
+    
+    public int helperIndex=0;
+    
+    public TreeNode helper2(String[] s)
+    {
+        TreeNode res=null;
+        if(s[helperIndex].equals("#"))
+        {
+            helperIndex++;
+            return res;
+        }
+        else
+        {
+            res=new TreeNode(Integer.parseInt(s[helperIndex]));
+            helperIndex++;
+            res.left=helper2(s);
+            res.right=helper2(s);
+        }
+        return res;
+    }
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        //List<String> list=new ArrayList();
+        StringBuilder s=new StringBuilder();
+        helper1(s,root);
+        return s.toString();
+        // Queue<TreeNode> q=new LinkedList();
+        // q.add(root);
+        // while(!q.isEmpty())
+        // {
+        //     TreeNode t=q.poll();
+        //     if(t==null)
+        //     {
+        //         list.add("#");
+        //     }
+        //     else
+        //     {
+        //         list.add(""+t.val);
+        //         q.add(t.left);
+        //         q.add(t.right);
+        //     }
+        // }
+        // String res="";
+        // for(int i=0;i<list.size();i++)
+        // {
+        //     res+=list.get(i)+" ";
+        // }
+        // return res;
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        helperIndex=0;
+        String[] tree=data.split(" ");
+        return helper2(tree);
+        
+        // TreeNode root=null;
+        // Queue<TreeNode> q=new LinkedList();
+        // if(tree.length==1&&tree[0].equals("#"))
+        // {
+        //     return root;
+        // }
+        // Map<String,Integer> map=new HashMap();
+        // for(int i=-10;i<10;i++)
+        // {
+        //     map.put(""+i,i);
+        // }
+        // int t=Integer.parseInt(tree[0]);
+        // root=new TreeNode(t);
+        // q.add(root);
+        // int index=1;
+        // while(!q.isEmpty()&&index<tree.length)
+        // {
+        //     TreeNode tn=q.poll();
+        //     if(!tree[index].equals("#"))
+        //     {
+        //         TreeNode left=null;
+        //         if(map.containsKey(tree[index]))
+        //         left=new TreeNode(map.get(tree[index]));
+        //         else
+        //         left=new TreeNode(Integer.parseInt(tree[index]));
+        //         //TreeNode left=new TreeNode(tree[index].charAt(0)-'0');
+        //         tn.left=left;
+        //         q.add(left);
+        //     }
+        //     else
+        //     {
+        //         tn.left=null;
+        //     }
+        //     index++;
+        //     if(!tree[index].equals("#"))
+        //     {
+        //         TreeNode right=null;
+        //         if(map.containsKey(tree[index]))
+        //         right=new TreeNode(Integer.parseInt(tree[index]));
+        //         else
+        //         right=new TreeNode(Integer.parseInt(tree[index]));
+        //         //TreeNode right=new TreeNode(tree[index].charAt(0)-'0');
+        //         tn.right=right;
+        //         q.add(right);
+        //     }
+        //     else
+        //     {
+        //         tn.right=null;
+        //     }
+        //     index++;
+        // }
+        // return root;
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec = new Codec();
+// codec.deserialize(codec.serialize(root));
