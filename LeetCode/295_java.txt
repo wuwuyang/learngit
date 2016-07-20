@@ -1,0 +1,89 @@
+public class MedianFinder {
+    List<Integer> data=new ArrayList();
+    Queue<Integer> maxq=new PriorityQueue<Integer>();
+    Queue<Integer> minq=new PriorityQueue<Integer>();
+
+    // Adds a number into the data structure.
+    public int findIndex(int num)
+    {
+        int left=0;
+        int right=data.size();
+        while(left<right)
+        {
+            int mid=(left+right)/2;
+            int t=data.get(mid);
+            if(t==num)
+            return mid;
+            else if(t<num)
+            left=mid+1;
+            else
+            right=mid-1;
+        }
+        if(left==data.size())
+        return left;
+        else if(data.get(left)>num)
+        return left;
+        else
+        return left+1;
+    }
+    
+    public void addNum(int num) {
+        //原始方法
+        // int index=findIndex(num);
+        // data.add(index,num);
+        //System.out.println(index+" "+num);
+        //书影方法
+        if(maxq.size()==0)
+        maxq.add(num);
+        else
+        {
+            int t=maxq.peek();
+            if(num<t)
+            {
+                minq.add(-num);
+            }
+            else
+            {
+                maxq.add(num);
+            }
+            if(minq.size()>maxq.size())
+            {
+                num=-minq.poll();
+                maxq.add(num);
+            }
+            if(maxq.size()>minq.size()+1)
+            {
+                num=maxq.poll();
+                minq.add(-num);
+            }
+        }
+    }
+
+    // Returns the median of current data stream
+    public double findMedian() {
+        //原始方法
+        // int s=data.size();
+        // if(s%2==0)
+        // {
+        //     return (data.get(s/2-1)+data.get(s/2))*1.0/2.0;
+        // }
+        // else
+        // {
+        //     return data.get(s/2)*1.0;
+        // }
+        //书影方法
+        if((maxq.size()+minq.size())%2==0)
+        {
+            return (maxq.peek()-minq.peek())*1.0/2;
+        }
+        else
+        {
+            return maxq.peek()*1.0;
+        }
+    }
+};
+
+// Your MedianFinder object will be instantiated and called as such:
+// MedianFinder mf = new MedianFinder();
+// mf.addNum(1);
+// mf.findMedian();
