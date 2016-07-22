@@ -1,0 +1,70 @@
+public class Solution {
+    //dp解法
+    // public int wiggleMaxLength(int[] nums) {
+    //     int[][] dp=new int[nums.length][2];
+    //     if(nums.length==0)
+    //     return 0;
+    //     int res=1;
+    //     dp[0][0]=1;
+    //     dp[0][1]=1;
+    //     for(int i=1;i<nums.length;i++)
+    //     {
+    //         int t1=0;
+    //         int t2=0;
+    //         for(int j=i-1;j>=0;j--)
+    //         {
+    //             if(nums[j]>nums[i])
+    //             {
+    //                 if(dp[j][0]>t2)
+    //                 {
+    //                     t2=dp[j][0];
+    //                 }
+    //             }
+    //             else if(nums[j]<nums[i])
+    //             {
+    //                 if(dp[j][1]>t1)
+    //                 {
+    //                     t1=dp[j][1];
+    //                 }
+    //             }
+    //         }
+    //         dp[i][0]=t1+1;
+    //         dp[i][1]=t2+1;
+    //         if(dp[i][0]>res)
+    //         res=dp[i][0];
+    //         if(dp[i][1]>res)
+    //         res=dp[i][1];
+    //     }
+    //     return res;
+    // }
+    
+    //贪心解法
+    public int wiggleMaxLength(int[] nums) {
+        if(nums.length==0)
+        return 0;
+        int dir=0;
+        int res=1;
+        for(int i=1;i<nums.length;i++)
+        {
+            if(nums[i]==nums[i-1])
+            continue;
+            else if(nums[i]>nums[i-1])
+            {
+                if(dir!=1)
+                {
+                    dir=1;
+                    res++;
+                }
+            }
+            else
+            {
+                if(dir!=-1)
+                {
+                    dir=-1;
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
+}
