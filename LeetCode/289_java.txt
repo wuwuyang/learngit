@@ -1,0 +1,55 @@
+public class Solution {
+    int[][] dir={{-1,0},{-1,-1},{-1,1},{1,0},{1,-1},{1,1},{0,1},{0,-1}};
+    
+    public int getNeighbors(int[][] board,int x,int y)
+    {
+        int res=0;
+        for(int i=0;i<dir.length;i++)
+        {
+            int tx=x+dir[i][0];
+            int ty=y+dir[i][1];
+            if(tx>=0&&tx<board.length&&ty>=0&&ty<board[0].length&&board[tx][ty]>0)
+            {
+                res++;
+            }
+        }
+        return res;
+    }
+    
+    public void update(int[][] board)
+    {
+        for(int i=0;i<board.length;i++)
+        {
+            for(int j=0;j<board[0].length;j++)
+            {
+                if(board[i][j]==2)
+                {
+                    board[i][j]=0;
+                }
+                else if(board[i][j]==-1)
+                {
+                    board[i][j]=1;
+                }
+            }
+        }
+    }
+    
+    public void gameOfLife(int[][] board) {
+        for(int i=0;i<board.length;i++)
+        {
+            for(int j=0;j<board[0].length;j++)
+            {
+                int num=getNeighbors(board,i,j);
+                if((num<2||num>3)&&board[i][j]==1)
+                {
+                    board[i][j]=2;
+                }
+                if(num==3&&board[i][j]==0)
+                {
+                    board[i][j]=-1;
+                }
+            }
+        }
+        update(board);
+    }
+}
