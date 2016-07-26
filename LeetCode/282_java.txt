@@ -1,0 +1,39 @@
+public class Solution {
+    public void helper(List<String> res,String nowFormula,String num,int index,int target,long nowValue,long lastValue)
+    {
+        if(index>=num.length())
+        {
+            if(nowValue+lastValue==target)
+            {
+                res.add(nowFormula);
+            }
+            return;
+        }
+        long temp=0;
+        for(int i=index;i<num.length();i++)
+        {
+            temp=temp*10+num.charAt(i)-'0';
+            String s1=nowFormula+"-"+temp;
+            helper(res,s1,num,i+1,target,nowValue+lastValue,-temp);
+            String s2=nowFormula+"+"+temp;
+            helper(res,s2,num,i+1,target,nowValue+lastValue,temp);
+            String s3=nowFormula+"*"+temp;
+            helper(res,s3,num,i+1,target,nowValue,lastValue*temp);
+            if(num.charAt(index)=='0')
+            break;
+        }
+    }
+    
+    public List<String> addOperators(String num, int target) {
+        long temp=0;
+        List<String> res=new ArrayList();
+        for(int i=0;i<num.length();i++)
+        {
+            temp=temp*10+num.charAt(i)-'0';
+            helper(res,""+temp,num,i+1,target,0,temp);
+            if(num.charAt(0)=='0')
+            break;
+        }
+        return res;
+    }
+}
