@@ -1,0 +1,38 @@
+public class Solution {
+    // public int[] singleNumber(int[] nums) {
+    //     Set<Integer> set=new HashSet();
+    //     for(int i:nums)
+    //     {
+    //         if(set.contains(i))
+    //         set.remove(i);
+    //         else
+    //         set.add(i);
+    //     }
+    //     int[] res=new int[2];
+    //     int i=0;
+    //     for(int j:set)
+    //     {
+    //         res[i++]=j;
+    //     }
+    //     return res;
+    // }
+    
+    public int[] singleNumber(int[] nums) {
+        int x1=0;
+        for(int x:nums)
+        x1^=x;
+        x1&=-x1;
+        int n1=0,n2=0;
+        for(int x:nums)
+        {
+            if((x&x1)!=0)
+            n1^=x;
+            else
+            n2^=x;
+        }
+        int[] res=new int[2];
+        res[0]=n1;
+        res[1]=n2;
+        return res;
+    }
+}
