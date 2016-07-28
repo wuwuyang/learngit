@@ -1,0 +1,68 @@
+public class Solution {
+    String[] s1={"Zero","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"};
+    //String[] s2={"Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventenn","Eighteen","Nineteen"};
+    String[] s2={"Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"};
+    
+    public String helper(int num)
+    {
+        String t1="";
+        if(num>=100)
+        {
+            int a1=num/100;
+            num%=100;
+            t1=s1[a1]+" Hundred";
+        }
+        String t2="";
+        if(num>=20)
+        {
+            int a2=num/10;
+            num%=10;
+            t2=""+s2[a2-2];
+        }
+        String t3="";
+        if(num>0)
+        {
+            t3=""+s1[num];
+        }
+        String res="";
+        if(t1.length()>0)
+        res+=t1;
+        if(t2.length()>0)
+        {
+            if(res.length()>0)
+            res+=" "+t2;
+            else
+            res=""+t2;
+        }
+        if(t3.length()>0)
+        {
+            if(res.length()>0)
+            res+=" "+t3;
+            else
+            res=""+t3;
+        }
+        return res;
+    }
+    
+    public String numberToWords(int num) {
+        if(num==0)
+        return s1[num];
+        String res="";
+        String[] unit={""," Thousand"," Million"," Billion"," Trillion"};
+        for(int i=0;i<5;i++)
+        {
+            if(num==0)
+            break;
+            int t=num%1000;
+            num/=1000;
+            String temp=helper(t);
+            if(temp.length()>0)
+            temp=helper(t)+unit[i];
+            if(res.length()>0&&temp.length()>0)
+            res=temp+" "+res;
+            else if(temp.length()>0)
+            res=temp;
+        }
+        return res;
+    }
+}

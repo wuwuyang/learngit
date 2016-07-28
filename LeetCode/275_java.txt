@@ -1,0 +1,10 @@
+public class Solution {
+    public int hIndex(int[] citations) {
+        int res=1;
+        while(res<=citations.length&&citations[citations.length-res]>=res)
+        {
+            res++;
+        }
+        return res-1;
+    }
+}
