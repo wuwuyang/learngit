@@ -1,0 +1,65 @@
+public class Solution {
+    public void helper(String input,List<Character> oper,List<Integer> value)
+    {
+        int v=0;
+        for(int i=0;i<input.length();i++)
+        {
+            char c=input.charAt(i);
+            if(c>='0'&&c<='9')
+            {
+                v=v*10+c-'0';
+            }
+            else
+            {
+                oper.add(c);
+                value.add(v);
+                v=0;
+            }
+        }
+        value.add(v);
+    }
+    
+    public int cal(int v1,int v2,char c)
+    {
+        switch(c)
+        {
+            case '+':
+                return v1+v2;
+            case '-':
+                return v1-v2;
+            case '*':
+                return v1*v2;
+        }
+        return 0;
+    }
+    
+    public List<Integer> helper2(List<Integer> value,List<Character> oper,int left,int right)
+    {
+        List<Integer> res=new ArrayList<Integer>();
+        if(left==right)
+        res.add(value.get(left));
+        for(int i=left;i<right;i++)
+        {
+            List<Integer> l1=helper2(value,oper,left,i);
+            List<Integer> l2=helper2(value,oper,i+1,right);
+            for(int t1:l1)
+            {
+                for(int t2:l2)
+                {
+                    res.add(cal(t1,t2,oper.get(i)));
+                }
+            }
+        }
+        return res;
+    }
+    
+    public List<Integer> diffWaysToCompute(String input) {
+        //List<Integer> res=new ArrayList<Integer>();
+        //Set<Integer> set=new HashSet<Integer>();
+        List<Character> oper=new ArrayList<Character>();
+        List<Integer> value=new ArrayList<Integer>();
+        //Queue<Node> q=new LinkedList<Node>();
+        helper(input,oper,value);
+        return helper2(value,oper,0,oper.size());
+    }
+}
