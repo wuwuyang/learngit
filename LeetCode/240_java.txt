@@ -1,0 +1,66 @@
+public class Solution {
+    public boolean bs(int[][] matrix,int target,int x,int y)
+    {
+        int left=0,right=matrix.length-1;
+        while(left<=right)
+        {
+            int mid=(left+right)/2;
+            if(matrix[mid][y]==target)
+            return true;
+            else if(matrix[mid][y]>target)
+            right=mid-1;
+            else
+            left=mid+1;
+        }
+        left=0;
+        right=matrix[0].length-1;
+        while(left<=right)
+        {
+            int mid=(left+right)/2;
+            if(matrix[x][mid]==target)
+            return true;
+            else if(matrix[x][mid]>target)
+            right=mid-1;
+            else
+            left=mid+1;
+        }
+        return false;
+    }
+    
+    public boolean helper(int[][] matrix,int target,int x1,int y1,int x2,int y2)
+    {
+        if(x1>x2||y1>y2)
+        return false;
+        if(x1==x2&&y1==y2)
+        return matrix[x1][y1]==target;
+        int mx=(x1+x2)/2;
+        int my=(y1+y2)/2;
+        if(matrix[mx][my]==target||bs(matrix,target,mx,my))
+        return true;
+        else if(matrix[mx][my]>target)
+        {
+            return helper(matrix,target,x1,y1,mx-1,my-1)||helper(matrix,target,x1,my+1,mx-1,y2)||helper(matrix,target,mx+1,y1,x2,my-1);
+        }
+        else
+        {
+            return helper(matrix,target,mx+1,my+1,x2,y2)||helper(matrix,target,x1,my+1,mx-1,y2)||helper(matrix,target,mx+1,y1,x2,my-1);
+        }
+    }
+    
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int m=matrix.length;
+        if(m==0)
+        return false;
+        int n=matrix[0].length;
+        //return helper(matrix,target,0,0,m-1,n-1);
+        int y=n-1;
+        for(int i=0;i<m;i++)
+        {
+            while(y>=0&&matrix[i][y]>target)
+            y--;
+            if(y>=0&&matrix[i][y]==target)
+            return true;
+        }
+        return false;
+    }
+}
