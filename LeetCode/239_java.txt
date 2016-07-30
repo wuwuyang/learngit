@@ -1,0 +1,85 @@
+public class Solution {
+    // public int[] maxSlidingWindow(int[] nums, int k) {
+    //     if(nums.length==0||k==0)
+    //     return new int[0];
+    //     TreeSet<Integer> set=new TreeSet();
+    //     Map<Integer,Integer> map=new HashMap();
+    //     for(int i=0;i<k;i++)
+    //     {
+    //         set.add(-nums[i]);
+    //         if(map.containsKey(-nums[i]))
+    //         map.put(-nums[i],map.get(-nums[i])+1);
+    //         else
+    //         map.put(-nums[i],1);
+    //     }
+    //     int[] res=new int[nums.length-k+1];
+    //     for(int i=k;i<nums.length;i++)
+    //     {
+    //         int t=set.first();
+    //         res[i-k]=-t;
+    //         int t1=map.get(-nums[i-k])-1;
+    //         if(t1==0)
+    //         set.remove(-nums[i-k]);
+    //         map.put(-nums[i-k],t1);
+    //         set.add(-nums[i]);
+    //         if(map.containsKey(-nums[i]))
+    //         map.put(-nums[i],map.get(-nums[i])+1);
+    //         else
+    //         map.put(-nums[i],1);
+    //     }
+    //     res[nums.length-k]=-set.first();
+    //     return res;
+    // }
+    
+    class Node
+    {
+        public int value;
+        public int index;
+        public Node(int i,int v)
+        {
+            index=i;
+            value=v;
+        }
+    }
+    
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if(nums.length==0||k==0)
+        return new int[0];
+        
+        Comparator<Node> OrderValue=new Comparator<Node>(){
+            public int compare(Node n1,Node n2)
+            {
+                int v1=n1.value;
+                int v2=n2.value;
+                if(v1<v2)
+                return 1;
+                else if(v1==v2)
+                return 0;
+                else
+                return -1;
+            }
+        };
+        
+        int[] res=new int[nums.length-k+1];
+        PriorityQueue<Node> p=new PriorityQueue<Node>(k,OrderValue);
+        for(int i=0;i<=nums.length;i++)
+        {
+            if(i>=k)
+            {
+                Node tn=p.peek();
+                while(i-tn.index>k)
+                {
+                    p.poll();
+                    tn=p.peek();
+                }
+                if(i-tn.index<=k)
+                {
+                    res[i-k]=tn.value;
+                }
+            }
+            if(i<nums.length)
+            p.add(new Node(i,nums[i]));
+        }
+        return res;
+    }
+}
