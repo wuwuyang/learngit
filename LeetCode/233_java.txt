@@ -1,0 +1,39 @@
+public class Solution {
+    public int countDigitOne(int n) {
+        if(n<=0)
+        return 0;
+        Map<Integer,Integer> map=new HashMap();
+        Long t=10l;
+        map.put(1,0);
+        int t1=1;
+        while(t<=n)
+        {
+            int t2=map.get(t1);
+            map.put(t.intValue(),t1+10*t2);
+            t*=10;
+            t1*=10;
+        }
+        Long tstand=1l;
+        while(tstand<=n)
+        {
+            tstand*=10;
+        }
+        tstand/=10;
+        int stand=tstand.intValue();
+        int res=0;
+        while(n>0)
+        {
+            int t2=n/stand;
+            res+=t2*map.get(stand);
+            if(t2>1)
+            res+=stand;
+            else if(t2==1)
+            {
+                res+=(n%stand)+1;
+            }
+            n%=stand;
+            stand/=10;
+        }
+        return res;
+    }
+}
