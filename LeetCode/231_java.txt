@@ -1,0 +1,10 @@
+public class Solution {
+    public boolean isPowerOfTwo(int n) {
+        Long t=1l;
+        while(n>t)
+        {
+            t*=2;
+        }
+        return n==t;
+    }
+}
