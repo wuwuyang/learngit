@@ -1,0 +1,23 @@
+public class Solution {
+    public int majorityElement(int[] nums) {
+        int res=0;
+        int c1=0;
+        for(int num:nums)
+        {
+            if(c1==0)
+            {
+                res=num;
+                c1=1;
+            }
+            else if(num==res)
+            {
+                c1++;
+            }
+            else
+            {
+                c1--;
+            }
+        }
+        return res;
+    }
+}

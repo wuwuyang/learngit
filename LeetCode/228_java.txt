@@ -1,0 +1,35 @@
+public class Solution {
+    public List<String> summaryRanges(int[] nums) {
+        List<String> res=new ArrayList();
+        if(nums.length==0)
+        return res;
+        int start=nums[0];
+        int end=nums[0];
+        for(int i=1;i<=nums.length;i++)
+        {
+            int num;
+            if(i<nums.length)
+            num=nums[i];
+            else
+            num=end+2;
+            if(num==end+1)
+            {
+                end=num;
+            }
+            else
+            {
+                if(start==end)
+                {
+                    res.add(""+start);
+                }
+                else
+                {
+                    res.add(""+start+"->"+end);
+                }
+                start=num;
+                end=num;
+            }
+        }
+        return res;
+    }
+}

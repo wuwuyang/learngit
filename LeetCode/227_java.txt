@@ -1,0 +1,57 @@
+public class Solution {
+    public int cal(int n1,int n2,char op)
+    {
+        switch(op){
+            case '+':
+                return n1+n2;
+            case '-':
+                return n1-n2;
+            case '/':
+                return n1/n2;
+            case '*':
+                return n1*n2;
+        }
+        return 0;
+    }
+    
+    public int calculate(String s) {
+        LinkedList<Integer> qn=new LinkedList();
+        LinkedList<Character> qc=new LinkedList();
+        int t=0;
+        for(int i=0;i<s.length();i++)
+        {
+            char c=s.charAt(i);
+            if(c>='0'&&c<='9')
+            {
+                t=t*10+c-'0';
+            }
+            else if(c!=' ')
+            {
+                qn.add(t);
+                qc.add(c);
+                t=0;
+            }
+        }
+        qn.add(t);
+        int res=0;
+        int t1=qn.poll();
+        char op1='+';
+        while(qc.size()>0)
+        {
+            char op2=qc.poll();
+            int t2=qn.poll();
+            if(op2=='+'||op2=='-')
+            {
+                res=cal(res,t1,op1);
+                t1=t2;
+                op1=op2;
+            }
+            else
+            {
+                t1=cal(t1,t2,op2);
+            }
+        }
+        res=cal(res,t1,op1);
+        return res;
+    }
+}
