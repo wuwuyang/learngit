@@ -1,0 +1,36 @@
+class MyStack {
+    // Push element x onto stack.
+    LinkedList<Integer> q=new LinkedList();
+    int topv=0;
+    
+    public void push(int x) {
+        q.add(x);
+        topv=x;
+    }
+
+    // Removes the element on top of the stack.
+    public void pop() {
+        //LinkedList<Integer> tq=new LinkedList();
+        int s=q.size();
+        for(;s>0;s--)
+        {
+            int t=q.poll();
+            if(s>1)
+            {
+                q.add(t);
+                topv=t;
+            }
+        }
+        //q=tq;
+    }
+
+    // Get the top element.
+    public int top() {
+        return topv;
+    }
+
+    // Return whether the stack is empty.
+    public boolean empty() {
+        return q.size()==0;
+    }
+}
