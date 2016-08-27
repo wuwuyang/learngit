@@ -1,0 +1,52 @@
+public class Solution {
+    public int lengthLongestPath(String input) {
+        int res=0;
+        int deep=0;
+        int start=0;
+        int allen=0;
+        boolean isFile=false;
+        Stack<Integer> stk=new Stack();
+        for(int i=0;i<input.length();i++)
+        {
+            char c=input.charAt(i);
+            if(c=='\n')
+            {
+                int len=i-start;
+                while(stk.size()>deep)
+                {
+                    allen-=stk.pop();
+                }
+                stk.push(len);
+                allen+=len;
+                if(isFile&&allen+deep>res)
+                res=allen+deep;
+                i++;
+                deep=0;
+                isFile=false;
+                while(input.charAt(i)=='\t')
+                {
+                    i++;
+                    deep++;
+                }
+                start=i;
+                i--;
+            }
+            else
+            {
+                if(c=='.')
+                isFile=true;
+            }
+        }
+        if(isFile)
+        {
+            while(stk.size()>deep)
+            {
+                allen-=stk.pop();
+            }
+            int t=allen+input.length()-start+deep;
+            if(t>res)
+            res=t;
+        }
+        return res;
+    }
+}

@@ -1,0 +1,17 @@
+public class Solution {
+    public void helper(List<Integer> list,int tn,int n)
+    {
+        if(tn>n)
+        return;
+        list.add(tn);
+        for(int i=0;i<10;i++)
+        helper(list,tn*10+i,n);
+    }
+    
+    public List<Integer> lexicalOrder(int n) {
+        List<Integer> res=new ArrayList();
+        for(int i=1;i<10;i++)
+        helper(res,i,n);
+        return res;
+    }
+}

@@ -1,0 +1,42 @@
+public class Solution {
+    int[] nums;
+    int[] backup;
+
+    public Solution(int[] nums) {
+        this.nums=nums;
+        this.backup=new int[nums.length];
+        for(int i=0;i<nums.length;i++)
+        this.backup[i]=nums[i];
+    }
+    
+    /** Resets the array to its original configuration and return it. */
+    public int[] reset() {
+        int[] res=new int[backup.length];
+        for(int i=0;i<backup.length;i++)
+        res[i]=backup[i];
+        return res;
+    }
+    
+    /** Returns a random shuffling of the array. */
+    public int[] shuffle() {
+        Random ra=new Random();
+        int[] res=new int[nums.length];
+        for(int i=0;i<nums.length;i++)
+        {
+            int t=ra.nextInt(nums.length-i)+i;
+            int v=nums[t];
+            nums[t]=nums[i];
+            nums[i]=v;
+        }
+        for(int i=0;i<nums.length;i++)
+        res[i]=nums[i];
+        return res;
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(nums);
+ * int[] param_1 = obj.reset();
+ * int[] param_2 = obj.shuffle();
+ */
