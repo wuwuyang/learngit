@@ -1,0 +1,61 @@
+public class Solution {
+    public void helper(Stack<Integer> stk1,Stack<Character> stk2)
+    {
+        if(stk1.size()==0||stk1.size()==1||stk2.size()==0)
+        return;
+        if(stk2.peek()=='(')
+        return;
+        char c=stk2.pop();
+        while(c!='(')
+        {
+            int v1=stk1.pop(),v2=stk1.pop();
+            if(c=='+')
+            {
+                stk1.push(v1+v2);
+            }
+            if(c=='-')
+            {
+                stk1.push(v2-v1);
+            }
+            if(stk2.size()==0)
+            break;
+            c=stk2.pop();
+        }
+        if(c=='(')
+        stk2.push(c);
+    }
+    
+    public int calculate(String s) {
+        Stack<Integer> stk1=new Stack();
+        Stack<Character> stk2=new Stack();
+        for(int i=0;i<s.length();i++)
+        {
+            char c=s.charAt(i);
+            if(c>='0'&&c<='9')
+            {
+                int n=0;
+                while(c>='0'&&c<='9')
+                {
+                    n=n*10+c-'0';
+                    i++;
+                    if(i==s.length())
+                    break;
+                    c=s.charAt(i);
+                }
+                stk1.push(n);
+                i--;
+                helper(stk1,stk2);
+            }
+            else if(c=='+'||c=='-'||c=='(')
+            {
+                stk2.push(c);
+            }
+            else if(c==')')
+            {
+                stk2.pop();
+                helper(stk1,stk2);
+            }
+        }
+        return stk1.pop();
+    }
+}
