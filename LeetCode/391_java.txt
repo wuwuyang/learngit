@@ -1,0 +1,128 @@
+// public class Solution {
+//     public boolean isRectangleCover(int[][] rectangles) {
+//         int rlx=0x7fffffff,lux=-1,rly=0x7fffffff,luy=-1;
+//         int minrx=0x7fffffff,minry=0x7fffffff,maxlx=-1,maxly=-1;
+//         for(int i=0;i<rectangles.length;i++)
+//         {
+//             if(rectangles[i][0]<=rlx&&rectangles[i][1]<=rly)
+//             {
+//                 rlx=rectangles[i][0];
+//                 rly=rectangles[i][1];
+//             }
+//             if(rectangles[i][2]>=lux&&rectangles[i][3]>=luy)
+//             {
+//                 lux=rectangles[i][2];
+//                 luy=rectangles[i][3];
+//             }
+//             if(rectangles[i][0]<minrx)
+//             minrx=rectangles[i][0];
+//             if(rectangles[i][1]<minry)
+//             minry=rectangles[i][1];
+//             if(rectangles[i][2]>maxlx)
+//             maxlx=rectangles[i][2];
+//             if(rectangles[i][3]>maxly)
+//             maxly=rectangles[i][3];
+//         }
+//         if(minrx<rlx||minry<rly||maxlx>lux||maxly>luy)
+//         return false;
+//         int flag[][]=new int[lux-rlx][luy-rly];
+//         for(int i=0;i<rectangles.length;i++)
+//         {
+//             int rx=rectangles[i][0]-rlx;
+//             int ry=rectangles[i][1]-rly;
+//             int lx=rectangles[i][2]-rlx;
+//             int ly=rectangles[i][3]-rly;
+//             for(int j=rx;j<lx;j++)
+//             {
+//                 for(int k=ry;k<ly;k++)
+//                 {
+//                     flag[j][k]++;
+//                     if(flag[j][k]>1)
+//                     return false;
+//                 }
+//             }
+//         }
+//         for(int i=0;i<lux-rlx;i++)
+//         {
+//             for(int j=0;j<luy-rly;j++)
+//             {
+//                 if(flag[i][j]==0)
+//                 return false;
+//             }
+//         }
+//         return true;
+//     }
+// }
+
+public class Solution {
+    
+    public String[] getKey(int[] pos)
+    {
+        return new String[]{""+pos[0]+"-"+pos[1],""+pos[0]+"-"+pos[3],""+pos[2]+"-"+pos[1],""+pos[2]+"-"+pos[3]};
+    }
+    
+    public int getArea(int[] pos)
+    {
+        return (pos[3]-pos[1])*(pos[2]-pos[0]);
+    }
+    
+    public boolean isRectangleCover(int[][] rectangles) {
+        int minrx=0x7fffffff,minry=0x7fffffff,maxlx=-1,maxly=-1;
+        Map<String,Integer> map=new HashMap();
+        int sumArea=0;
+        for(int i=0;i<rectangles.length;i++)
+        {
+            if(rectangles[i][0]<minrx)
+            minrx=rectangles[i][0];
+            if(rectangles[i][1]<minry)
+            minry=rectangles[i][1];
+            if(rectangles[i][2]>maxlx)
+            maxlx=rectangles[i][2];
+            if(rectangles[i][3]>maxly)
+            maxly=rectangles[i][3];
+            String[] a=getKey(rectangles[i]);
+            for(int j=0;j<4;j++)
+            {
+                Integer t=map.get(a[j]);
+                if(t==null)
+                t=1;
+                else
+                t++;
+                map.put(a[j],t);
+            }
+            sumArea+=getArea(rectangles[i]);
+        }
+        int rightArea=(maxlx-minrx)*(maxly-minry);
+        //System.out.println(sumArea+" "+rightArea);
+        if(rightArea!=sumArea)
+        return false;
+        int record=0;
+        String s1=""+minrx+"-"+minry;
+        String s2=""+minrx+"-"+maxly;
+        String s3=""+maxlx+"-"+minry;
+        String s4=""+maxlx+"-"+maxly;
+        for(Map.Entry<String,Integer> entry:map.entrySet())
+        {
+            String a=entry.getKey();
+            Integer t=entry.getValue();
+            //System.out.println(a+" "+t);
+            if(a.equals(s1)||a.equals(s2)||a.equals(s3)||a.equals(s4))
+            {
+                if(t==1)
+                record++;
+                else
+                {
+                    // System.out.println("2");
+                    return false;
+                }
+            }
+            else if(t%2!=0)
+            {
+                // System.out.println("3");
+                return false;
+            }
+        }
+        //System.out.println("record:"+record);
+        return record==4;
+    }
+}
