@@ -1,0 +1,191 @@
+public class Solution {
+    class Node{
+        int x;
+        int y;
+        Node(int a1,int a2)
+        {
+            x=a1;
+            y=a2;
+        }
+    }
+    
+    public int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+            // List<Node> list1=new ArrayList();
+            // List<Node> list2=new ArrayList();
+            int sum=(C-A)*(D-B)+(G-E)*(H-F);
+            // if(A>=E&&A<=G)
+            // {
+            //     if(B>=F&&B<=H)
+            //     {
+            //         list1.add(new Node(A,B));
+            //     }
+            //     if(D>=F&&D<=H)
+            //     {
+            //         list1.add(new Node(A,D));
+            //     }
+            // }
+            // if(C>=E&&C<=G)
+            // {
+            //     if(B>=F&&B<=H)
+            //     {
+            //         list1.add(new Node(C,B));
+            //     }
+            //     if(D>=F&&D<=H)
+            //     {
+            //         list1.add(new Node(C,D));
+            //     }
+            // }
+            // if(E>=A&&E<=C)
+            // {
+            //     if(F>=B&&F<=D)
+            //     {
+            //         list2.add(new Node(E,F));
+            //     }
+            //     if(H>=B&&H<=D)
+            //     {
+            //         list2.add(new Node(E,H));
+            //     }
+            // }
+            // if(G>=A&&G<=C)
+            // {
+            //     if(F>=B&&F<=D)
+            //     {
+            //         list2.add(new Node(G,F));
+            //     }
+            //     if(H>=B&&H<=D)
+            //     {
+            //         list2.add(new Node(G,H));
+            //     }
+            // }
+            // System.out.println(list1.size()+" "+list2.size());
+            // if(list1.size()==0&&list2.size()==0)
+            // sum+=0;
+            // else if(list1.size()==1&&list2.size()==1)
+            // {
+            //     Node a1=list1.get(0);
+            //     Node a2=list2.get(0);
+            //     return sum-Math.abs(a1.x-a2.x)*Math.abs(a1.y-a2.y);
+            // }
+            // else if(list1.size()==2&&list2.size()==2)
+            // {
+            //     Node a1=list1.get(0);
+            //     Node a2=list1.get(1);
+            //     Node a3=list2.get(0);
+            //     Node a4=list2.get(1);
+            //     //System.out.println(a1.x+" "+a1.y+" "+a2.x+" "+a2.y+" "+a3.x+" "+a3.y+" "+a4.x+" "+a4.y);
+            //     int x1=a1.x,x2=a2.x,y1=a1.y,y2=a2.y;
+            //     if(a2.x!=x1)
+            //     x2=a2.x;
+            //     else if(a3.x!=x1)
+            //     x2=a3.x;
+            //     else if(a4.x!=x1)
+            //     x2=a4.x;
+            //     if(a2.y!=y1)
+            //     y2=a2.y;
+            //     else if(a3.y!=y1)
+            //     y2=a3.y;
+            //     else if(a4.y!=y1)
+            //     y2=a4.y;
+            //     //System.out.println(x1+" "+y1+" "+x2+" "+y2);
+            //     return sum-Math.abs(x2-x1)*Math.abs(y2-y1);
+            // }
+            // else if(list1.size()==2)
+            // {
+            //     Node a1=list1.get(0);
+            //     Node a2=list1.get(1);
+            //     if(a1.x==a2.x)
+            //     {
+            //         if(E>=A&&E<=C&&E!=a1.x)
+            //         return sum-Math.abs(E-a1.x)*Math.abs(a1.y-a2.y);
+            //         if(G>=A&&G<=C&&G!=a1.x)
+            //         return sum-Math.abs(G-a1.x)*Math.abs(a1.y-a2.y);
+            //     }
+            //     else if(a1.y==a2.y)
+            //     {
+            //         if(F>=B&&F<=D&&H!=a1.y)
+            //         return sum-Math.abs(F-a1.y)*Math.abs(a1.x-a2.x);
+            //         if(H>=B&&H<=D&&H!=a1.y)
+            //         return sum-Math.abs(H-a1.y)*Math.abs(a1.x-a2.x);
+            //     }
+            // }
+            // else if(list2.size()==2)
+            // {
+            //     Node a1=list2.get(0);
+            //     Node a2=list2.get(1);
+            //     if(a1.x==a2.x)
+            //     {
+            //         if(A>=E&&A<=G&&A!=a1.x)
+            //         return sum-Math.abs(A-a1.x)*Math.abs(a1.y-a2.y);
+            //         if(C>=E&&C<=G&&C!=a1.x)
+            //         return sum-Math.abs(C-a1.x)*Math.abs(a1.y-a2.y);
+            //     }
+            //     if(a1.y==a2.y)
+            //     {
+            //         if(B>=F&&B<=H&&B!=a1.y)
+            //         return sum-Math.abs(B-a1.y)*Math.abs(a1.x-a2.x);
+            //         if(D>=F&&D<=H&&D!=a1.y)
+            //         return sum-Math.abs(D-a1.y)*Math.abs(a1.x-a2.x);
+            //     }
+            // }
+            // else if(list1.size()==4)
+            // {
+            //     return (G-E)*(H-F);
+            // }
+            // else if(list2.size()==4)
+            // {
+            //     return (C-A)*(D-B);
+            // }
+            Set<Integer> X=new HashSet();
+            Set<Integer> Y=new HashSet();
+            if(A>=E&&A<=G)
+            {
+                X.add(A);
+            }
+            if(C>=E&&C<=G)
+            {
+                X.add(C);
+            }
+            if(E>=A&&E<=C)
+            {
+                X.add(E);
+            }
+            if(G>=A&&G<=C)
+            {
+                X.add(G);
+            }
+            if(B>=F&&B<=H)
+            {
+                Y.add(B);
+            }
+            if(D>=F&&D<=H)
+            {
+                Y.add(D);
+            }
+            if(F>=B&&F<=D)
+            {
+                Y.add(F);
+            }
+            if(H>=B&&H<=D)
+            {
+                Y.add(H);
+            }
+            //System.out.println(X.size()+" "+Y.size());
+            if(X.size()==2&&Y.size()==2)
+            {
+                int[] x=new int[2];
+                int[] y=new int[2];
+                int i=0;
+                for(int j:X)
+                {
+                    x[i++]=j;
+                }
+                i=0;
+                for(int j:Y)
+                {
+                    y[i++]=j;
+                }
+                return sum-Math.abs(x[1]-x[0])*Math.abs(y[1]-y[0]);
+            }
+            return sum;
+    }
+}
