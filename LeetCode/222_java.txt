@@ -1,0 +1,171 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    int t=0;
+    int h;
+    boolean flag=false;
+    
+    public int getHeight(TreeNode root)
+    {
+        int h=0;
+        while(root!=null)
+        {
+            h++;
+            root=root.left;
+        }
+        return h;
+    }
+    
+    public int getHeight_Right(TreeNode root)
+    {
+        int h=0;
+        while(root!=null)
+        {
+            h++;
+            root=root.right;
+        }
+        return h;
+    }
+    
+    public void helper(TreeNode root,int height)
+    {
+        if(flag||height>h)
+        return;
+        if(height==h)
+        {
+            if(root!=null)
+            {
+                t++;
+            }
+            else
+            {
+                flag=true;
+            }
+            return;
+        }
+        helper(root.left,height+1);
+        helper(root.right,height+1);
+    }
+    
+    public TreeNode getNode(TreeNode root,int num,int height)
+    {
+        while(root!=null&&height>0)
+        {
+            height--;
+            int t=num&(1<<height);
+            if(t>0)
+            root=root.right;
+            else
+            root=root.left;
+        }
+        // while((height>0)&&(root!=null))
+        // {
+        //     height--;
+        //     if((num&(1<<height))>0)
+        //     root=root.right;
+        //     else
+        //     root=root.left;
+        // }
+        return root;
+    }
+    
+    public void helper2(TreeNode root,int height)
+    {
+        if(root==null)
+        return;
+        int h1=getHeight(root.left);
+        int h2=getHeight_Right(root.left);
+        if(h1!=h2)
+        {
+            helper2(root.left,height+1);
+        }
+        else if(h1!=0)
+        {
+            if(h1+height==h)
+            t+=1<<h1-1;
+            helper2(root.right,height+1);
+        }
+        else if(h1==0)
+        {
+            //t+=1;
+            if(height==h)
+            t+=1;
+        }
+    }
+    
+    public int countNodes(TreeNode root) {
+        // 第一种方法，TLE
+        // if(root==null)
+        // return 0;
+        // return 1+countNodes(root.left)+countNodes(root.right);
+        // 第二种方法,TLE
+        // h=getHeight(root);
+        // helper(root,1);
+        // int num1=0;
+        // if(h>1)
+        // num1=(1<<h-1)-1;
+        // System.out.println(h+" "+t);
+        // return num1+t;
+        //书影方法
+        // int depth=0;
+        // TreeNode tnode=root;
+        // while(tnode!=null)
+        // {
+        //     depth++;
+        //     tnode=tnode.left;
+        // }
+        // if(depth==0)
+        // return 0;
+        // int left=0;
+        // int right=(1<<(depth-1))-1;
+        // while(left<=right)
+        // {
+        //     tnode=root;
+        //     int mid=(left+right)>>1;
+        //     if(getNode(tnode,mid,depth-1)!=null)
+        //     {
+        //         left=mid+1;
+        //     }
+        //     else
+        //     {
+        //         //System.out.println("fuck");
+        //         right=mid-1;
+        //     }
+        // }
+        // //System.out.println(depth+" "+right);
+        // return (1<<depth-1)+right;
+        //自写书影方法1
+        // h=getHeight(root);
+        // if(h==0)
+        // return 0;
+        // int left=0;
+        // int right=(1<<h-1)-1;
+        // while(left<=right)
+        // {
+        //     int mid=(left+right)/2;
+        //     if(getNode(root,mid,h-1)!=null)
+        //     {
+        //         left=mid+1;
+        //     }
+        //     else
+        //     {
+        //         right=mid-1;
+        //     }
+        // }
+        // return (1<<h-1)+right;
+        //自写书影方法2
+        h=getHeight(root);
+        if(h==0||h==1)
+        return h;
+        helper2(root,1);
+        //System.out.println(t);
+        return (1<<(h-1))+t-1;
+    }
+}
