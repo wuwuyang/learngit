@@ -1,0 +1,58 @@
+public class Solution {
+    // public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+    //     if(k<1||t<0)
+    //     return false;
+    //     TreeSet<Integer> set=new TreeSet();
+    //     for(int i=0;i<nums.length;i++)
+    //     {
+    //         if(i>k)
+    //         set.remove(nums[i-k-1]);
+    //         if(set.ceiling(nums[i])!=null&&set.ceiling(nums[i])<=(t+nums[i]))
+    //         {
+    //             System.out.println("fuck1 "+i);
+    //             return true;
+    //         }
+    //         if(set.floor(nums[i])!=null&&(set.floor(nums[i])+t)>=nums[i])
+    //         {
+    //             System.out.println("fuck2 "+i);
+    //             return true;
+    //         }
+    //         set.add(nums[i]);
+    //     }
+    //     return false;
+    // }
+    
+    public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+        if(k<1||t<0)
+        return false;
+        Map<Double,Integer> map=new HashMap();
+        int tt=t;
+        t=Math.max(1,t);
+        for(int i=0;i<nums.length;i++)
+        {
+            if(i>k)
+            {
+                Double t1=Math.floor(nums[i-k-1]/t);
+                map.remove(t1);
+            }
+            Double t1=Math.floor(nums[i]/t);
+            for(Double j=t1-1;j<=t1+1;j++)
+            {
+                Integer t2=map.get(j);
+                if(t2!=null)
+                {
+                    long t3=Math.abs(t2-nums[i]);
+                    if(t3<0)
+                    t3*=-1;
+                    if(t3<=tt)
+                    {
+                        //System.out.println(i+" "+nums[i]+" "+t2);
+                        return true;
+                    }
+                }
+            }
+            map.put(t1,nums[i]);
+        }
+        return false;
+    }
+}
