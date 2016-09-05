@@ -1,0 +1,38 @@
+public class Solution {
+    public void helper(List<List<Integer>> res,List<Integer> t,int k,int n,int sum)
+    {
+        if(t.size()==k)
+        {
+            if(sum==n)
+            {
+                res.add(new ArrayList(t));
+            }
+            return;
+        }
+        int t1=0;
+        if(t.size()>0)
+        {
+            t1=t.get(t.size()-1);
+        }
+        int index=t.size();
+        t.add(0);
+        for(int i=1;i<=9;i++)
+        {
+            if(i+sum>n)
+            break;
+            if(i>t1)
+            {
+              t.set(index,i);
+              helper(res,t,k,n,sum+i);
+            }
+        }
+        t.remove(index);
+    }
+    
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> res=new ArrayList();
+        List<Integer> t=new ArrayList();
+        helper(res,t,k,n,0);
+        return res;
+    }
+}
