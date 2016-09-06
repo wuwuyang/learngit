@@ -1,0 +1,55 @@
+public class Solution {
+    public boolean judgePalind(String s,int end)
+    {
+        for(int i=0,j=end;i<j;i++,j--)
+        {
+            if(s.charAt(i)!=s.charAt(j))
+            return false;
+        }
+        return true;
+    }
+    
+    public String getRev(String s)
+    {
+        StringBuilder sb=new StringBuilder(s);
+        return sb.reverse().toString();
+    }
+    
+    public String useKMP(String s)
+    {
+        String ts=s;
+        String t=getRev(s);
+        s+=t;
+        int next[]=new int[s.length()+1];
+        next[0]=0;
+        next[1]=0;
+        int j=0;
+        for(int i=1;i<s.length();i++)
+        {
+            while(j>0&&(s.charAt(j)!=s.charAt(i)||j>=ts.length()))
+            j=next[j];
+            if(s.charAt(j)==s.charAt(i))
+            j++;
+            next[i+1]=j;
+            // System.out.print(" "+next[i+1]);
+        }
+        int p=next[s.length()];
+        return t.substring(0,ts.length()-p)+ts;
+    }
+    
+    public String shortestPalindrome(String s) {
+        if(s.length()==0)
+        return s;
+        String t=getRev(s);
+        for(int i=s.length()-1;i>=0;i--)
+        {
+            if(judgePalind(s,i))
+            {
+                return t.substring(0,s.length()-i-1)+s;
+            }
+        }
+        return "";
+        // return useKMP(s);
+    }
+}
+
