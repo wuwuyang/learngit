@@ -1,0 +1,130 @@
+class TrieNode{
+    public char value;
+    public TrieNode child[];
+    public boolean isWord;
+    public TrieNode()
+    {
+        value='0';
+        child=new TrieNode[26];
+        isWord=false;
+    }
+    public TrieNode(char c)
+    {
+        value=c;
+        child=new TrieNode[26];
+        isWord=false;
+    }
+}
+
+class PrefixTree{
+    public TrieNode root;
+    public PrefixTree()
+    {
+        root=new TrieNode();
+    }
+    public void insert(String word)
+    {
+        TrieNode t=root;
+        for(int i=0;i<word.length();i++)
+        {
+            char c=word.charAt(i);
+            if(t.child[c-'a']==null)
+            t.child[c-'a']=new TrieNode(c);
+            t=t.child[c-'a'];
+        }
+        t.isWord=true;
+    }
+}
+
+public class Solution {
+    public boolean dfs(char[][] board,int x,int y,String word,int index)
+    {
+        if(index>=word.length())
+        return true;
+        if(x<0||y<0||x>=board.length||y>=board[0].length)
+        return false;
+        if(board[x][y]>='A'&&board[x][y]<='Z')
+        return false;
+        if(board[x][y]!=word.charAt(index))
+        return false;
+        board[x][y]+='A'-'a';
+        int dir[][]={{0,1},{0,-1},{1,0},{-1,0}};
+        boolean res=false;
+        for(int i=0;i<4;i++)
+        {
+            int tx=x+dir[i][0],ty=y+dir[i][1];
+            if(dfs(board,tx,ty,word,index+1))
+            {
+                res=true;
+                break;
+            }
+        }
+        board[x][y]-=('A'-'a');
+        return res;
+    }
+    
+    public void dfs2(char[][] board,int x,int y,TrieNode tnode,String s,Set<String> set)
+    {
+        if(x<0||y<0||x>=board.length||y>=board[0].length||tnode==null)
+        return;
+        if(board[x][y]>='A'&&board[x][y]<='Z')
+        return;
+        if(tnode.child[board[x][y]-'a']==null)
+        return;
+        tnode=tnode.child[board[x][y]-'a'];
+        s+=board[x][y];
+        if(tnode.isWord)
+        {
+            set.add(s);
+        }
+        board[x][y]+='A'-'a';
+        int dir[][]={{0,1},{0,-1},{1,0},{-1,0}};
+        for(int i=0;i<4;i++)
+        {
+            int tx=x+dir[i][0];
+            int ty=y+dir[i][1];
+            dfs2(board,tx,ty,tnode,s,set);
+        }
+        board[x][y]-=('A'-'a');
+        return;
+    }
+    
+    public List<String> findWords(char[][] board, String[] words) {
+        List<String> res=new ArrayList();
+        Set<String> set=new HashSet();
+        // for(int i=0;i<words.length;i++)
+        // set.add(words[i]);
+        // if(board.length==0||board[0].length==0||words.length==0)
+        // return res;
+        // for(int i=0;i<board.length;i++)
+        // {
+        //     for(int j=0;j<board[0].length;j++)
+        //     {
+        //         List<String> list=new ArrayList();
+        //         for(String s:set)
+        //         {
+        //             if(dfs(board,i,j,s,0))
+        //             {
+        //                 res.add(s);
+        //                 list.add(s);
+        //             }
+        //         }
+        //         for(String s:list)
+        //         set.remove(s);
+        //     }
+        // }
+        PrefixTree tree=new PrefixTree();
+        for(String s:words)
+        tree.insert(s);
+        for(int i=0;i<board.length;i++)
+        {
+            for(int j=0;j<board[0].length;j++)
+            {
+                dfs2(board,i,j,tree.root,"",set);
+            }
+        }
+        for(String s:set)
+        res.add(s);
+        return res;
+    }
+}
