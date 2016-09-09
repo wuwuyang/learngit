@@ -1,0 +1,45 @@
+public class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        // int sum[]=new int[nums.length];
+        // int t=0;
+        // int res=-1;
+        // for(int i=0;i<nums.length;i++)
+        // {
+        //     sum[i]=t+nums[i];
+        //     t=sum[i];
+        //     if(t>=s&&res==-1)
+        //     {
+        //         res=i;
+        //     }
+        // }
+        // if(res<=0)
+        // return res+1;
+        // for(int i=res;i<nums.length;i++)
+        // {
+        //     while(res>=0&&sum[i]-sum[i-res]>=s)
+        //     {
+        //         res--;
+        //     }
+        // }
+        // return res+1;
+        int start=0,end=0,sum=0,res=nums.length+1;
+        while(end<nums.length)
+        {
+            while(end<nums.length&&sum<s)
+            {
+                sum+=nums[end];
+                end++;
+            }
+            while(start<end&&sum>=s)
+            {
+                sum-=nums[start];
+                start++;
+            }
+            if(start>0&&sum+nums[start-1]>=s)
+            res=Math.min(res,end-start+1);
+        }
+        if(res==nums.length+1)
+        return 0;
+        return res;
+    }
+}
