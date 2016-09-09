@@ -1,0 +1,91 @@
+class TrieNode{
+    public char val;
+    public boolean isWord;
+    public TrieNode child[];
+    public TrieNode(){
+        val='0';
+        isWord=false;
+        child=new TrieNode[26];
+    }
+    public TrieNode(char c)
+    {
+        val=c;
+        isWord=false;
+        child=new TrieNode[26];
+    }
+}
+
+class PrefixTree{
+    public TrieNode root;
+    public PrefixTree()
+    {
+        root=new TrieNode();
+    }
+    
+    public void insert(String s)
+    {
+        TrieNode t=root;
+        for(int i=0;i<s.length();i++)
+        {
+            char c=s.charAt(i);
+            if(t.child[c-'a']==null)
+            t.child[c-'a']=new TrieNode(c);
+            t=t.child[c-'a'];
+        }
+        t.isWord=true;
+    }
+    
+    public boolean search(TrieNode t,String s,int index)
+    {
+        if(t==null)
+        return false;
+        if(index==s.length())
+        return t.isWord;
+        for(int i=index;i<s.length();i++)
+        {
+            char c=s.charAt(i);
+            if(c!='.')
+            {
+                if(t.child[c-'a']==null)
+                return false;
+                t=t.child[c-'a'];
+            }
+            else
+            {
+                for(int j=0;j<26;j++)
+                {
+                    if(search(t.child[j],s,i+1))
+                    return true;
+                }
+                return false;
+            }
+        }
+        return t.isWord;
+    }
+}
+
+
+public class WordDictionary {
+    PrefixTree tree;
+    
+    public WordDictionary()
+    {
+        tree=new PrefixTree();
+    }
+
+    // Adds a word into the data structure.
+    public void addWord(String word) {
+        tree.insert(word);
+    }
+
+    // Returns if the word is in the data structure. A word could
+    // contain the dot character '.' to represent any one letter.
+    public boolean search(String word) {
+        return tree.search(tree.root,word,0);
+    }
+}
+
+// Your WordDictionary object will be instantiated and called as such:
+// WordDictionary wordDictionary = new WordDictionary();
+// wordDictionary.addWord("word");
+// wordDictionary.search("pattern");
