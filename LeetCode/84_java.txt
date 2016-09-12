@@ -1,0 +1,43 @@
+class Node{
+    public int h;
+    public int x;
+    public Node(int a1,int a2)
+    {
+        h=a1;
+        x=a2;
+    }
+}
+
+public class Solution {
+    public int largestRectangleArea(int[] heights) {
+        Stack<Node> stk=new Stack();
+        int res=0;
+        stk.push(new Node(0,-1));
+        for(int i=0;i<=heights.length;i++)
+        {
+            int ch=i<heights.length?heights[i]:0;
+            Node tn=stk.peek();
+            if(tn.h<ch)
+            {
+                stk.push(new Node(ch,i));
+            }
+            else
+            {
+                int tx=tn.x;
+                int th=tn.h;
+                while(!stk.empty())
+                {
+                    tn=stk.pop();
+                    int t1=(tx-tn.x)*th;
+                    res=res>t1?res:t1;
+                    th=tn.h;
+                    if(th<ch)
+                    break;
+                }
+                stk.push(tn);
+                stk.push(new Node(ch,i));
+            }
+        }
+        return res;
+    }
+}
