@@ -1,0 +1,74 @@
+public class Solution {
+    public String decodeString(String s) {
+        Stack<String> stk1=new Stack();
+        Stack<Integer> stk2=new Stack();
+        StringBuffer sb=new StringBuffer();
+        int step=0;
+        for(int i=0;i<s.length();i++)
+        {
+            char c=s.charAt(i);
+            if(c>='0'&&c<='9')
+            {
+                Integer t=0;
+                while(c>='0'&&c<='9')
+                {
+                    t=t*10+c-'0';
+                    i++;
+                    if(i==s.length())
+                    break;
+                    c=s.charAt(i);
+                }
+                stk2.push(t);
+                //System.out.println("t:"+t);
+                i--;
+            }
+            else if(c=='[')
+            {
+                String ts=sb.toString();
+                stk1.push(ts);
+                stk1.push("[");
+                //System.out.println("ts:"+ts);
+                sb=new StringBuffer();
+            }
+            else if(c==']')
+            {
+                String ts="";
+                String tts=stk1.pop();
+                while(!tts.equals("["))
+                {
+                    ts=tts+ts;
+                    tts=stk1.pop();
+                }
+                ts+=sb.toString();
+                Integer t=stk2.pop();
+                String ts2="";
+                for(int j=0;j<t;j++)
+                ts2+=ts;
+                while(!stk1.empty())
+                {
+                    tts=stk1.pop();
+                    if(tts.equals("["))
+                    {
+                        stk1.push(tts);
+                        break;
+                    }
+                    else
+                    {
+                        ts2=tts+ts2;
+                    }
+                }
+                stk1.push(ts2);
+                //System.out.println("ts2:"+ts2);
+                sb=new StringBuffer();
+            }
+            else
+            {
+                sb.append(c);
+            }
+        }
+        String res=stk1.empty()?"":stk1.pop();
+        if(sb.length()>0)
+        res+=sb.toString();
+        return res;
+    }
+}
