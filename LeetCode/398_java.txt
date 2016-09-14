@@ -1,0 +1,69 @@
+public class Solution {
+
+    // Map<Integer,Integer> map1=new HashMap();
+    Random ra=new Random();
+    int[] nums;
+
+    public Solution(int[] nums1) {
+        nums=nums1;
+        // Map<Integer,Integer> map2=new HashMap();
+        // for(int i=0;i<nums.length;i++)
+        // {
+        //     if(!map1.containsKey(nums[i]))
+        //     {
+        //         map1.put(nums[i],i);
+        //         map2.put(nums[i],i);
+        //     }
+        //     else
+        //     {
+        //         Integer t=map2.get(nums[i]);
+        //         nums[t]=i;
+        //         map2.put(nums[i],i);
+        //     }
+        //     nums[i]=-1;
+        // }
+    }
+    
+    public int pick(int target) {
+        // int res=map1.get(target);
+        // int c=1;
+        // while(nums[res]!=-1)
+        // {
+        //     res=nums[res];
+        //     c++;
+        // }
+        // int t=ra.nextInt(c);
+        // res=map1.get(target);
+        // for(int i=0;i<t;i++)
+        // {
+        //     res=nums[res];
+        // }
+        // return res;
+        int c=0;
+        for(int i=0;i<nums.length;i++)
+        {
+            if(nums[i]==target)
+            {
+                c++;
+            }
+        }
+        int t=ra.nextInt(c);
+        int j=0;
+        for(int i=0;i<nums.length;i++)
+        {
+            if(nums[i]==target)
+            {
+                if(j==t)
+                return i;
+                j++;
+            }
+        }
+        return 0;
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(nums);
+ * int param_1 = obj.pick(target);
+ */

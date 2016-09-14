@@ -1,0 +1,61 @@
+public class Solution {
+    public double bfs(Map<String,Map<String,Double>> map,String mel,String den)
+    {
+        if(!map.containsKey(mel)||!map.containsKey(den))
+        return -1.0;
+        if(mel.equals(den))
+        return 1.0;
+        Set<String> set=new HashSet();
+        LinkedList<String> q1=new LinkedList();
+        LinkedList<Double> q2=new LinkedList();
+        q1.push(mel);
+        q2.push(1.0);
+        set.add(mel);
+        while(!q1.isEmpty())
+        {
+            String ts=q1.poll();
+            Double td=q2.poll();
+            Map<String,Double> tmap=map.get(ts);
+            if(tmap!=null)
+            {
+                for(Map.Entry<String,Double> entry:tmap.entrySet())
+                {
+                    if(!set.contains(entry.getKey()))
+                    {
+                        set.add(entry.getKey());
+                        q1.push(entry.getKey());
+                        q2.push(td*entry.getValue());
+                        if(entry.getKey().equals(den))
+                        {
+                            return td*entry.getValue();
+                        }
+                    }
+                }
+            }
+        }
+        return -1.0;
+    }
+    
+    public double[] calcEquation(String[][] equations, double[] values, String[][] queries) {
+        Map<String,Map<String,Double>> map=new HashMap();
+        for(int i=0;i<equations.length;i++)
+        {
+            Map<String,Double> tmap1=map.get(equations[i][0]);
+            if(tmap1==null)
+            tmap1=new HashMap();
+            tmap1.put(equations[i][1],values[i]);
+            Map<String,Double> tmap2=map.get(equations[i][1]);
+            if(tmap2==null)
+            tmap2=new HashMap();
+            tmap2.put(equations[i][0],1.0/values[i]);
+            map.put(equations[i][0],tmap1);
+            map.put(equations[i][1],tmap2);
+        }
+        double res[]=new double[queries.length];
+        for(int i=0;i<queries.length;i++)
+        {
+            res[i]=bfs(map,queries[i][0],queries[i][1]);
+        }
+        return res;
+    }
+}
