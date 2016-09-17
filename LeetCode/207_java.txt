@@ -1,0 +1,40 @@
+public class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        Set<Integer> set[]=new HashSet[numCourses];
+        int t[]=new int[numCourses];
+        for(int[] a:prerequisites)
+        {
+            if(set[a[1]]==null)
+            set[a[1]]=new HashSet();
+            if(!set[a[1]].contains(a[0]))
+            {
+                set[a[1]].add(a[0]);
+                t[a[0]]++;
+            }
+        }
+        LinkedList<Integer> q=new LinkedList();
+        for(int i=0;i<numCourses;i++)
+        {
+            if(t[i]==0)
+            q.push(i);
+        }
+        int res=0;
+        while(!q.isEmpty())
+        {
+            Integer t1=q.poll();
+            //System.out.println(t1);
+            res++;
+            Set<Integer> tset=set[t1];
+            if(tset!=null)
+            {
+                for(Integer t2:tset)
+                {
+                    t[t2]--;
+                    if(t[t2]==0)
+                    q.push(t2);
+                }
+            }
+        }
+        return res==numCourses;
+    }
+}
