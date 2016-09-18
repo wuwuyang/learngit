@@ -1,0 +1,27 @@
+public class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        Map<Character,Character> map1=new HashMap();
+        Map<Character,Character> map2=new HashMap();
+        for(int i=0;i<s.length();i++)
+        {
+            Character c1=s.charAt(i);
+            Character c2=t.charAt(i);
+            Character c3=map1.get(c1);
+            Character c4=map2.get(c2);
+            if(c3==null&&c4==null)
+            {
+                map1.put(c1,c2);
+                map2.put(c2,c1);
+            }
+            else if(c3==null||c4==null)
+            {
+                return false;
+            }
+            else if(c3!=c2||c4!=c1)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+}
