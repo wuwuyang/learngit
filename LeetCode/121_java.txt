@@ -1,0 +1,23 @@
+public class Solution {
+    public int maxProfit(int[] prices) {
+        int res=0;
+        if(prices.length>0)
+        {
+            int t1=prices[0];
+            for(int i=1;i<prices.length;i++)
+            {
+                int t2=prices[i];
+                if(t2>t1)
+                {
+                    int t3=t2-t1;
+                    res=res>t3?res:t3;
+                }
+                else
+                {
+                    t1=t2;
+                }
+            }
+        }
+        return res;
+    }
+}
