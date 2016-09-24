@@ -1,0 +1,30 @@
+public class Solution {
+    public int findNthDigit(int n) {
+        long t1=0,t2=9;
+        long len=1,num=9;
+        while(n>t2)
+        {
+            t1=t2;
+            len++;
+            num*=10;
+            t2+=len*num;
+        }
+        n-=t1;
+        long t=len-1;
+        long t3=1;
+        while(t>0)
+        {
+            t3=t3*10;
+            t--;
+        }
+        t3+=n/len;
+        int t4=(int)(n%len);
+        if(t4==0)
+        {
+            t3--;
+            t4=(int)len;
+        }
+        String ts=""+t3;
+        return ts.charAt(t4-1)-'0';
+    }
+}

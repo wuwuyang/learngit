@@ -1,0 +1,69 @@
+public class Solution {
+    public boolean helper(Map<Integer,Set<Integer>> map,Set<Integer> set,int end,int curpos,int jump)
+    {
+        for(int i=jump-1;i<=jump+1;i++)
+        {
+            if(i<=0)
+            continue;
+            int t=curpos+i;
+            if(set.contains(t))
+            {
+                if(t==end)
+                return true;
+                if(!map.get(t).contains(i))
+                {
+                    map.get(t).add(i);
+                    if(helper(map,set,end,t,i)) return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    public boolean canCross(int[] stones) {
+        if(stones.length<2)
+        return true;
+        else if(stones[1]!=1)
+        return false;
+        else if(stones.length==2&&stones[1]==1)
+        return true;
+        // Map<Integer,Integer> map=new HashMap();
+        // for(int i=0;i<stones.length;i++)
+        // {
+        //     map.put(stones[i],i);
+        // }
+        //return helper(map,stones.length-1,1,1,1);
+        Set<Integer> set=new HashSet();
+        Map<Integer,Set<Integer>> map=new HashMap();
+        for(int i:stones)
+        {
+            map.put(i,new HashSet<Integer>());
+            set.add(i);
+        }
+        int end=stones[stones.length-1];
+        return helper(map,set,end,1,1);
+        // LinkedList<Integer[]> q=new LinkedList();
+        // q.add(new Integer[]{1,1});
+        // while(!q.isEmpty())
+        // {
+        //     Integer[] t=q.poll();
+        //     for(int i=t[1]-1;i<=t[1]+1;i++)
+        //     {
+        //         if(i==0)
+        //         continue;
+        //         int t1=t[0]+i;
+        //         if(set.contains(t1))
+        //         {
+        //             if(!map.get(t1).contains(i))
+        //             {
+        //                 q.add(new Integer[]{t1,i});
+        //                 map.get(t1).add(i);
+        //             }   
+        //             if(t1==end)
+        //             return true;
+        //         }
+        //     }
+        // }
+        // return false;
+    }
+}

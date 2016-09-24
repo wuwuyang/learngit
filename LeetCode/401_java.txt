@@ -1,0 +1,72 @@
+public class Solution {
+    public void getTime(Set<Integer> set,int[] t1,int num,int cur,boolean flag)
+    {
+        if(cur>=num)
+        {
+            int t=0;
+            for(int i=0;i<num;i++)
+            {
+                t+=t1[i];
+            }
+            if(flag)
+            {
+                if(t<=660)
+                set.add(t);
+            }
+            else
+            {
+                if(t<60)
+                set.add(t);
+            }
+        }
+        else
+        {
+            for(int i=cur;i<t1.length;i++)
+            {
+                int t=t1[cur];
+                t1[cur]=t1[i];
+                t1[i]=t;
+                getTime(set,t1,num,cur+1,flag);
+                t1[i]=t1[cur];
+                t1[cur]=t;
+            }
+        }
+    }
+    
+    public List<String> readBinaryWatch(int num) {
+        int[] t1=new int[]{480,240,120,60};
+        int[] t2=new int[]{32,16,8,4,2,1};
+        List<String> res=new ArrayList();
+        Set<Integer> set=new HashSet();
+        for(int i=0;i<=num;i++)
+        {
+            if(i<4)
+            {
+                int j=num-i;
+                if(j<6)
+                {
+                    Set<Integer> set1=new HashSet();
+                    Set<Integer> set2=new HashSet();
+                    getTime(set1,t1,i,0,true);
+                    getTime(set2,t2,j,0,false);
+                    for(Integer t3:set1)
+                    {
+                        for(Integer t4:set2)
+                        {
+                            set.add(t3+t4);
+                        }
+                    }
+                }
+            }
+        }
+        for(Integer t:set)
+        {
+            String hour=""+t/60;
+            String minute=""+t%60;
+            if(minute.length()==1)
+            minute="0"+minute;
+            res.add(hour+":"+minute);
+        }
+        return res;
+    }
+}

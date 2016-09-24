@@ -1,0 +1,77 @@
+public class Solution {
+    public String minString(String s1,String s2)
+    {
+        // int i=0;
+        // int len1=s1.length(),len2=s2.length();
+        // if(len1<len2)
+        // return s1;
+        // else if(len1>len2)
+        // return s2;
+        // while(i<len1)
+        // {
+        //     char c1=s1.charAt(i);
+        //     char c2=s2.charAt(i);
+        //     if(c1<c2)
+        //     return s1;
+        //     else if(c1>c2)
+        //     return s2;
+        //     i++;
+        // }
+        // return s1;
+        int t=s1.compareTo(s2);
+        if(t==0)
+        return s1;
+        else if(t>0)
+        return s2;
+        else 
+        return s1;
+    }
+    
+    public String removeKdigits(String num, int k) {
+        if(num.length()==0||num.length()==k)
+        return "0";
+        // String[] dp=new String[k+1];
+        // for(int i=0;i<=k;i++)
+        // dp[i]=num;
+        // dp[0]="";
+        // for(int i=0;i<num.length();i++)
+        // {
+        //     char c=num.charAt(i);
+        //     for(int j=Math.min(i+1,k);j>0;j--)
+        //     {
+        //         dp[j]=minString(dp[j]+c,dp[j-1]);
+        //     }
+        //     dp[0]+=c;
+        // }
+        // String res=dp[k];
+        // int i=0;
+        // while(i<res.length()-1&&res.charAt(i)=='0')
+        // i++;
+        // return res.substring(i);
+        Stack<Character> stk=new Stack();
+        k=num.length()-k;
+        for(int i=0;i<num.length();i++)
+        {
+            Character t=num.charAt(i);
+            while(!stk.empty()&&stk.peek()>t&&(stk.size()+num.length()-i-1)>=k)
+            {
+                stk.pop();
+            }
+            stk.push(t);
+        }
+        StringBuilder bui=new StringBuilder();
+        while(stk.size()>k)
+        stk.pop();
+        while(!stk.empty())
+        {
+            Character t=stk.pop();
+            bui.append(t);
+        }
+        bui.reverse();
+        String res=bui.toString();
+        int i=0;
+        while(i<res.length()-1&&res.charAt(i)=='0')
+        i++;
+        return res.substring(i);
+    }
+}

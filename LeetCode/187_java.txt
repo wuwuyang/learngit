@@ -1,0 +1,24 @@
+public class Solution {
+    public List<String> findRepeatedDnaSequences(String s) {
+        Set<String> set1=new HashSet();
+        List<String> res=new ArrayList();
+        Set<String> set2=new HashSet();
+        for(int i=s.length()-10;i>=0;i--)
+        {
+            String ts=s.substring(i,i+10);
+            if(set1.contains(ts))
+            {
+                set2.add(ts);
+            }
+            else
+            {
+                set1.add(ts);
+            }
+        }
+        for(String t:set2)
+        {
+            res.add(t);
+        }
+        return res;
+    }
+}
