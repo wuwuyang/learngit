@@ -1,0 +1,59 @@
+public class Solution {
+    public boolean compare(String s1,String s2)
+    {
+        int len1=s1.length();
+        int len2=s2.length();
+        int len=2*Math.max(len1,len2)+1;
+        for(int i=0;i<len;i++)
+        {
+            char c1=s1.charAt(i%len1);
+            char c2=s2.charAt(i%len2);
+            if(c1>c2)
+            return true;
+            if(c1<c2)
+            return false;
+        }
+        if(len1>len2)
+        return false;
+        return true;
+    }
+    
+    public String largestNumber(int[] nums) {
+        List<String> list=new ArrayList();
+        String res="";
+        if(nums.length==0)
+        return res;
+        list.add(""+nums[0]);
+        for(int i=1;i<nums.length;i++)
+        {
+            String s1=""+nums[i];
+            boolean flag=true;
+            for(int j=0;j<list.size();j++)
+            {
+                if(compare(s1,list.get(j)))
+                {
+                    flag=false;
+                    list.add(j,s1);
+                    break;
+                }
+            }
+            if(flag)
+            list.add(s1);
+        }
+        StringBuilder bui=new StringBuilder();
+        for(String s:list)
+        {
+            bui.append(s);
+        }
+        res=bui.toString();
+        int i=0;
+        while(i<res.length()-1)
+        {
+            if(res.charAt(i)=='0')
+            i++;
+            else
+            break;
+        }
+        return res.substring(i);
+    }
+}
