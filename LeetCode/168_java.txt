@@ -1,0 +1,15 @@
+public class Solution {
+    public String convertToTitle(int n) {
+        StringBuilder bui=new StringBuilder();
+        while(n>0)
+        {
+            int t1=n%26;
+            n/=26;
+            if(t1==0)
+            n--;
+            t1=(t1+25)%26;
+            bui.append((char)('A'+t1));
+        }
+        return bui.reverse().toString();
+    }
+}
