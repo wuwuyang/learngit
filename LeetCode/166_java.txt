@@ -1,0 +1,59 @@
+public class Solution {
+    public String fractionToDecimal(int numerator, int denominator) {
+        String pre="";
+        Long lnumerator=(long)numerator;
+        Long ldenominator=(long)denominator;
+        if((lnumerator*ldenominator)<0)
+        {
+            pre="-";
+        }
+        //System.out.println(pre);
+        lnumerator=(long)Math.abs(numerator);
+        ldenominator=(long)Math.abs(denominator);
+        Long p1=Math.abs(lnumerator/ldenominator);
+        Long p2=Math.abs(lnumerator%ldenominator);
+        if(p2==0)
+        return pre+p1;
+        List<Long> list=new ArrayList();
+        Map<Long,Integer> map=new HashMap();
+        while(p2!=0)
+        {
+            if(map.containsKey(p2))
+            {
+                break;
+            }
+            else
+            {
+                p2*=10;
+                list.add(p2/ldenominator);
+                map.put(p2/10,list.size());
+                p2%=ldenominator;
+            }
+        }
+        StringBuilder bui=new StringBuilder();
+        bui.append(p1).append(".");
+        if(0==p2)
+        {
+            for(long t:list)
+            {
+                //System.out.println(t);
+                bui.append(Math.abs(t));
+            }
+        }
+        else
+        {
+            for(int i=0;i<map.get(p2)-1;i++)
+            {
+                bui.append(Math.abs(list.get(i)));
+                //System.out.println(list.get(i));
+            }
+            bui.append("(");
+            for(int i=map.get(p2)-1;i<list.size();i++)
+            {
+                bui.append(Math.abs(list.get(i)));
+            }
+            bui.append(")");
+        }
+        return pre+bui.toString();
+    }
+}

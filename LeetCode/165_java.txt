@@ -1,0 +1,37 @@
+public class Solution {
+    public int compareVersion(String version1, String version2) {
+        String[] seg1=version1.split("\\.");
+        String[] seg2=version2.split("\\.");
+        for(int i=0;i<Math.min(seg1.length,seg2.length);i++)
+        {
+            int t1=Integer.parseInt(seg1[i]);
+            int t2=Integer.parseInt(seg2[i]);
+            if(t1<t2)
+            return -1;
+            else if(t1>t2)
+            return 1;
+        }
+        if(seg1.length==seg2.length)
+        return 0;
+        else if(seg1.length<seg2.length)
+        {
+            for(int i=seg1.length;i<seg2.length;i++)
+            {
+                int t=Integer.parseInt(seg2[i]);
+                if(t>0)
+                return -1;
+            }
+            return 0;
+        }
+        else
+        {
+            for(int i=seg2.length;i<seg1.length;i++)
+            {
+                int t=Integer.parseInt(seg1[i]);
+                if(t>0)
+                return 1;
+            }
+            return 0;
+        }
+    }
+}
