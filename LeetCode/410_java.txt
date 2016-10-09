@@ -1,0 +1,41 @@
+public class Solution {
+    public int splitArray(int[] nums, int m) {
+        Long high=0l;
+        for(int i:nums)
+        high+=i;
+        Long low=new Long(high/nums.length);
+        if(m==1)
+        return high.intValue();
+        while(low<=high)
+        {
+            int n=m;
+            int cur=0;
+            boolean valid=true;
+            long mid=(low+high)/2;
+            for(int i=0;i<nums.length;i++)
+            {
+                if(nums[i]>mid)
+                {
+                    valid=false;
+                    break;
+                }
+                if(cur+nums[i]>mid)
+                {
+                    n--;
+                    cur=0;
+                }
+                cur+=nums[i];
+                if(n==0)
+                {
+                    valid=false;
+                    break;
+                }
+            }
+            if(valid)
+            high=mid-1;
+            else
+            low=mid+1;
+        }
+        return low.intValue();
+    }
+}
