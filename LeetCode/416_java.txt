@@ -1,0 +1,19 @@
+public class Solution {
+    public boolean dfs(int[] nums,int sum,int cur,int i)
+    {
+        if(cur==sum)
+        return true;
+        if(cur>sum||i>=nums.length)
+        return false;
+        return dfs(nums,sum,cur+nums[i],i+1)||dfs(nums,sum,cur,i+1);
+    }
+    
+    public boolean canPartition(int[] nums) {
+        int sum=0;
+        for(int i:nums)
+        sum+=i;
+        if(sum%2==1)
+        return false;
+        return dfs(nums,sum/2,0,0);
+    }
+}
