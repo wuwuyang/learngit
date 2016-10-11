@@ -1,0 +1,41 @@
+public class Solution {
+    public String addStrings(String num1, String num2) {
+        if(num1.length()<num2.length())
+        {
+            String t=num1;
+            num1=num2;
+            num2=t;
+        }
+        char[] temp=new char[num1.length()];
+        int t=0;
+        for(int i=1;i<=num2.length();i++)
+        {
+            char c1=num1.charAt(num1.length()-i);
+            char c2=num2.charAt(num2.length()-i);
+            int cur=c1+c2-'0'-'0'+t;
+            t=0;
+            if(cur>=10)
+            {
+                cur-=10;
+                t=1;
+            }
+            temp[num1.length()-i]=(char)(cur+'0');
+        }
+        for(int i=num2.length()+1;i<=num1.length();i++)
+        {
+            char c=num1.charAt(num1.length()-i);
+            int cur=c-'0'+t;
+            t=0;
+            if(cur>=10)
+            {
+                cur-=10;
+                t=1;
+            }
+            temp[num1.length()-i]=(char)(cur+'0');
+        }
+        String res=new String(temp);
+        if(t>0)
+        res="1"+res;
+        return res;
+    }
+}
