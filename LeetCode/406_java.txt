@@ -1,0 +1,74 @@
+public class Solution {
+    public int[][] reconstructQueue(int[][] people) {
+        if(people.length==0)
+        return new int[0][2];
+        int[][] res=new int[people.length][people[0].length];
+        Map<Integer,PriorityQueue<Integer>> map=new HashMap();
+        Set<Integer> set=new TreeSet();
+        List<Integer[]> list=new ArrayList();
+        for(int[] t:people)
+        {
+            PriorityQueue<Integer> p=map.get(t[1]);
+            if(null==p)
+            p=new PriorityQueue<Integer>();
+            p.add(t[0]);
+            map.put(t[1],p);
+            set.add(t[1]);
+        }
+        
+        // for(int k:map.keySet())
+        // {
+        //     System.out.print(k+" :");
+        //     PriorityQueue<Integer> p=map.get(k);
+        //     while(!p.isEmpty())
+        //     {
+        //         System.out.print(" "+p.poll()+",");
+        //     }
+        //     System.out.println();
+        // }
+        
+        PriorityQueue<Integer> p=map.get(0);
+        while(!p.isEmpty())
+        {
+            list.add(new Integer[]{p.poll(),0});
+        }
+        for(int k:set)
+        {
+            if(0==k)
+            continue;
+            p=map.get(k);
+            while(!p.isEmpty())
+            {
+                int h=p.poll();
+                int i=0,j=0;
+                while(j<list.size())
+                {
+                    Integer[] t=list.get(j);
+                    j++;
+                    if(t[0]>=h)
+                    {
+                        i++;
+                    }
+                    if(i==k)
+                    break;
+                }
+                while(j<list.size())
+                {
+                    Integer[] t=list.get(j);
+                    if(t[0]<h)
+                    j++;
+                    else
+                    break;
+                }
+                list.add(j,new Integer[]{h,k});
+            }
+        }
+        for(int i=0;i<list.size();i++)
+        {
+            Integer[] t=list.get(i);
+            res[i][0]=t[0];
+            res[i][1]=t[1];
+        }
+        return res;
+    }
+}

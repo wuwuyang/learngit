@@ -1,0 +1,117 @@
+public class Solution {
+    
+    int[][] dir={{0,1},{0,-1},{1,0},{-1,0}};
+    
+    public int trapRainWater(int[][] heightMap) {
+        if(heightMap.length==0||heightMap[0].length==0)
+        return 0;
+        int res=0;
+        int m=heightMap.length,n=heightMap[0].length;
+        int[][] maxTop=new int[m][n];
+        LinkedList<Integer[]> q=new LinkedList<Integer[]>();
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                maxTop[i][j]=-1;
+                if(i==0||i==m-1||j==0||j==n-1)
+                {
+                    maxTop[i][j]=heightMap[i][j];
+                    q.add(new Integer[]{i,j});
+                }
+            }
+        }
+        while(!q.isEmpty())
+        {
+            Integer[] t=q.poll();
+            for(int i=0;i<4;i++)
+            {
+                int x=t[0]+dir[i][0];
+                int y=t[1]+dir[i][1];
+                if(x<0||x>=m||y<0||y>=n)
+                continue;
+                int limit=Math.max(maxTop[t[0]][t[1]],heightMap[x][y]);
+                if(maxTop[x][y]==-1||maxTop[x][y]>limit)
+                {
+                    maxTop[x][y]=limit;
+                    q.push(new Integer[]{x,y});
+                }
+            }
+        }
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                if(maxTop[i][j]>heightMap[i][j])
+                res+=maxTop[i][j]-heightMap[i][j];
+            }
+        }
+        return res;
+    }
+    
+    // public void restoreflag(boolean[][] flag)
+    // {
+    //     for(int i=0;i<flag.length;i++)
+    //     {
+    //         for(int j=0;j<flag[0].length;j++)
+    //         {
+    //             flag[i][j]=false;
+    //         }
+    //     }
+    // }
+    
+    // public void dfs(int[][] heightMap,boolean[][] flag,int x,int y,int h)
+    // {
+    //     if(x<0||x>=flag.length||y<0||y>=flag[0].length)
+    //     return;
+    //     if(flag[x][y]||heightMap[x][y]>h)
+    //     return;
+    //     flag[x][y]=true;
+    //     for(int i=0;i<4;i++)
+    //     {
+    //         dfs(heightMap,flag,x+dir[i][0],y+dir[i][1],h);
+    //     }
+    // }
+    
+    // public int trapRainWater(int[][] heightMap) {
+    //     if(heightMap.length==0||heightMap[0].length==0)
+    //     return 0;
+    //     int res=0;
+    //     int m=heightMap.length,n=heightMap[0].length;
+    //     boolean[][] flag=new boolean[m][n];
+    //     int minH=20000,maxH=0;
+    //     for(int i=0;i<m;i++)
+    //     {
+    //         for(int j=0;j<n;j++)
+    //         {
+    //             if(minH>heightMap[i][j])
+    //             minH=heightMap[i][j];
+    //             if(maxH<heightMap[i][j])
+    //             maxH=heightMap[i][j];
+    //         }
+    //     }
+    //     for(int h=minH;h<maxH;h++)
+    //     {
+    //         restoreflag(flag);
+    //         for(int i=0;i<m;i++)
+    //         {
+    //             dfs(heightMap,flag,i,0,h);
+    //             dfs(heightMap,flag,i,n-1,h);
+    //         }
+    //         for(int i=0;i<n;i++)
+    //         {
+    //             dfs(heightMap,flag,0,i,h);
+    //             dfs(heightMap,flag,m-1,i,h);
+    //         }
+    //         for(int i=0;i<m;i++)
+    //         {
+    //             for(int j=0;j<n;j++)
+    //             {
+    //                 if(!flag[i][j]&&heightMap[i][j]<=h)
+    //                 res++;
+    //             }
+    //         }
+    //     }
+    //     return res;
+    // }
+}
