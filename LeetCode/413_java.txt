@@ -1,0 +1,30 @@
+public class Solution {
+    public int numberOfArithmeticSlices(int[] A) {
+        int res=0;
+        if(A.length>=3)
+        {
+            int i=2;
+            int t=A[1]-A[0];
+            int n=2;
+            while(i<A.length)
+            {
+                if(A[i]-A[i-1]==t)
+                {
+                    i++;
+                    n++;
+                }
+                else
+                {
+                    for(int j=3;j<=n;j++)
+                    res+=n-j+1;
+                    t=A[i]-A[i-1];
+                    n=2;
+                    i++;
+                }
+            }
+            for(int j=3;j<=n;j++)
+            res+=n-j+1;
+        }
+        return res;
+    }
+}
