@@ -1,0 +1,32 @@
+public class Solution {
+    public int findMax(int[] a)
+    {
+        int res=0;
+        for(int i=0;i<a.length;i++)
+        {
+            if(a[i]>res)
+            res=a[i];
+        }
+        return res;
+    }
+    
+    public int characterReplacement(String s, int k) {
+        int left=0,right=0,res=0;
+        int[] a=new int[26];
+        while(right<s.length())
+        {
+            a[s.charAt(right)-'A']++;
+            int tres=right-left+1;
+            while(tres-findMax(a)>k)
+            {
+                a[s.charAt(left)-'A']--;
+                left++;
+                tres--;
+            }
+            if(tres>res)
+            res=tres;
+            right++;
+        }
+        return res;
+    }
+}
