@@ -1,0 +1,37 @@
+public class Solution {
+    public int helper(int[] letters,String num,char key)
+    {
+        int res=letters[key-'a'];
+        //System.out.println(key+":"+res);
+        for(int i=0;i<num.length();i++)
+        {
+            letters[num.charAt(i)-'a']-=res;
+        }
+        return res;
+    }
+    
+    public String originalDigits(String s) {
+        int[] res=new int[10];
+        int[] letters=new int[26];
+        for(int i=0;i<s.length();i++)
+        {
+            letters[s.charAt(i)-'a']++;
+        }
+        String[] sorder={"zero","six","seven","two","four","five","three","eight","one","nine"};
+        char[] corder={'z','x','s','w','u','f','r','t','o','i'};
+        int[] iorder={0,6,7,2,4,5,3,8,1,9};
+        for(int i=0;i<10;i++)
+        {
+            res[iorder[i]]=helper(letters,sorder[i],corder[i]);
+        }
+        StringBuilder sb=new StringBuilder();
+        for(int i=0;i<10;i++)
+        {
+            for(int j=0;j<res[i];j++)
+            {
+                sb.append(i);
+            }
+        }
+        return sb.toString();
+    }
+}
