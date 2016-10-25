@@ -1,0 +1,57 @@
+public class Solution {
+    public String toHex(int num) {
+        String s="0123456789abcdef";
+        StringBuilder res=new StringBuilder();
+        if(num==0)
+        res.append('0');
+        else if(num==-2147483648)
+        {
+            return "80000000";
+        }
+        else if(num>0)
+        {
+            while(num>0)
+            {
+                res.append(s.charAt(num%16));
+                num/=16;
+            }
+        }
+        else
+        {
+            Long t=new Long(-num);
+            while(t>0)
+            {
+                res.append(s.charAt(15-new Long(t%16).intValue()));
+                t/=16;
+            }
+            while(res.length()<8)
+            res.append('f');
+            int up=1;
+            for(int i=0;i<res.length();i++)
+            {
+                if(up==0)
+                break;
+                char c=res.charAt(i);
+                if(c=='f')
+                {
+                    res.setCharAt(i,'0');
+                }
+                else if(c=='9')
+                {
+                    res.setCharAt(i,'a');
+                    up=0;
+                }
+                else
+                {
+                    res.setCharAt(i,(char)(c+1));
+                    up=0;
+                }
+            }
+            if(up==1)
+            {
+                res.append('1');
+            }
+        }
+        return res.reverse().toString();
+    }
+}

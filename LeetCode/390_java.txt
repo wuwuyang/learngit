@@ -1,0 +1,25 @@
+public class Solution {
+    public int lastRemaining(int n) {
+        int leftN=1;
+        int margin=1;
+        int i=0;
+        while(n>1)
+        {
+            if(i%2==0)
+            {
+                leftN+=margin;
+            }
+            else
+            {
+                if(n%2!=0)
+                {
+                    leftN+=margin;
+                }
+            }
+            margin*=2;
+            n/=2;
+            i++;
+        }
+        return leftN;
+    }
+}

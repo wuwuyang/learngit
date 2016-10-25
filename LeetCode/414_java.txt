@@ -1,0 +1,62 @@
+public class Solution {
+    public int thirdMax(int[] nums) {
+        // List<Integer> l=new ArrayList();
+        // l.add(nums[0]);
+        // for(int i=1;i<nums.length;i++)
+        // {
+        //     boolean flag=true;
+        //     for(int j=0;j<l.size();j++)
+        //     {
+        //         if(nums[i]>l.get(j))
+        //         {
+        //             l.add(j,nums[i]);
+        //             flag=false;
+        //             break;
+        //         }
+        //         if(nums[i]==l.get(j))
+        //         {
+        //             flag=false;
+        //             break;
+        //         }
+        //     }
+        //     if(flag)
+        //     l.add(nums[i]);
+        // }
+        // if(l.size()>2)
+        // return l.get(2);
+        // return l.get(0);
+        int tmax=0x80000000;
+        int tmin=0x7fffffff;
+        int[] fuck={0x80000000,0x80000000,0x80000000};
+        for(int n:nums)
+        {
+            if(n>tmax)
+            tmax=n;
+            if(n<tmin)
+            tmin=n;
+            for(int i=0;i<3;i++)
+            {
+                if(n>fuck[i])
+                {
+                    int t=fuck[i];
+                    fuck[i]=n;
+                    n=t;
+                }
+                else if(n==fuck[i])
+                break;
+            }
+        }
+        if(fuck[2]==0x80000000)
+        {
+            if(tmin!=0x80000000)
+            return tmax;
+            else
+            {
+                if(fuck[1]!=0x80000000)
+                return fuck[2];
+                return tmax;
+            }
+        }
+        return fuck[2];
+    }
+}
