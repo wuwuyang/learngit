@@ -1,0 +1,160 @@
+class Node{
+    Node[] childs;
+    public Node()
+    {
+        childs=new Node[2];
+    }
+}
+
+public class Solution {
+    public int fuck(Node left,Node right,int mask)
+    {
+        if(null==left&&null==right)
+        return 0;
+        else if(null==left)
+        {
+            return fuck(right.childs[0],right.childs[1],mask/2);
+        }
+        else if(null==right)
+        {
+            return fuck(left.childs[0],left.childs[1],mask/2);
+        }
+        else
+        {
+            int ans=fuck(left.childs[0],right.childs[1],mask/2);
+            ans=Math.max(ans,fuck(left.childs[1],right.childs[0],mask/2));
+            if(0==ans)
+            {
+                ans=Math.max(fuck(left.childs[0],right.childs[0],mask/2),fuck(left.childs[1],right.childs[1],mask/2))-mask/2;
+            }
+            return ans+mask;
+        }
+    }
+    
+    public int findMaximumXOR(int[] nums) {
+        Node root=new Node();
+        for(int n:nums)
+        {
+            int t=0;
+            Node tree=root;
+            for(int i=30;i>=t;i--)
+            {
+                int mask=1<<i;
+                if((n&mask)==0)
+                {
+                    if(null==tree.childs[0])
+                    tree.childs[0]=new Node();
+                    tree=tree.childs[0];
+                }
+                else
+                {
+                    if(null==tree.childs[1])
+                    tree.childs[1]=new Node();
+                    tree=tree.childs[1];
+                }
+            }
+        }
+        return fuck(root.childs[0],root.childs[1],1<<30);
+    }
+}
+
+
+// public class Solution {
+//     public int findMaximumXOR(int[] nums) {
+//         int ans=0,mask=0;
+//         for(int i=30;i>=0;i--)
+//         {
+//             mask|=(1<<i);
+//             Set<Integer> pre=new HashSet();
+//             for(int n:nums)
+//             {
+//                 pre.add(n&mask);
+//             }
+//             int tmp=ans|(1<<i);
+//             for(int n:pre)
+//             {
+//                 if(pre.contains(tmp^n))
+//                 {
+//                     ans=tmp;
+//                     break;
+//                 }
+//             }
+//         }
+//         return ans;
+//     }
+// }
+
+// public class Solution {
+//     public int fuck(List<Integer> nums0,List<Integer> nums1,Long mask)
+//     {
+//         if(mask<=1)
+//         return mask.intValue();
+//         mask/=2;
+//         List<Integer> nums00=new ArrayList();
+//         List<Integer> nums01=new ArrayList();
+//         List<Integer> nums10=new ArrayList();
+//         List<Integer> nums11=new ArrayList();
+//         for(int i=0;i<nums0.size();i++)
+//         {
+//             int t=nums0.get(i);
+//             if((t&mask)!=0)
+//             {
+//                 nums01.add(t);
+//             }
+//             else
+//             {
+//                 nums00.add(t);
+//             }
+//         }
+//         for(int i=0;i<nums1.size();i++)
+//         {
+//             int t=nums1.get(i);
+//             if((t&mask)!=0)
+//             {
+//                 nums11.add(t);
+//             }
+//             else
+//             {
+//                 nums10.add(t);
+//             }
+//         }
+//         int ans=0;
+//         if(nums00.size()>0&&nums11.size()>0)
+//         {
+//             ans=Math.max(ans,fuck(nums00,nums11,mask));
+//         }
+//         if(nums01.size()>0&&nums10.size()>0)
+//         {
+//             ans=Math.max(ans,fuck(nums01,nums10,mask));
+//         }
+//         if(0==ans)
+//         {
+//             ans=fuck(nums0,nums1,mask)-mask.intValue();
+//         }
+//         return ans+mask.intValue()*2;
+//     }
+    
+//     public int findMaximumXOR(int[] nums) {
+//         List<Integer> nums0=new ArrayList();
+//         List<Integer> nums1=new ArrayList();
+//         Long mask=new Long(1<<30);
+//         while(mask>0)
+//         {
+//             for(int n:nums)
+//             {
+//                 if((n&mask)!=0)
+//                 nums1.add(n);
+//                 else
+//                 nums0.add(n);
+//             }
+//             if(nums0.size()>0&&nums1.size()>0)
+//             {
+//                 break;
+//             }
+//             nums0=new ArrayList();
+//             nums1=new ArrayList();
+//             mask/=2;
+//         }
+//         return fuck(nums0,nums1,mask);
+//     }
+// }
