@@ -1,0 +1,113 @@
+public class AllOne {
+
+    Map<String,Integer> total;
+    Map<Integer,Set<String>> revIndex;
+    TreeSet<Integer> s;
+
+    /** Initialize your data structure here. */
+    public AllOne() {
+        total=new HashMap<String,Integer>();
+        revIndex=new HashMap<Integer,Set<String>>();
+        s=new TreeSet<Integer>();
+    }
+    
+    /** Inserts a new key <Key> with value 1. Or increments an existing key by 1. */
+    public void inc(String key) {
+        Integer t=total.get(key);
+        if(null==t)
+        t=1;
+        else
+        t++;
+        total.put(key,t);
+        Set<String> ts;
+        if(t>1)
+        {
+            ts=revIndex.get(t-1);
+            ts.remove(key);
+            if(ts.size()==0)
+            {
+                s.remove(t-1);
+                revIndex.remove(t-1);
+            }
+            else
+            {
+                revIndex.put(t-1,ts);
+            }
+        }
+        ts=revIndex.get(t);
+        if(null==ts)
+        ts=new HashSet<String>();
+        ts.add(key);
+        revIndex.put(t,ts);
+        s.add(t);
+    }
+    
+    /** Decrements an existing key by 1. If Key's value is 1, remove it from the data structure. */
+    public void dec(String key) {
+        Integer t=total.get(key);
+        if(null==t)
+        return;
+        Set<String> ts;
+        ts=revIndex.get(t);
+        ts.remove(key);
+        if(ts.size()==0)
+        {
+            revIndex.remove(t);
+            s.remove(t);
+        }
+        else
+        {
+            revIndex.put(t,ts);
+        }
+        t--;
+        if(t>0)
+        {
+            ts=revIndex.get(t);
+            if(null==ts)
+            {
+                ts=new HashSet<String>();
+            }
+            ts.add(key);
+            revIndex.put(t,ts);
+            s.add(t);
+            total.put(key,t);
+        }
+        else
+        {
+            total.remove(key);
+        }
+    }
+    
+    /** Returns one of the keys with maximal value. */
+    public String getMaxKey() {
+        if(s.isEmpty())
+        return "";
+        Integer t=s.last();
+        Set<String> ts=revIndex.get(t);
+        for(String st:ts)
+        {
+            return st;
+        }
+        return "";
+    }
+    
+    /** Returns one of the keys with Minimal value. */
+    public String getMinKey() {
+        if(s.isEmpty())
+        return "";
+        Integer t=s.first();
+        Set<String> ts=revIndex.get(t);
+        for(String st:ts)
+        return st;
+        return "";
+    }
+}
+
+/**
+ * Your AllOne object will be instantiated and called as such:
+ * AllOne obj = new AllOne();
+ * obj.inc(key);
+ * obj.dec(key);
+ * String param_3 = obj.getMaxKey();
+ * String param_4 = obj.getMinKey();
+ */
