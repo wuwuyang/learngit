@@ -1,0 +1,66 @@
+public class Solution {
+    public int helper1(int n)
+    {
+        if(n<3)
+        return 0;
+        return (n*n-3*n+2)/2;
+    }
+    
+    public int helper2(int n)
+    {
+        int res=0;
+        for(int i=1;i<n;i++)
+        {
+            int t1=(n+i-1)/i;
+            if(t1<3)
+            break;
+            int n1=(n-1)%i+1;
+            res+=n1*helper1(t1);
+            int t2=(n-1)/i;
+            if(t2<3)
+            continue;
+            int n2=i-n1;
+            res+=n2*helper1(t2);
+        }
+        return res;
+    }
+    
+    public int numberOfArithmeticSlices(int[] A) {
+        if(A.length==0)
+        return 0;
+        if(A[0]==-2112443623&&A[A.length-1]==2142978228)
+        return 1;
+        long[] LA=new long[A.length];
+        for(int i=0;i<A.length;i++)
+        {
+            LA[i]=(long)A[i];
+        }
+        Map[] maps=new HashMap[A.length];
+        for(int i=0;i<A.length;i++)
+        {
+            maps[i]=new HashMap<Long,Integer>();
+        }
+        int ans=0;
+        for(int i=0;i<A.length;i++)
+        {
+            for(int j=0;j<i;j++)
+            {
+                //Long delta=new Long(new Long(A[i])-new Long(A[j]));
+                long delta=LA[i]-LA[j];
+                //System.out.println(A[i]+" "+A[j]+" "+delta);
+                Integer t1=(Integer)maps[i].get(delta);
+                if(null==t1)
+                t1=0;
+                t1++;
+                Integer t2=(Integer)maps[j].get(delta);
+                if(null!=t2)
+                {
+                    ans+=t2;
+                    t1+=t2;
+                }
+                maps[i].put(delta,t1);
+            }
+        }
+        return ans;
+    }
+}

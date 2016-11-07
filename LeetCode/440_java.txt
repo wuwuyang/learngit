@@ -1,0 +1,33 @@
+public class Solution {
+    public int findGap(int n,long p,long q)
+    {
+        int gap=0;
+        while(p<=n)
+        {
+            gap+=Math.max(0,Math.min(n+1,q)-p);
+            p*=10;
+            q*=10;
+        }
+        return gap;
+    }
+    
+    public int findKthNumber(int n, int k) {
+        int ans=1;
+        k--;
+        while(k>0)
+        {
+            int gap=findGap(n,ans,ans+1);
+            if(gap<=k)
+            {
+                ans++;
+                k-=gap;
+            }
+            else
+            {
+                ans*=10;
+                k--;
+            }
+        }
+        return ans;
+    }
+}

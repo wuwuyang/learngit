@@ -1,0 +1,20 @@
+public class Solution {
+    public int arrangeCoins(int n) {
+        int right=(int) Math.sqrt((long)2*n);
+        int left=0;
+        while(left<=right)
+        {
+            Long mid=new Long((left+right)/2);
+            long t=((mid*mid)+mid)/2;
+            //System.out.println(mid+" "+t);
+            if(t==n)
+            return mid.intValue();
+            else if(t<n)
+            left=mid.intValue()+1;
+            else
+            right=mid.intValue()-1;
+            //System.out.println(left+" "+right);
+        }
+        return right;
+    }
+}
