@@ -1,0 +1,67 @@
+public class Solution {
+    public int getDis(int[] p1,int[] p2)
+    {
+        int t1=p1[0]-p2[0];
+        int t2=p1[1]-p2[1];
+        return t1*t1+t2*t2;
+    }
+    
+    public int numberOfBoomerangs(int[][] points) {
+        int ans=0;
+        for(int i=0;i<points.length;i++)
+        {
+            Map<Integer,Integer> map=new HashMap();
+            for(int j=0;j<points.length;j++)
+            {
+                if(i==j)
+                continue;
+                int dis=getDis(points[i],points[j]);
+                Integer t=map.get(dis);
+                if(null==t)
+                t=0;
+                map.put(dis,t+1);
+            }
+            for(Map.Entry<Integer,Integer> entry:map.entrySet())
+            {
+                int v=entry.getValue();
+                ans+=v*(v-1);
+            }
+        }
+        return ans;
+    }
+    
+    // public int numberOfBoomerangs(int[][] points) {
+    //     Map[] maps=new Map[points.length];
+    //     for(int i=0;i<maps.length;i++)
+    //     {
+    //         maps[i]=new HashMap<Integer,Integer>();
+    //     }
+    //     for(int i=0;i<points.length;i++)
+    //     {
+    //         for(int j=i+1;j<points.length;j++)
+    //         {
+    //             int dis=getDis(points[i],points[j]);
+    //             Integer t1=(Integer)maps[i].get(dis);
+    //             Integer t2=(Integer)maps[j].get(dis);
+    //             if(null==t1)
+    //             t1=0;
+    //             if(null==t2)
+    //             t2=0;
+    //             t1++;
+    //             t2++;
+    //             maps[i].put(dis,t1);
+    //             maps[j].put(dis,t2);
+    //         }
+    //     }
+    //     int ans=0;
+    //     for(int i=0;i<maps.length;i++)
+    //     {
+    //         for(Object key:maps[i].keySet())
+    //         {
+    //             int v=(int)maps[i].get(key);
+    //             ans+=v*(v-1);
+    //         }
+    //     }
+    //     return ans;
+    // }
+}
