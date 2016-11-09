@@ -1,0 +1,67 @@
+public class Solution {
+    public int maximumGap(int[] nums) {
+        // Arrays.sort(nums);
+        // int res=0;
+        // for(int i=1;i<nums.length;i++)
+        // {
+        //     if(nums[i]-nums[i-1]>res)
+        //     {
+        //         res=nums[i]-nums[i-1];
+        //     }
+        // }
+        // return res;
+        if(nums.length<2)
+        return 0;
+        int minV=0x7fffffff,maxV=0;
+        for(int i:nums)
+        {
+            if(i<minV)
+            {
+                minV=i;
+            }
+            if(i>maxV)
+            {
+                maxV=i;
+            }
+        }
+        if(minV==maxV)
+        return 0;
+        int avgap=Math.max(1,(maxV-minV)/(nums.length-1));
+        //System.out.println(avgap);
+        int bsize=(maxV-minV)/avgap+1;
+        Integer[] bucketsMin=new Integer[bsize];
+        Integer[] bucketsMax=new Integer[bsize];
+        // for(int i=0;i<bsize;i++)
+        // {
+        //     bucketsMin[i]=null;
+        //     bucketsMax[i]=null;
+        // }
+        for(int i:nums)
+        {
+            int bnum=(i-minV)/avgap;
+            if(null==bucketsMin[bnum]||i<bucketsMin[bnum])
+            {
+                bucketsMin[bnum]=i;
+            }
+            if(null==bucketsMax[bnum]||i>bucketsMax[bnum])
+            {
+                bucketsMax[bnum]=i;
+            }
+        }
+        int ans=avgap;
+        int lastmax=minV;
+        for(int i=0;i<bucketsMin.length;i++)
+        {
+            if(null!=bucketsMin[i])
+            {
+                int tmin=bucketsMin[i];
+                if(tmin-lastmax>ans)
+                {
+                    ans=tmin-lastmax;
+                }
+                lastmax=bucketsMax[i];
+            }
+        }
+        return ans;
+    }
+}
