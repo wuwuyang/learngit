@@ -1,0 +1,59 @@
+public class MinStack {
+
+    List<Integer> minL;
+    List<Integer> realStack;
+    int curMinV=0x7fffffff;
+    int curTopV=0;
+    /** initialize your data structure here. */
+    public MinStack() {
+        minL=new ArrayList();
+        realStack=new ArrayList();
+    }
+    
+    public void push(int x) {
+        realStack.add(x);
+        curTopV=x;
+        if(x<=curMinV)
+        {
+            minL.add(x);
+            curMinV=x;
+        }
+    }
+    
+    public void pop() {
+        realStack.remove(realStack.size()-1);
+        if(curTopV==curMinV)
+        {
+            minL.remove(minL.size()-1);
+            if(minL.size()>0)
+            {
+                curMinV=minL.get(minL.size()-1);
+            }
+            else
+            {
+                curMinV=0x7fffffff;
+            }
+        }
+        if(realStack.size()>0)
+        curTopV=realStack.get(realStack.size()-1);
+        else
+        curTopV=0;
+    }
+    
+    public int top() {
+        return curTopV;
+    }
+    
+    public int getMin() {
+        return curMinV;
+    }
+}
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(x);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.getMin();
+ */
