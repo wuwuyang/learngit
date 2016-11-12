@@ -1,0 +1,24 @@
+public class Solution {
+    public int helper(int[] nums,int left,int right)
+    {
+        if(left==right)
+        return nums[left];
+        if(left>right)
+        return 0x7fffffff;
+        int mid=(left+right)/2;
+        int res=0;
+        if(nums[mid]>nums[right])
+        res=helper(nums,mid+1,right);
+        else if(nums[mid]<nums[right])
+        res=helper(nums,left,mid);
+        else
+        res=Math.min(helper(nums,left,mid),helper(nums,mid+1,right));
+        if(0x7fffffff==res)
+        res=nums[mid];
+        return res;
+    }
+    
+    public int findMin(int[] nums) {
+        return helper(nums,0,nums.length-1);
+    }
+}

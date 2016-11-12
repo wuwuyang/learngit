@@ -1,0 +1,22 @@
+public class Solution {
+    public int helper(int[] nums,int left,int right)
+    {
+        if(left>right)
+        return 0x7fffffff;
+        if(left==right)
+        return nums[left];
+        int res=0;
+        int mid=(left+right)/2;
+        if(nums[mid]>nums[right])
+        res=helper(nums,mid+1,right);
+        else
+        res=helper(nums,left,mid);
+        if(res==0x7fffffff)
+        res=nums[mid];
+        return res;
+    }
+    
+    public int findMin(int[] nums) {
+        return helper(nums,0,nums.length-1);
+    }
+}
