@@ -1,0 +1,100 @@
+class Node{
+    int val;
+    Node left;
+    Node right;
+    public Node(int v)
+    {
+        val=v;
+        left=null;
+        right=null;
+    }
+}
+
+public class LRUCache {
+    
+    Map<Integer,Integer> map;
+    Map<Integer,Node> keyMap;
+    int curSize;
+    int capacity;
+    Node head;
+    Node tail;
+    
+    public LRUCache(int capacity) {
+        map=new HashMap<Integer,Integer>();
+        keyMap=new HashMap<Integer,Node>();
+        curSize=0;
+        this.capacity=capacity;
+        head=new Node(-1);
+        tail=head;
+    }
+    
+    public void moveToFirst(int key)
+    {
+        //System.out.println(key);
+        if(curSize<2)
+        return;
+        Node t1=keyMap.get(key);
+        if(tail==t1)
+        tail=t1.left;
+        t1.left.right=t1.right;
+        if(t1.right!=null)
+        t1.right.left=t1.left;
+        t1.right=head.right;
+        if(t1.right!=null)
+        t1.right.left=t1;
+        t1.left=head;
+        head.right=t1;
+    }
+    
+    public void addToFirst(int key,int value)
+    {
+       // System.out.println(key+" "+value);
+        Node t1=new Node(key);
+        t1.right=head.right;
+        if(t1.right!=null)
+        t1.right.left=t1;
+        head.right=t1;
+        t1.left=head;
+        keyMap.put(key,t1);
+        if(curSize==1)
+        tail=t1;
+    }
+    
+    public int get(int key) {
+        if(map.containsKey(key))
+        {
+            moveToFirst(key);
+            return map.get(key);
+        }
+        return -1;
+    }
+    
+    public void set(int key, int value) {
+        if(map.containsKey(key))
+        {
+            moveToFirst(key);
+        }
+        else
+        {
+            if(curSize<capacity)
+            {
+                curSize++;
+                addToFirst(key,value);
+            }
+            else
+            {
+                int dkey=tail.val;
+                keyMap.remove(dkey);
+                Node t1=tail.left;
+                tail.left=null;
+                tail=t1;
+                tail.right=null;
+                addToFirst(key,value);
+                map.remove(dkey);
+                //System.out.println("dkey "+dkey);
+            }
+        }
+        map.put(key,value);
+        //System.out.println("fuck: "+tail.val);
+    }
+}
