@@ -1,0 +1,30 @@
+public class Solution {
+    public Map<Integer,Integer> sum2(int[] a,int[] b)
+    {
+        Map<Integer,Integer> res=new HashMap();
+        for(int i:a)
+        {
+            for(int j:b)
+            {
+                Integer t=res.get(i+j);
+                if(null==t)
+                t=0;
+                t++;
+                res.put(i+j,t);
+            }
+        }
+        return res;
+    }
+    
+    public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
+        Map<Integer,Integer> m1=sum2(A,B);
+        Map<Integer,Integer> m2=sum2(C,D);
+        int res=0;
+        for(Map.Entry<Integer,Integer> entry:m1.entrySet())
+        {
+            if(m2.containsKey(-entry.getKey()))
+            res+=(entry.getValue()*m2.get(-entry.getKey()));
+        }
+        return res;
+    }
+}

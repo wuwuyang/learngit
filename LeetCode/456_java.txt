@@ -1,0 +1,43 @@
+public class Solution {
+    public boolean find132pattern(int[] nums) {
+        if(nums.length<3)
+        return false;
+        TreeSet<Integer> ts=new TreeSet();
+        int minLeft=nums[0];
+        Map<Integer,Integer> map=new HashMap();
+        for(int i=2;i<nums.length;i++)
+        {
+            ts.add(nums[i]);
+            Integer t=map.get(nums[i]);
+            if(null==t)
+            t=0;
+            t++;
+            map.put(nums[i],t);
+        }
+        for(int i=1;i<nums.length-1;i++)
+        {
+            if(nums[i]>minLeft)
+            {
+                Integer t=ts.higher(minLeft);
+                if(null!=t&&t<nums[i])
+                return true;
+            }
+            else
+            {
+                minLeft=nums[i];
+            }
+            Integer t=map.get(nums[i+1]);
+            t--;
+            if(t<=0)
+            {
+                map.remove(nums[i+1]);
+                ts.remove(nums[i+1]);
+            }
+            else
+            {
+                map.put(nums[i+1],t);
+            }
+        }
+        return false;
+    }
+}
