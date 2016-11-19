@@ -1,0 +1,32 @@
+public class Solution {
+    Boolean[] flag;
+    
+    public boolean wordBreak2(String s, Set<String> wordDict,int index) {
+        if(flag[index]!=null)
+        return flag[index];
+        if(s==null||s.length()==0||wordDict.contains(s))
+        {
+            flag[index]=true;
+            return true;
+        }
+        for(int i=0;i<s.length()-1;i++)
+        {
+            String ls=s.substring(0,i+1);
+            String rs=s.substring(i+1);
+            if(wordDict.contains(ls))
+            {
+                if(flag[index+i+1]==null)
+                flag[index+i+1]=wordBreak2(rs,wordDict,index+i+1);
+                if(flag[index+i+1])
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean wordBreak(String s, Set<String> wordDict)
+    {
+        flag=new Boolean[s.length()+1];
+        return wordBreak2(s,wordDict,0);
+    }
+}

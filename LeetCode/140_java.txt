@@ -1,0 +1,37 @@
+public class Solution {
+    List<String>[] flag;
+    
+    public List<String> wordBreak2(String s, Set<String> wordDict,int index) {
+        List<String> res=new ArrayList();
+        if(s==null)
+        return res;
+        for(int i=0;i<s.length();i++)
+        {
+            String ls=s.substring(0,i+1);
+            String rs=s.substring(i+1);
+            if(wordDict.contains(ls))
+            {
+                if(i==s.length()-1)
+                {
+                    res.add(ls);
+                }
+                else
+                {
+                    if(flag[index+i+1]==null)
+                    flag[index+i+1]=wordBreak2(rs,wordDict,index+i+1);
+                    for(String ts:flag[index+i+1])
+                    {
+                        res.add(ls+" "+ts);
+                    }
+                }
+            }
+        }
+        return res;
+    }
+    
+    public List<String> wordBreak(String s, Set<String> wordDict)
+    {
+        flag=new List[s.length()+1];
+        return wordBreak2(s,wordDict,0);
+    }
+}
