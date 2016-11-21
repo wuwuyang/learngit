@@ -1,0 +1,43 @@
+public class Solution {
+    Map<Integer,Boolean> dp=new HashMap();
+    
+    public boolean dfs(int status,int curSum,int m, int d)
+    {
+        if(dp.containsKey(status))
+        return dp.get(status);
+        for(int i=m;i>0;i--)
+        {
+            if(curSum+i>=d&&(status&(1<<(i-1)))==0)
+            {
+                dp.put(status,true);
+                return true;
+            }
+        }
+        for(int i=1;i<=m;i++)
+        {
+            if((status&(1<<(i-1)))==0)
+            {
+                int nstatus=status|(1<<(i-1));
+                Boolean tmp=dp.get(nstatus);
+                if(tmp==null)
+                tmp=dfs(nstatus,curSum+i,m,d);
+                dp.put(nstatus,tmp);
+                if(!tmp)
+                {
+                    dp.put(status,true);
+                    return true;
+                }
+            }
+        }
+        dp.put(status,false);
+        return false;
+    }
+    
+    public boolean canIWin(int maxChoosableInteger, int desiredTotal) {
+        if(maxChoosableInteger>=desiredTotal)
+        return true;
+        if(maxChoosableInteger*(maxChoosableInteger+1)<2*desiredTotal)
+        return false;
+        return dfs(0,0,maxChoosableInteger,desiredTotal);
+    }
+}
