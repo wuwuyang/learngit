@@ -1,0 +1,27 @@
+public class Solution {
+    public int minCut(String s) {
+        boolean[][] flag=new boolean[s.length()][s.length()];
+        for(int i=1;i<s.length();i++)
+        {
+            flag[i][i]=true;
+        }
+        int[] dp=new int[s.length()+1];
+        for(int i=1;i<=s.length();i++)
+        {
+            dp[i]=dp[i-1]+1;
+            for(int j=1;j<i;j++)
+            {
+                if(s.charAt(j-1)==s.charAt(i-1))
+                {
+                    if((i-2>=j)&&!flag[j][i-2])
+                    continue;
+                    flag[j-1][i-1]=true;
+                    int t=dp[j-1]+1;
+                    if(t<dp[i])
+                    dp[i]=t;
+                }
+            }
+        }
+        return dp[s.length()]-1;
+    }
+}
