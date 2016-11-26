@@ -1,0 +1,56 @@
+public class Solution {
+    public static class Pair{
+        int steps;
+        String s;
+        public Pair(int a,String b){
+            steps=a;
+            s=b;
+        }
+    }
+    
+    public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
+        Map<String,Set<String>> map=new HashMap();
+        wordList.add(beginWord);
+        wordList.add(endWord);
+        for(String s:wordList)
+        {
+            Set<String> set=new HashSet();
+            char[] tmp=s.toCharArray();
+            for(int i=0;i<tmp.length;i++)
+            {
+                char c1=tmp[i];
+                for(int j=0;j<26;j++)
+                {
+                    char c2=(char)('a'+j);
+                    if(c2!=c1)
+                    {
+                        tmp[i]=c2;
+                        String ts=new String(tmp);
+                        if(wordList.contains(ts))
+                        set.add(ts);
+                    }
+                }
+                tmp[i]=c1;
+            }
+            map.put(s,set);
+        }
+        LinkedList<Pair> q=new LinkedList();
+        q.add(new Pair(1,beginWord));
+        while(!q.isEmpty())
+        {
+            Pair p=q.poll();
+            if(map.containsKey(p.s))
+            {
+                for(String ts:map.get(p.s))
+                {
+                    if(ts.equals(endWord))
+                    return p.steps+1;
+                    if(map.containsKey(ts))
+                    q.add(new Pair(p.steps+1,ts));
+                }
+                map.remove(p.s);
+            }
+        }
+        return 0;
+    }
+}

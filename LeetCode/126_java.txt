@@ -1,0 +1,69 @@
+public class Solution {
+    
+    public void helper(List<List<String>> res,List<String> temp,Map<String,Set<String>> map1,String beginWord,String curWord)
+    {
+        if(curWord.equals(beginWord))
+        {
+            temp.add(0,curWord);
+            res.add(new ArrayList<String>(temp));
+            temp.remove(0);
+            return;
+        }
+        temp.add(0,curWord);
+        for(String s:map1.get(curWord))
+        {
+            helper(res,temp,map1,beginWord,s);
+        }
+        temp.remove(0);
+    }
+    
+    
+    public List<List<String>> findLadders(String beginWord, String endWord, Set<String> wordList) {
+        wordList.add(endWord);
+        List<List<String>> res=new ArrayList();
+        Map<String,Set<String>> map1=new HashMap();
+        Set<String> curLevel=new HashSet();
+        curLevel.add(beginWord);
+        while(true)
+        {
+            Set<String> nextLevel=new HashSet();
+            for(String s:curLevel)
+            {
+                char[] tmpc=s.toCharArray();
+                for(int i=0;i<tmpc.length;i++)
+                {
+                    char c1=tmpc[i];
+                    for(char c2='a';c2<='z';c2++)
+                    {
+                        if(c2==c1)
+                        continue;
+                        tmpc[i]=c2;
+                        String ts1=new String(tmpc);
+                        if(wordList.contains(ts1))
+                        {
+                            nextLevel.add(ts1);
+                            Set<String> set1=map1.get(ts1);
+                            if(set1==null)
+                            set1=new HashSet<String>();
+                            set1.add(s);
+                            map1.put(ts1,set1);
+                        }
+                    }
+                    tmpc[i]=c1;
+                }
+            }
+            for(String s:nextLevel)
+            {
+                wordList.remove(s);
+            }
+            curLevel=nextLevel;
+            if(curLevel.size()==0||curLevel.contains(endWord))
+            break;
+        }
+        if(curLevel.size()>0)
+        {
+            helper(res,new ArrayList<String>(),map1,beginWord,endWord);
+        }
+        return res;
+    }
+}
