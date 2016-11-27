@@ -1,0 +1,24 @@
+public class Solution {
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> res=new ArrayList();
+        if(numRows>0)
+        {
+            List<Integer> temp=new ArrayList();
+            temp.add(1);
+            res.add(new ArrayList(temp));
+            for(int i=0;i<numRows-1;i++)
+            {
+                int t1=0;
+                for(int j=0;j<temp.size();j++)
+                {
+                    int t2=temp.get(j)+t1;
+                    t1=temp.get(j);
+                    temp.set(j,t2);
+                }
+                temp.add(t1);
+                res.add(new ArrayList(temp));
+            }
+        }
+        return res;
+    }
+}
