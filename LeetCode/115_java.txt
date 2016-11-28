@@ -1,0 +1,37 @@
+public class Solution {
+    public int numDistinct(String s, String t) {
+        if(s.length()==0||s.length()<t.length())
+        return 0;
+        char[] cs=s.toCharArray();
+        char[] ct=t.toCharArray();
+        int[] curDp=new int[s.length()];
+        int res=0;
+        for(int i=0;i<t.length();i++)
+        {
+            int sum1=(i==0?1:0);
+            int sum2=0;
+            int[] nextDp=new int[s.length()];
+            for(int j=0;j<s.length();j++)
+            {
+                if(j>=i)
+                {
+                    if(cs[j]==ct[i])
+                    {
+                        nextDp[j]=sum1;
+                        sum2+=sum1;
+                    }
+                    else
+                    {
+                        nextDp[j]=0;
+                    }
+                }
+                sum1+=curDp[j];
+            }
+            //System.out.println(sum1+" "+sum2);
+            curDp=nextDp;
+            if(i==t.length()-1)
+            res=sum2;
+        }
+        return res;
+    }
+}
