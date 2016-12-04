@@ -1,0 +1,132 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public void helper(TreeNode root,List<Integer> res)
+    {
+        if(root==null)
+        return;
+        helper(root.left,res);
+        res.add(root.val);
+        helper(root.right,res);
+    }
+    
+    public int recover(TreeNode root,List<Integer> res,int i)
+    {
+        if(root==null)
+        return i;
+        int t=recover(root.left,res,i);
+        if(root.val!=res.get(t))
+        root.val=res.get(t);
+        return recover(root.right,res,t+1);
+    }
+    
+    public void recoverTree2(TreeNode root) {
+        List<Integer> temp1=new ArrayList();
+        helper(root,temp1);
+        int[] fuck=new int[2];
+        boolean flag=true;
+        int t1=temp1.get(0);
+        for(int i=1;i<temp1.size();i++)
+        {
+            int t2=temp1.get(i);
+            if(t1>t2)
+            {
+                if(flag)
+                {
+                    fuck[0]=i-1;
+                    fuck[1]=i;
+                    flag=false;
+                }
+                else
+                {
+                    fuck[1]=i;
+                    break;
+                }
+            }
+            t1=t2;
+        }
+        t1=temp1.get(fuck[0]);
+        temp1.set(fuck[0],temp1.get(fuck[1]));
+        temp1.set(fuck[1],t1);
+        recover(root,temp1,0);
+    }
+    
+    boolean flag1=true;
+    
+    public TreeNode getPre(TreeNode root,TreeNode[] fuck,boolean flag2,TreeNode tpre)
+    {
+        if(root==null)
+        return null;
+        TreeNode pre=getPre(root.left,fuck,flag2,tpre);
+        if(pre==null&&!flag2)
+        {
+            pre=tpre;
+        }
+        if(pre!=null)
+        {
+            //System.out.println(pre.val+","+root.val);
+            if(pre.val>root.val)
+            {
+                if(flag1)
+                {
+                    fuck[0]=pre;
+                    fuck[1]=root;
+                    flag1=false;
+                }
+                else
+                {
+                    fuck[1]=root;
+                }
+            }
+        }
+        TreeNode pre2=getPre(root.right,fuck,false,root);
+        if(pre2==null)
+        pre2=root;
+        return pre2;
+    }
+    
+    TreeNode mpre=null;
+    TreeNode[] fuck=new TreeNode[2];
+    
+    public void getPre2(TreeNode root)
+    {
+        if(root==null)
+        {
+            return;
+        }
+        getPre2(root.left);
+        if(mpre!=null&&mpre.val>root.val)
+        {
+            //System.out.println(mpre.val+","+root.val);
+            if(fuck[0]==null)
+            {
+                fuck[0]=mpre;
+                fuck[1]=root;
+            }
+            else
+            {
+                fuck[1]=root;
+            }
+        }
+        mpre=root;
+        getPre2(root.right);
+    }
+    
+    public void recoverTree(TreeNode root)
+    {
+        // TreeNode[] fuck=new TreeNode[2];
+        // boolean flag=true;
+        // getPre(root,fuck,true,null);
+        getPre2(root);
+        int t=fuck[0].val;
+        fuck[0].val=fuck[1].val;
+        fuck[1].val=t;
+    }
+}

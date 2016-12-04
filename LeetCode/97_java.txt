@@ -1,0 +1,37 @@
+public class Solution {
+    public boolean isInterleave(String s1, String s2, String s3) {
+        if(s3.length()!=s1.length()+s2.length())
+        return false;
+        if(s1.length()==0&&s2.length()==0)
+        {
+            return true;
+        }
+        else if(s1.length()==0)
+        return s2.equals(s3);
+        else if(s2.length()==0)
+        return s1.equals(s3);
+        else
+        {
+            boolean[][] dp=new boolean[s1.length()+1][s2.length()+1];
+            dp[0][0]=true;
+            for(int k=1;k<=s3.length();k++)
+            {
+                for(int i=0;i<=Math.min(k,s1.length());i++)
+                {
+                    int j=k-i;
+                    if(j>s2.length())
+                    continue;
+                    if(j>0&&dp[i][j-1]&&s2.charAt(j-1)==s3.charAt(k-1))
+                    {
+                        dp[i][j]=true;
+                    }
+                    else if(i>0&&dp[i-1][j]&&s1.charAt(i-1)==s3.charAt(k-1))
+                    {
+                        dp[i][j]=true;
+                    }
+                }
+            }
+            return dp[s1.length()][s2.length()];
+        }
+    }
+}
