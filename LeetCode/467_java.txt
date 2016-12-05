@@ -1,0 +1,35 @@
+public class Solution {
+    
+    public int findSubstringInWraproundString(String p) {
+        Set<Integer>[] sets=new HashSet[26];
+        for(int i=0;i<26;i++)
+        sets[i]=new HashSet();
+        int res=0;
+        int last=0;
+        for(int i=1;i<=p.length();i++)
+        {
+            if(i<p.length())
+            {
+                char c1=p.charAt(i-1);
+                char c2=p.charAt(i);
+                if(c2-c1==1||c2-c1==-25)
+                {
+                    continue;
+                }
+            }
+            for(int j=last;j<i;j++)
+            {
+                int t=p.charAt(j)-'a';
+                int k=i-j;
+                while(k>0&&!sets[t].contains(k))
+                {
+                    res++;
+                    sets[t].add(k);
+                    k--;
+                }
+            }
+            last=i;
+        }
+        return res;
+    }
+}

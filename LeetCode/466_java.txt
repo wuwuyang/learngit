@@ -1,0 +1,59 @@
+public class Solution {
+    public static class Pair{
+        int v1;
+        int v2;
+        public Pair(int t1,int t2)
+        {
+            v1=t1;
+            v2=t2;
+        }
+    }
+    
+    public int getMaxRepetitions(String s1, int n1, String s2, int n2) {
+        Set<Character> set1=new HashSet();
+        char[] c1=s1.toCharArray();
+        char[] c2=s2.toCharArray();
+        for(char c:c1)
+        {
+            set1.add(c);
+        }
+        for(char c:c2)
+        {
+            if(!set1.contains(c))
+            return 0;
+        }
+        int res=0;
+        int x1=0,x2=0;
+        int l1=s1.length(),l2=s2.length();
+        Pair[][] ps=new Pair[l1][l2];
+        while(x1<l1*n1)
+        {
+            while(c1[x1%l1]!=c2[x2%l2])
+            {
+                x1++;
+            }
+            if(x1>=l1*n1)
+            break;
+            int y1=x1%l1,y2=x2%l2;
+            if(ps[y1][y2]==null)
+            {
+                ps[y1][y2]=new Pair(x1,x2);
+            }
+            else
+            {
+                int dx1=ps[y1][y2].v1;
+                int dx2=ps[y1][y2].v2;
+                int round=(l1*n1-dx1)/(x1-dx1);
+                x1=dx1+round*(x1-dx1);
+                x2=dx2+round*(x2-dx2);
+                ps[y1][y2]=new Pair(x1,x2);
+            }
+            if(x1<l1*n1)
+            {
+                x1++;
+                x2++;
+            }
+        }
+        return x2/(n2*l2);
+    }
+}
