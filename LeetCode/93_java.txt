@@ -1,0 +1,38 @@
+public class Solution {
+    List<String> res=new ArrayList();
+    int[] tuples=new int[4];
+    
+    public void dfs(String s,int index1,int index2)
+    {
+        if(index1==s.length()&&index2==4)
+        {
+            String ts=""+tuples[0];
+            for(int i=1;i<4;i++)
+            ts+="."+tuples[i];
+            res.add(ts);
+            return;
+        }
+        if(index2>=4||index1>=s.length())
+        return;
+        int cur=0;
+        boolean flag=false;
+        for(int i=index1;i<Math.min(index1+3,s.length());i++)
+        {
+            char c=s.charAt(i);
+            if(i==index1&&c=='0')
+            flag=true;
+            cur=cur*10+c-'0';
+            if(cur>255)
+            return;
+            tuples[index2]=cur;
+            dfs(s,i+1,index2+1);
+            if(flag)
+            return;
+        }
+    }
+    
+    public List<String> restoreIpAddresses(String s) {
+        dfs(s,0,0);
+        return res;
+    }
+}
