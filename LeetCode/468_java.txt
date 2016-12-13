@@ -1,0 +1,63 @@
+public class Solution {
+    public boolean isValidIPV4(String IP)
+    {
+        String[] tuples=IP.split("\\.");
+        if(tuples.length!=4)
+        {
+            return false;
+        }
+        for(int i=0;i<tuples.length;i++)
+        {
+            String t=tuples[i].trim();
+            if(t.charAt(0)=='0'&&t.length()>1)
+            return false;
+            if(t.length()>3||t.length()==0)
+            return false;
+            for(int j=0;j<t.length();j++)
+            {
+                char c=t.charAt(j);
+                if(c>='0'&&c<='9')
+                continue;
+                return false;
+            }
+            int t1=Integer.parseInt(t);
+            if(t1>=256)
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean isValidIPV6(String IP)
+    {
+        String[] tuples=IP.split(":");
+        if(tuples.length!=8)
+        return false;
+        for(int i=0;i<tuples.length;i++)
+        {
+            String t=tuples[i].trim();
+            if(t.length()>4||t.length()==0)
+            return false;
+            for(int j=0;j<t.length();j++)
+            {
+                char c=t.charAt(j);
+                if(c>='0'&&c<='9')
+                continue;
+                if(c>='a'&&c<='f')
+                continue;
+                if(c>='A'&&c<='F')
+                continue;
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public String validIPAddress(String IP) {
+        IP=" "+IP+" ";
+        if(isValidIPV4(IP))
+        return "IPv4";
+        if(isValidIPV6(IP))
+        return "IPv6";
+        return "Neither";
+    }
+}

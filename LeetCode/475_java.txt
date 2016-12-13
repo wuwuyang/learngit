@@ -1,0 +1,36 @@
+public class Solution {
+    public int findRadius(int[] houses, int[] heaters) {
+        Arrays.sort(houses);
+        Arrays.sort(heaters);
+        int t=Math.abs(heaters[0]-houses[0]);
+        int hi=0;
+        while(hi+1<heaters.length)
+        {
+            if(Math.abs(heaters[hi+1]-houses[0])<=t)
+            t=Math.abs(heaters[hi+1]-houses[0]);
+            else
+            break;
+            hi++;
+        }
+        for(int i=1;i<houses.length;i++)
+        {
+            int t1=Math.abs(houses[i]-heaters[hi]);
+            if(t1<=t)
+            continue;
+            while(hi+1<heaters.length)
+            {
+                if(Math.abs(heaters[hi+1]-houses[i])<=t1)
+                {
+                    t1=Math.abs(heaters[hi+1]-houses[i]);
+                    hi++;
+                }
+                else
+                break;
+            }
+            if(t1<=t)
+            continue;
+            t=t1;
+        }
+        return t;
+    }
+}
