@@ -1,0 +1,60 @@
+public class Solution {
+    public boolean cmp(String s1,String s2)
+    {
+        if(s1==null&&s2==null)
+        return true;
+        if(s1==null||s2==null)
+        return false;
+        if(s1.length()!=s2.length())
+        return false;
+        if(s1.length()==0&&s2.length()==0)
+        return true;
+        if(s1.equals(s2))
+        return true;
+        for(int i=0;i<s1.length();i++)
+        {
+            if(s1.charAt(i)!=s2.charAt(s2.length()-i-1))
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean isScramble(String s1, String s2) {
+        boolean[][][] dp=new boolean[s1.length()+1][s1.length()+1][s1.length()+1];
+        for(int k=0;k<=s1.length();k++)
+        {
+            for(int i=0;i<=s1.length()-k;i++)
+            {
+                for(int j=0;j<=s2.length()-k;j++)
+                {
+                    boolean flag=false;
+                    if(k>0)
+                    {
+                        if(cmp(s1.substring(i,i+k),s2.substring(j,j+k)))
+                        flag=true;
+                        else
+                        {
+                            for(int t=1;t<k;t++)
+                            {
+                                if(dp[i][j][t]&&dp[i+t][j+t][k-t])
+                                {
+                                    flag=true;
+                                    break;
+                                }
+                                if(dp[i+k-t][j][t]&&dp[i][j+t][k-t])
+                                {
+                                    flag=true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    // if(flag)
+                    // System.out.println(i+" "+j+" "+k);
+                    dp[i][j][k]=flag;
+                }
+            }
+        }
+        return dp[0][0][s1.length()];
+    }
+}
