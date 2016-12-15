@@ -1,0 +1,101 @@
+public class Solution {
+    public int getMaxSum(int[] nums)
+    {
+        int[] dp=new int[nums.length];
+        int res=nums[0]>0?nums[0]:0;
+        dp[0]=res;
+        for(int i=1;i<nums.length;i++)
+        {
+            if(nums[i]<=0)
+            dp[i]=0;
+            else
+            dp[i]=dp[i-1]+nums[i];
+            if(dp[i]>res)
+            res=dp[i];
+            //System.out.println(dp[i]);
+        }
+        return res;
+    }
+    
+    public static class Node{
+        int h;
+        int x;
+        public Node(int h,int x)
+        {
+            this.h=h;
+            this.x=x;
+        }
+    }
+    
+    public int getMaxRt(int[] nums)
+    {
+        int res=0;
+        Stack<Node> stk=new Stack();
+        for(int i=0;i<=nums.length;i++)
+        {
+            int h=(i==nums.length)?0:nums[i];
+            if(stk.isEmpty())
+            {
+                stk.push(new Node(h,i));
+            }
+            else
+            {
+                Node top=stk.peek();
+                while(top.h>h)
+                {
+                    stk.pop();
+                    int left=stk.isEmpty()?-1:stk.peek().x;
+                    int t=top.h*(i-left-1);
+                    if(t>res)
+                    res=t;
+                    if(stk.isEmpty())
+                    break;
+                    top=stk.peek();
+                }
+                stk.push(new Node(h,i));
+            }
+        }
+        return res;
+    }
+    
+    public int maximalRectangle(char[][] matrix) {
+        if(matrix.length==0||matrix[0].length==0)
+        return 0;
+        int res=0;
+        int[] dp=new int[matrix[0].length];
+        // for(int i=0;i<matrix.length;i++)
+        // {
+        //     int[] dp=new int[matrix[0].length];
+        //     for(int j=i;j>=0;j--)
+        //     {
+        //         for(int k=0;k<matrix[j].length;k++)
+        //         {
+        //             if(dp[k]<0||matrix[j][k]=='0')
+        //             dp[k]=-1;
+        //             else
+        //             dp[k]+=1;
+        //             //System.out.println("dp["+k+"]:"+dp[k]);
+        //         }
+        //         int t=getMaxSum(dp);
+        //         if(t>res)
+        //         res=t;
+        //         if(t==0)
+        //         break;
+        //     }
+        // }
+        for(int i=0;i<matrix.length;i++)
+        {
+            for(int j=0;j<matrix[i].length;j++)
+            {
+                if(matrix[i][j]=='0')
+                dp[j]=0;
+                else
+                dp[j]++;
+            }
+            int t=getMaxRt(dp);
+            if(t>res)
+            res=t;
+        }
+        return res;
+    }
+}
