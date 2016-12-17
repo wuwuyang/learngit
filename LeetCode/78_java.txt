@@ -1,0 +1,21 @@
+public class Solution {
+    List<List<Integer>> res=new ArrayList();
+    List<Integer> temp=new ArrayList();
+    public void helper(int[] nums,int index)
+    {
+        if(index>=nums.length)
+        {
+            res.add(new ArrayList<Integer>(temp));
+            return;
+        }
+        temp.add(nums[index]);
+        helper(nums,index+1);
+        temp.remove(temp.size()-1);
+        helper(nums,index+1);
+    }
+    
+    public List<List<Integer>> subsets(int[] nums) {
+        helper(nums,0);
+        return res;
+    }
+}
