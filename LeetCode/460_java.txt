@@ -1,0 +1,156 @@
+public class LFUCache {
+    public static class Node{
+        public int val;
+        public Node left;
+        public Node right;
+        public int feq;
+        
+        public Node(int v)
+        {
+            val=v;
+            left=null;
+            right=null;
+            feq=1;
+        }
+    }
+    
+    public static class DL{
+        int len;
+        public Node head;
+        public Node tail;
+        public DL()
+        {
+           head=new Node(0);
+           tail=head;
+           len=1;
+        }
+        
+        public boolean isEmpty()
+        {
+            return len==1;
+        }
+        
+        public void insert(Node n)
+        {
+            if(head.right!=null)
+            head.right.left=n;
+            n.right=head.right;
+            n.left=head;
+            head.right=n;
+            if(len==1)
+            tail=n;
+            len++;
+        }
+        
+        public Node getTail()
+        {
+            System.out.println("getTail "+len);
+            if(isEmpty())
+            return null;
+            Node t=tail;
+            tail=tail.left;
+            tail.right.left=null;
+            tail.right=null;
+            len--;
+            return t;
+        }
+    }
+    
+    public HashMap<Integer,Integer> map=new HashMap();
+    public TreeMap<Integer,DL> fmap=new TreeMap();
+    public HashMap<Integer,Node> map2=new HashMap();
+    int curSize=0;
+    int allSize=0;
+
+    public LFUCache(int capacity) {
+        allSize=capacity;
+    }
+    
+    public void addFeq(int key)
+    {
+        Node t=map2.get(key);
+        if(t.right!=null)
+        {
+            t.left.right=t.right;
+            t.right.left=t.left;
+            t.left=null;
+            t.right=null;
+            DL dl1=fmap.get(t.feq);
+            dl1.len--;
+        }
+        else
+        {
+            // System.out.println("fuck");
+            DL dl1=fmap.get(t.feq);
+            t=dl1.getTail();
+            if(dl1.isEmpty())
+            {
+                fmap.remove(t.feq);
+            }
+        }
+        t.feq+=1;
+        DL dl=fmap.get(t.feq);
+        if(dl==null)
+        dl=new DL();
+        dl.insert(t);
+        fmap.put(t.feq,dl);
+        map2.put(key,t);
+    }
+    
+    public int get(int key) {
+        //System.out.println("get start");
+        if(map.containsKey(key))
+        {
+           addFeq(key);
+           return map.get(key);
+        }
+        return -1;
+    }
+    
+    public void put(int key, int value) {
+        //System.out.println("put start");
+        if(allSize==0)
+        return;
+        if(map.containsKey(key))
+        {
+            map.put(key,value);
+            addFeq(key);
+            return;
+        }
+        map.put(key,value);
+        Node t=new Node(key);
+        if(curSize<allSize)
+        {
+            curSize++;
+        }
+        else
+        {
+            Map.Entry<Integer,DL> entry=fmap.firstEntry();
+            //System.out.println(entry.getKey());
+            DL dl=entry.getValue();
+            Node tn=dl.getTail();
+            // if(tn==null)
+            // System.out.println("fuck");
+            //System.out.println(tn.val);
+            if(dl.isEmpty())
+            fmap.remove(entry.getKey());
+            map.remove(tn.val);
+            map2.remove(tn.val);
+        }
+        DL dl=fmap.get(t.feq);
+        if(dl==null)
+        dl=new DL();
+        dl.insert(t);
+        //System.out.println(t.feq+" "+dl.len);
+        fmap.put(t.feq,dl);
+        map2.put(key,t);
+        //System.out.println(key);
+    }
+}
+
+/**
+ * Your LFUCache object will be instantiated and called as such:
+ * LFUCache obj = new LFUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */

@@ -1,0 +1,53 @@
+public class Solution {
+    public static class TrieNode{
+        boolean flag=false;
+        TrieNode[] childs=new TrieNode[26];
+    }
+    
+    TrieNode root=null;
+    
+    public void buildTree(String[] words)
+    {
+        root=new TrieNode();
+        for(String s:words)
+        {
+            TrieNode cur=root;
+            for(char c:s.toCharArray())
+            {
+                while(cur.childs[c-'a']==null)
+                cur.childs[c-'a']=new TrieNode();
+                cur=cur.childs[c-'a'];
+            }
+            cur.flag=true;
+        }
+    }
+    
+    public boolean dfs(String word,int index,TrieNode cur,int cn)
+    {
+        if(cur==null)
+        return false;
+        if(index==word.length()-1)
+        return cur.flag&&cn>0;
+        int t=word.charAt(index+1)-'a';
+        if(cur.flag)
+        {
+            if(dfs(word,index+1,root.childs[t],cn+1))
+            return true;
+        }
+        return dfs(word,index+1,cur.childs[t],cn);
+    }
+    
+    public List<String> findAllConcatenatedWordsInADict(String[] words) {
+        List<String> res=new ArrayList();
+        buildTree(words);
+        for(String s:words)
+        {
+            if(s.length()>0)
+            {
+                if(dfs(s,0,root.childs[s.charAt(0)-'a'],0))
+                res.add(s);
+            }
+        }
+        return res;
+    }
+}

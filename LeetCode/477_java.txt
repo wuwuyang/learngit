@@ -1,0 +1,33 @@
+public class Solution {
+    public int totalHammingDistance(int[] nums) {
+        int[][] records=new int[32][2];
+        for(int n:nums)
+        {
+            int tn=n;
+            int i=0;
+            while(i<32)
+            {
+                //System.out.print(tn&1);
+                records[i][tn&1]++;
+                i++;
+                tn>>=1;
+            }
+            //System.out.println();
+        }
+        int res=0;
+        for(int n:nums)
+        {
+            int tn=n;
+            int i=0;
+            while(i<32)
+            {
+                int t=((tn&1)+1)%2;
+                res+=records[i][t];
+                //System.out.println(records[i][t]);
+                i++;
+                tn>>=1;
+            }
+        }
+        return res/2;
+    }
+}
