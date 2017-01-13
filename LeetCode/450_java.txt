@@ -1,0 +1,85 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public TreeNode deleteNode(TreeNode root, int key) {
+        TreeNode pre=null;
+        TreeNode temp=root;
+        boolean flag=true;
+        while(temp!=null&&temp.val!=key)
+        {
+            pre=temp;
+            if(temp.val<key)
+            {
+                temp=temp.right;
+                flag=true;
+            }
+            else
+            {
+                temp=temp.left;
+                flag=false;
+            }
+        }
+        if(temp==null)
+        {
+            //System.out.println("fuck0");
+            return root;
+        }
+        TreeNode pre2=temp;
+        TreeNode temp2=temp.right;
+        while(temp2!=null&&temp2.left!=null)
+        {
+            pre2=temp2;
+            temp2=temp2.left;
+        }
+        if(temp2!=null)
+        {
+            //System.out.println("fuck1");
+            temp.val=temp2.val;
+            if(pre2==temp)
+            {
+                //System.out.println("fuck1.1");
+                pre2.right=temp2.right;
+            }
+            else
+            {
+                //System.out.println("fuck1.2");
+                pre2.left=temp2.right;
+            }
+        }
+        else
+        {
+            //System.out.println("fuck2");
+            if(pre==null)
+            {
+                //System.out.println("fuck2.1");
+                root=temp.left;
+            }
+            else
+            {
+                TreeNode t=temp.left;
+                // if(t==null)
+                // {
+                //     System.out.println("fuck2.2");
+                // }
+                if(flag)
+                {
+                    //System.out.println("fuck2.2");
+                    pre.right=t;
+                }
+                else
+                {
+                    //System.out.println("fuck2.3");
+                    pre.left=t;
+                }
+            }
+        }
+        return root;
+    }
+}

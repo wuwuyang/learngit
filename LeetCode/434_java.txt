@@ -1,0 +1,29 @@
+public class Solution {
+    public int countSegments(String s) {
+        int res=0;
+        int i=0;
+        while(i<s.length())
+        {
+            char c=s.charAt(i);
+            while(c==' '||c=='\t'||c=='\n')
+            {
+                i++;
+                if(i<s.length())
+                c=s.charAt(i);
+                else
+                break;
+            }
+            if(i<s.length())
+            res++;
+            while(c!=' '&&c!='\t'&&c!='\n')
+            {
+                i++;
+                if(i<s.length())
+                c=s.charAt(i);
+                else
+                break;
+            }
+        }
+        return res;
+    }
+}

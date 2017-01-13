@@ -1,0 +1,76 @@
+public class Solution {
+    public double[] medianSlidingWindow(int[] nums1, int k) {
+        double[] res=new double[nums1.length-k+1];
+        long[] nums=new long[nums1.length];
+        if(k==1)
+        {
+            for(int i=0;i<nums.length;i++)
+            res[i]=nums1[i];
+            return res;
+        }
+        else
+        {
+            for(int i=0;i<nums.length;i++)
+            nums[i]=nums1[i];
+        }
+        PriorityQueue<Long> p1=new PriorityQueue();
+        PriorityQueue<Long> p2=new PriorityQueue();
+        PriorityQueue<Long> p3=new PriorityQueue();
+        for(int i=0;i<nums.length;i++)
+        {
+            if(i<k)
+            {
+                p3.add(nums[i]);
+                if(i==k-1)
+                {
+                    for(int j=0;j<k/2;j++)
+                    {
+                        p1.add(-p3.poll());
+                    }
+                    for(int j=k/2;j<k;j++)
+                    {
+                        p2.add(p3.poll());
+                    }
+                }
+            }
+            else
+            {
+                long t=nums[i-k];
+                if(p1.size()>0&&-t>=p1.peek())
+                {
+                    p1.remove(-t);
+                }
+                else
+                {
+                    p2.remove(t);
+                }
+                t=nums[i];
+                if(p2.size()==0||t>=p2.peek())
+                p2.add(t);
+                else
+                p1.add(-t);
+                while(p1.size()<k/2)
+                {
+                    p1.add(-p2.poll());
+                }
+                while(p1.size()>k/2)
+                {
+                    p2.add(-p1.poll());
+                }
+                
+            }
+            if(i>=k-1)
+            {
+                if(k%2==0)
+                {
+                    res[i-k+1]=(-p1.peek()*1.0+p2.peek()*1.0)/2.0;
+                }
+                else
+                {
+                    res[i-k+1]=p2.peek();
+                }
+            }
+        }
+        return res;
+    }
+}

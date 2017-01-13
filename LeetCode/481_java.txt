@@ -1,0 +1,42 @@
+public class Solution {
+    public int magicalString(int n) {
+        if(n==0)
+        return 0;
+        int res=1;
+        List<Integer> list=new ArrayList();
+        list.add(1);
+        int left=0;
+        int last=1;
+        boolean flag=true;
+        while(list.size()<n)
+        {
+            last=(last%2)+1;
+            if(list.get(left)==1)
+            {
+                list.add(last);
+            }
+            else
+            {
+                if(flag)
+                {
+                    last=(last%2)+1;
+                    list.add(last);
+                    flag=false;
+                }
+                else
+                {
+                    list.add(last);
+                    list.add(last);
+                }
+            }
+            if(last==1)
+            {
+                res+=list.size()<=n?list.get(left):1;
+            }
+            left++;
+        }
+        // for(int t:list)
+        // System.out.print(t);
+        return res;
+    }
+}

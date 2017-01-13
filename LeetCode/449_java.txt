@@ -1,0 +1,79 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder res=new StringBuilder();
+        LinkedList<TreeNode> q=new LinkedList();
+        q.add(root);
+        while(!q.isEmpty())
+        {
+            TreeNode tn=q.poll();
+            if(tn!=null)
+            {
+                res.append(tn.val);
+                q.add(tn.left);
+                q.add(tn.right);
+            }
+            else
+            {
+                res.append(' ');
+            }
+            res.append(',');
+        }
+        return res.toString();
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        String[] ts=data.split(",");
+        if(ts[0].equals(" "))
+        return null;
+        TreeNode root=new TreeNode(Integer.parseInt(ts[0]));
+        ArrayList<TreeNode> q1=new ArrayList();
+        ArrayList<TreeNode> q2=new ArrayList();
+        q1.add(root);
+        for(int i=1;i<ts.length;i++)
+        {
+            if(ts[i].equals(" "))
+            {
+                q2.add(null);
+            }
+            else
+            {
+                q2.add(new TreeNode(Integer.parseInt(ts[i])));
+            }
+            if(q2.size()==2*q1.size())
+            {
+                ArrayList<TreeNode> q3=new ArrayList();
+                for(int j=0;j<q1.size();j++)
+                {
+                    TreeNode tn1=q1.get(j);
+                    TreeNode tn2=q2.get(2*j);
+                    TreeNode tn3=q2.get(2*j+1);
+                    tn1.left=tn2;
+                    tn1.right=tn3;
+                    if(tn2!=null)
+                    q3.add(tn2);
+                    if(tn3!=null)
+                    q3.add(tn3);
+                }
+                q1=q3;
+                q2=new ArrayList();
+            }
+        }
+        return root;
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec = new Codec();
+// codec.deserialize(codec.serialize(root));

@@ -1,0 +1,23 @@
+public class Solution {
+    public int findComplement(int num) {
+        boolean flag=num>=0?false:true;
+        if(num<0)
+        num=-num;
+        int tnum=0;
+        int i=1;
+        while(num>0)
+        {
+            int t=num&i;
+            num-=t;
+            if(flag)
+            tnum+=t;
+            else
+            tnum+=(t>0)?0:i;
+            i<<=1;
+            //System.out.println(t+" "+tnum);
+        }
+        if(flag)
+        tnum+=1;
+        return flag?-tnum:tnum;
+    }
+}

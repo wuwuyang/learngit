@@ -1,0 +1,38 @@
+public class Solution {
+    public String minWindow(String s, String t) {
+        String res="";
+        int left=0,right=0;
+        int curRest=t.length();
+        int[] tb1=new int[256];
+        int[] tb2=new int[256];
+        for(char c:t.toCharArray())
+        {
+            tb1[(int)c]++;
+        }
+        while(right<s.length())
+        {
+            int c=(int)s.charAt(right);
+            tb2[c]++;
+            if(tb2[c]<=tb1[c])
+            {
+                curRest--;
+            }
+            while(curRest==0)
+            {
+                int c2=(int)s.charAt(left);
+                tb2[c2]--;
+                if(tb2[c2]<tb1[c2])
+                {
+                    curRest++;
+                    if(res.length()==0||(right-left+1<res.length()))
+                    {
+                        res=s.substring(left,right+1);
+                    }
+                }
+                left++;
+            }
+            right++;
+        }
+        return res;
+    }
+}
