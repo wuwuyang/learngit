@@ -1,0 +1,55 @@
+public class Solution {
+    public String buildSpace(int num)
+    {
+        String res="";
+        for(int i=0;i<num;i++)
+        res+=" ";
+        return res;
+    }
+    
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        List<String> res=new ArrayList();
+        for(int i=0;i<words.length;i++)
+        {
+            int j=i;
+            int curLen=0;
+            while(j<words.length)
+            {
+                if(curLen+words[j].length()+j-i<=maxWidth)
+                {
+                    curLen+=words[j].length();
+                    j++;
+                }
+                else
+                break;
+            }
+            int num_word=j-i;
+            int num_space=maxWidth-curLen;
+            int base_space=num_word==1?0:(num_space/(num_word-1));
+            int rest_space=num_word==1?0:(num_space%(num_word-1));
+            String temp="";
+            if(j==words.length)
+            {
+                base_space=1;
+                rest_space=0;
+            }
+            for(int k=0;k<j-i;k++)
+            {
+                temp+=words[i+k];
+                if(k<j-i-1||j-i==1)
+                temp+=buildSpace(base_space);
+                if(k<rest_space)
+                temp+=" ";
+            }
+            if(temp.length()<maxWidth)
+            {
+                temp+=buildSpace(maxWidth-temp.length());
+            }
+            else
+            temp=temp.substring(0,maxWidth);
+            res.add(temp);
+            i=j-1;
+        }
+        return res;
+    }
+}

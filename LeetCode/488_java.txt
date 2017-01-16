@@ -1,0 +1,80 @@
+public class Solution {
+    public boolean check(char[] board)
+    {
+        for(char c:board)
+        {
+            if(c!='0')
+            return false;
+        }
+        return true;
+    }
+    
+    public int dfs(char[] board2,Map<Character,Integer> hand2)
+    {
+        //System.out.println("fuck");
+        if(check(board2))
+        return 0;
+        char[] board=board2.clone();
+        Map<Character,Integer> hand=new HashMap(hand2);
+        int res=10;
+        for(int i=0;i<board.length;i++)
+        {
+            if(board[i]=='0')
+            continue;
+            int nsame=1;
+            for(int j=i+1;j<=board.length;j++)
+            {
+                if(j<board.length&&board[j]=='0')
+                {
+                    continue;
+                }
+                else if(j<board.length&&board[j]==board[i])
+                {
+                    nsame++;
+                    continue;
+                }
+                else
+                {
+                    if(nsame+hand.get(board[i])>=3)
+                    {
+                        int t=0;
+                        if(nsame<3)
+                        {
+                            hand.put(board[i],hand.get(board[i])+nsame-3);
+                            t=3-nsame;
+                        }
+                        for(int k=i;k<j;k++)
+                        {
+                            board[k]='0';
+                        }
+                        t+=dfs(board,hand);
+                        if(t<res)
+                        res=t;
+                        board=board2.clone();
+                        hand=new HashMap(hand2);
+                    }
+                    i=j-1;
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+    
+    public int findMinStep(String board, String hand) {
+        Map<Character,Integer> hand2=new HashMap();
+        hand2.put('R',0);
+        hand2.put('Y',0);
+        hand2.put('B',0);
+        hand2.put('G',0);
+        hand2.put('W',0);
+        char[] cboard=board.toCharArray();
+        for(int i=0;i<hand.length();i++)
+        {
+            char c=hand.charAt(i);
+            hand2.put(c,hand2.get(c)+1);
+        }
+        int res=dfs(cboard,hand2);
+        return res<=5?res:-1;
+    }
+}

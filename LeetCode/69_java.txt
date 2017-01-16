@@ -1,0 +1,68 @@
+public class Solution {
+    public int ensure(int x,int left,int right)
+    {
+        while(left<right)
+        {
+            //System.out.println(left+" "+right);
+            int mid=(left+right)/2;
+            if(mid*mid==x)
+            return mid;
+            else if(mid*mid>x)
+            right=mid-1;
+            else
+            left=mid+1;
+        }
+        if(left*left>x)
+        left--;
+        return left;
+    }
+    
+    public int mySqrt(int x) {
+        if(x<2)
+        return x;
+        int t=x;
+        int last=-1;
+        for(int i=0;i<50;i++)
+        {
+            //System.out.println(t);
+            t=(t+x/t)/2;
+            if(t<0)
+            t*=-1;
+            if(t==last)
+            break;
+            last=t;
+        }
+        if(t*t>x||t*t<=0)
+        t--;
+        return t;
+        // int left=0,right=1;
+        // int step=1000;
+        // int index=0;
+        // while(true)
+        // {
+        //     if(index>100)
+        //     break;
+        //     index++;
+        //     if(right*right>=x)
+        //     {
+        //         break;
+        //     }
+        //     else
+        //     {
+        //         if(right*right<=0)
+        //         {
+        //             right-=step;
+        //             step/=2;
+        //             if(step==0)
+        //             step=1;
+        //         }
+        //         else
+        //         {
+        //             right+=step;
+        //         }
+        //     }
+        //     //System.out.println(right+" "+right*right);
+        // }
+        // return ensure(x,left,right);
+    }
+}
